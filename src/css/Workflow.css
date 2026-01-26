@@ -1,3 +1,5 @@
+
+/* Css per lo stile della pagina workflow intera, che si trova sotto la navbar */
 .StileDivWorkflow {
 background-color: white;
 margin-top: 50px;
@@ -7,6 +9,8 @@ padding-bottom: 35px;
 transition: background-color 0.5s ease;
 }
 
+
+/* Proprietà per impostare il colore di sfondo a nero al clicl del bottone tema */
 .StileDivWorkflow.dark {
   background-color: #121212; 
 }
@@ -23,11 +27,14 @@ border-radius: 50%;
 }
 
 
+/* Quando viene aperta la sidebar di sinistra la freccia si inverte e trasla verso destra per non essere coperta */
 .icona-toggle.aperta {
 transform: rotate(180deg);
 margin-left: 310px; /* Sposta l'icona quando la sidebar è aperta */
 }
 
+
+/* Freccia della sidebar di destra */
 .icona-gestione {
 font-size: 2.5rem;
 color: #222;
@@ -37,12 +44,15 @@ background: white;
 border-radius: 50%;
 }
 
+
+/* Quando viene aperta la sidebar di destra la freccia si inverte e trasla verso sinistra per non essere coperta */
 .icona-gestione.aperta {
 transform: rotate(180deg);
 margin-right: 310px; /* Sposta l'icona quando la sidebar è aperta */
 }
 
-/* Sidebar */
+
+/* Sidebar che contiene i blocchi */
 .sidebar-blocchi {
 position: absolute;
 margin-top: 50px;
@@ -52,13 +62,15 @@ width: 300px;
 height: 100%;
 background: rgba(255, 255, 255, 0.95);
 backdrop-filter: blur(5px);
-border-right: 1px solid #ddd;
+border-right: 2px solid #121212;
 box-shadow: 2px 0 10px rgba(0,0,0,0.1);
 z-index: 1000;
 padding: 20px;
 transition: left 0.3s ease; /* Effetto slide */
 }
 
+
+/* Sidebar che contiene la gestione dei blocchi, cioè le loro proprietà */
 .sidebar-gestione {
 position: absolute;
 margin-top: 50px;
@@ -68,7 +80,7 @@ width: 300px;
 height: 100%;
 background: rgba(255, 255, 255, 0.95);
 backdrop-filter: blur(5px);
-border-left: 1px solid #ddd;
+border-left: 2px solid #121212;
 box-shadow: 2px 0 10px rgba(0,0,0,0.1);
 z-index: 5;
 padding: 10px;
@@ -76,15 +88,19 @@ transition: right 0.3s ease; /* Effetto slide */
 
 }
 
+
+/* Inizialmente la sidebar di sinistra è coperta, al click della freccia la sua "left" diventa zero, quindi diventa visibile */
 .sidebar-blocchi.visibile {
 left: 0; /* Appare scorrendo */
 }
 
+/* Inizialmente la sidebar di destra è coperta, al click della freccia la sua "right" diventa zero, quindi diventa visibile */
 .sidebar-gestione.visibile {
 right: 0;
 }
 
 
+/* Icona che rappresenta il pulsante del cambia tema, per switchare da bianco a nero e viceversa */
 .IconaCambiaSfondo {
 cursor: pointer;
 font-size: 2.0rem;
@@ -98,7 +114,7 @@ to   { filter: hue-rotate(360deg); }
 }
 
 
-/* Contenitore della lista nella sidebar */
+/* Contenitore della lista dei blocchi nella sidebar di sinistra */
 .lista-nodi {
   margin-top: 20px;
   display: flex;
@@ -107,33 +123,30 @@ to   { filter: hue-rotate(360deg); }
   padding: 10px 0;
 }
 
-/* Stile del blocco generico (la "card") */
+/* Stile del blocco generico, cioè la card che rappresenta il blocco prima di diventare effettivamente blocco */
 .blocco-sidebar {
   padding: 12px 15px;
   background-color: #ffffff;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
-  cursor: grab; /* Cursore a forma di manina aperta */
+  cursor: grab;
   font-size: 0.9rem;
   font-weight: 500;
   color: #333;
   display: flex;
   align-items: center;
   transition: all 0.2s ease;
-  user-select: none; /* Impedisce di selezionare il testo mentre trascini */
-  
-  /* Un tocco di ombra sottile */
+  user-select: none;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  
-  /* Barra colorata a sinistra per dare un look professionale */
   border-left: 5px solid #2196f3; 
 }
 
-/* Effetto al passaggio del mouse */
+
+/* Effetto al passaggio del mouse, quindi evidenziamento e cursore */
 .blocco-sidebar:hover {
   border-color: #2196f3;
   background-color: #f8f9fa;
-  transform: translateY(-2px); /* Si alza leggermente */
+  transform: translateY(-2px); /* Si alza leggermente al passaggio sopra del mouse */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -150,26 +163,28 @@ to   { filter: hue-rotate(360deg); }
   color: #eee;
 }
 
+
+/* Caratteristiche del blocco testo  */
 .nodo-testo-custom {
   background: white;
   border: 1px solid #777;
   border-radius: 4px;
   padding: 0;
-  width: 200px; /* Lunghezza desiderata */
-  height: 40px;  /* Altezza ridotta */
+  width: 200px; 
+  height: 40px;
   display: flex;
   align-items: center;
   overflow: hidden;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-/* Container interno dell'input */
+/* Contenitore del blocco testo quindi l'intero blocco  */
 .nodo-testo-custom .input-container {
   width: 100%;
   height: 100%;
 }
 
-/* L'input vero e proprio */
+/* Contenitore dell'input vero e proprio di testo, quindi dove si scrive.  */
 .nodo-testo-custom input {
   width: 100%;
   height: 100%;
@@ -181,21 +196,24 @@ to   { filter: hue-rotate(360deg); }
   background: transparent;
 }
 
+/* La caption che indica "scrivi qui" */
 .nodo-testo-custom input::placeholder {
   color: #aaa;
   font-style: italic;
 }
 
-/* Stile per la dark mode (opzionale) */
+/* Stile per la dark mode */
 .dark-mode .nodo-testo-custom {
   background: #333;
   border-color: #555;
 }
 
+/*  */
 .dark-mode .nodo-testo-custom input {
   color: white;
 }
 
+/* Questo è lo stile della maniglia del blocco testo */
 .drag-handle {
   width: 30px;
   height: 100%;
@@ -209,26 +227,32 @@ to   { filter: hue-rotate(360deg); }
   font-weight: bold;
 }
 
+/* Serve per modificare la manina quando viene preso il blocco testo per spostarlo */
 .drag-handle:active {
   cursor: grabbing;
 }
 
+/* Quando viene aperta la sidebar di sinistra, i controlli (zoom, lock) vengono spostati a destra con traslazione */
 .sposta-controlli {
   transition: transform 0.3s ease;
 }
 
+/* Quando viene aperta la sidebar di destra, la minimappa viene spostata a sinistra con traslazione */
 .sposta-minimappa {
   transition: transform 0.3s ease;
 }
 
+/* Quando viene aperta la sidebar di sinistra i controlli traslano a destra per non essere sovrapposti */
 .sposta-controlli.aperta {
-  transform: translateX(320px);
+  transform: translateX(310px);
 }
 
+/* Quando viene aperta la sidebar di destra la minimappa viene spostata a sinistra così da non essere sovrapposta */
 .sposta-minimappa.aperta {
-  transform: translateX(-320px);
+  transform: translateX(-310px);
 }
 
+/* Stile del pannello dei controlli, non sono riuscito ad impostare le caption in italiano */
 .react-flow__controls {
   border: 2px solid #007bff; /* Colore del bordo (es. Blu) */
   border-radius: 8px;        /* Arrotonda gli angoli del blocco */
@@ -236,6 +260,8 @@ to   { filter: hue-rotate(360deg); }
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Un po' di ombra per staccare dal fondo */
 }
 
+
+/* Stile della minimappa */
 .react-flow__minimap {
   border: 2px solid #007bff; /* Colore del bordo (es. Blu) */
   border-radius: 8px;        /* Arrotonda gli angoli del blocco */

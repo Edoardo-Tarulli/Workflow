@@ -4,6 +4,7 @@ import { IoIosArrowDroprightCircle } from "react-icons/io";
 import { IoIosArrowDropleftCircle } from "react-icons/io";
 import { FaCircle } from "react-icons/fa6";
 import Navbar from './components/Navbar';
+import { useWorkflow } from './WorkflowContext';
 import '../src/css/Workflow.css';
 import '@xyflow/react/dist/style.css';
 
@@ -88,16 +89,16 @@ const generaNuovoId = () => `nodo_${idContatore++}`;
 
 
 function WorkflowEditor() {
+  // Recupera tutto dal Context invece che da useState locali
+  const {
+    blocchi, SettaBlocchi,
+    collegamenti, SettaCollegamenti,
+    SidebarAperta, SettaAperturaSidebar,
+    GestioneAperta, SettaGestioneAperta,
+    ModalitaDark, SettaModalitaDark
+  } = useWorkflow();
 
-
-const [blocchi, SettaBlocchi] = useState (BlocchiIniziali);
-const [collegamenti, SettaCollegamenti] = useState (Associazioni);
-const [SidebarAperta, SettaAperturaSidebar] = useState(false);
-const [GestioneAperta, SettaGestioneAperta] = useState(false);
-const [ModalitaDark, SettaModalitaDark ] = useState (false);
-const { screenToFlowPosition } = useReactFlow(); // ci serve per trasformare le coordinate dello schermo in coordinate del workflow
-
-
+  const { screenToFlowPosition } = useReactFlow();
 
 const InizioTrascinamento = (event, tipoNodo) => {
     event.dataTransfer.setData('application/reactflow', tipoNodo);
