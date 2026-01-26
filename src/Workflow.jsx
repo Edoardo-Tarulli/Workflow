@@ -226,6 +226,16 @@ const Associa = useCallback(
             <span>🟢</span>
             <span style={{ marginLeft: '10px' }}>Nodo con input e output</span>
           </div>
+          {/* Blocco con solo output */}
+          <div 
+            className="blocco-sidebar" 
+            style={{ borderLeftColor: '#800000' }}
+            onDragStart={(event) => InizioTrascinamento(event, 'output')} 
+            draggable
+          >
+            <span>🟤</span>
+            <span style={{ marginLeft: '10px' }}>Nodo con solo output</span>
+          </div>à 
           {/* Blocco con inserimento testo */}
           <div 
             className="blocco-sidebar" 
@@ -236,17 +246,7 @@ const Associa = useCallback(
             <span>🔴</span>
             <span style={{ marginLeft: '10px' }}>Nodo testuale</span>
           </div>
-          {/* Blocco con input e output */}
-          <div 
-            className="blocco-sidebar" 
-            style={{ borderLeftColor: '#800000' }}
-            onDragStart={(event) => InizioTrascinamento(event, 'output')} 
-            draggable
-          >
-            <span>🟤</span>
-            <span style={{ marginLeft: '10px' }}>Nodo con solo output</span>
-          </div>
-
+  
         </div>
         </aside>
 
