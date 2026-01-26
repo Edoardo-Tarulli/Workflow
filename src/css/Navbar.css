@@ -1,0 +1,36 @@
+.StileNavbar {
+    width: 100%;
+    height: 50px;
+    z-index: 100;
+    position: fixed;
+    left: 0;
+    top: 0;
+    background-color: orange;
+}
+
+.StileElementiNav {
+    padding-left: 40px;
+    display: flex;
+    gap: 70px;
+    font-size: x-large;
+    justify-content: left;
+    align-items: center;
+    height: 100%;
+    transition: color 0.3s ease;
+}
+
+.StileElementiNav :hover {
+    cursor: pointer;
+    color: darkslategrey
+}
+
+.StileElementiNav :visited {
+    text-decoration: none;
+    color: inherit;
+}
+
+.StileBottoneMenu {
+    background: none;
+    border: none;
+    width: 20px;
+}

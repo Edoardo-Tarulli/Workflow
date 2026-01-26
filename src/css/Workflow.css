@@ -1,0 +1,244 @@
+.StileDivWorkflow {
+background-color: white;
+margin-top: 50px;
+width: 100vw;
+height: 100vh;
+padding-bottom: 35px;
+transition: background-color 0.5s ease;
+}
+
+.StileDivWorkflow.dark {
+  background-color: #121212; 
+}
+
+
+/* Animazione Icona */
+.icona-toggle {
+font-size: 2.5rem;
+color: #222;
+cursor: pointer;
+transition: transform 0.3s ease;
+background: white;
+border-radius: 50%;
+}
+
+
+.icona-toggle.aperta {
+transform: rotate(180deg);
+margin-left: 310px; /* Sposta l'icona quando la sidebar è aperta */
+}
+
+.icona-gestione {
+font-size: 2.5rem;
+color: #222;
+cursor: pointer;
+transition: transform 0.3s ease;
+background: white;
+border-radius: 50%;
+}
+
+.icona-gestione.aperta {
+transform: rotate(180deg);
+margin-right: 310px; /* Sposta l'icona quando la sidebar è aperta */
+}
+
+/* Sidebar */
+.sidebar-blocchi {
+position: absolute;
+margin-top: 50px;
+top: 0;
+left: -300px; /* Nascosta a sinistra inizialmente */
+width: 300px;
+height: 100%;
+background: rgba(255, 255, 255, 0.95);
+backdrop-filter: blur(5px);
+border-right: 1px solid #ddd;
+box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+z-index: 1000;
+padding: 20px;
+transition: left 0.3s ease; /* Effetto slide */
+}
+
+.sidebar-gestione {
+position: absolute;
+margin-top: 50px;
+top: 0;
+right: -300px; /* Nascosta a destra inizialmente */
+width: 300px;
+height: 100%;
+background: rgba(255, 255, 255, 0.95);
+backdrop-filter: blur(5px);
+border-left: 1px solid #ddd;
+box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+z-index: 5;
+padding: 10px;
+transition: right 0.3s ease; /* Effetto slide */
+
+}
+
+.sidebar-blocchi.visibile {
+left: 0; /* Appare scorrendo */
+}
+
+.sidebar-gestione.visibile {
+right: 0;
+}
+
+
+.IconaCambiaSfondo {
+cursor: pointer;
+font-size: 2.0rem;
+color: orange;
+animation: ruotaColori 5s linear infinite;
+}
+
+@keyframes ruotaColori {
+from { filter: hue-rotate(0deg); }
+to   { filter: hue-rotate(360deg); }
+}
+
+
+/* Contenitore della lista nella sidebar */
+.lista-nodi {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 10px 0;
+}
+
+/* Stile del blocco generico (la "card") */
+.blocco-sidebar {
+  padding: 12px 15px;
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  cursor: grab; /* Cursore a forma di manina aperta */
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #333;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease;
+  user-select: none; /* Impedisce di selezionare il testo mentre trascini */
+  
+  /* Un tocco di ombra sottile */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  
+  /* Barra colorata a sinistra per dare un look professionale */
+  border-left: 5px solid #2196f3; 
+}
+
+/* Effetto al passaggio del mouse */
+.blocco-sidebar:hover {
+  border-color: #2196f3;
+  background-color: #f8f9fa;
+  transform: translateY(-2px); /* Si alza leggermente */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Effetto mentre l'utente sta cliccando per trascinare */
+.blocco-sidebar:active {
+  cursor: grabbing; /* Manina chiusa */
+  transform: scale(0.98);
+}
+
+/* Adattamento Dark Mode per la sidebar */
+.dark-mode .blocco-sidebar {
+  background-color: #2d2d2d;
+  border-color: #444;
+  color: #eee;
+}
+
+.nodo-testo-custom {
+  background: white;
+  border: 1px solid #777;
+  border-radius: 4px;
+  padding: 0;
+  width: 200px; /* Lunghezza desiderata */
+  height: 40px;  /* Altezza ridotta */
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Container interno dell'input */
+.nodo-testo-custom .input-container {
+  width: 100%;
+  height: 100%;
+}
+
+/* L'input vero e proprio */
+.nodo-testo-custom input {
+  width: 100%;
+  height: 100%;
+  border: none;
+  padding: 0 15px;
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+  background: transparent;
+}
+
+.nodo-testo-custom input::placeholder {
+  color: #aaa;
+  font-style: italic;
+}
+
+/* Stile per la dark mode (opzionale) */
+.dark-mode .nodo-testo-custom {
+  background: #333;
+  border-color: #555;
+}
+
+.dark-mode .nodo-testo-custom input {
+  color: white;
+}
+
+.drag-handle {
+  width: 30px;
+  height: 100%;
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  border-right: 1px solid #eee;
+  color: #999;
+  font-weight: bold;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+.sposta-controlli {
+  transition: transform 0.3s ease;
+}
+
+.sposta-minimappa {
+  transition: transform 0.3s ease;
+}
+
+.sposta-controlli.aperta {
+  transform: translateX(320px);
+}
+
+.sposta-minimappa.aperta {
+  transform: translateX(-320px);
+}
+
+.react-flow__controls {
+  border: 2px solid #007bff; /* Colore del bordo (es. Blu) */
+  border-radius: 8px;        /* Arrotonda gli angoli del blocco */
+  overflow: hidden;          /* Evita che i tasti escano dal bordo arrotondato */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Un po' di ombra per staccare dal fondo */
+}
+
+.react-flow__minimap {
+  border: 2px solid #007bff; /* Colore del bordo (es. Blu) */
+  border-radius: 8px;        /* Arrotonda gli angoli del blocco */
+  overflow: hidden;          /* Evita che i tasti escano dal bordo arrotondato */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Un po' di ombra per staccare dal fondo */
+}
