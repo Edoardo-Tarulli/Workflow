@@ -14,3 +14,5 @@ The React Compiler is not enabled on this template because of its impact on dev 
 ## Expanding the ESLint configuration
 
 If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+
+Progetto di tirocinio per ingegneria informatica e automazione. Riguarda la creazione di uno spazio libero per la creazione di un Workflow formato da blocchi per organizzare le operazioni da applicare da un data set in ingresso, che può essere di vario tipo: dati probenienti da sensori, macchine, fonti varie.
