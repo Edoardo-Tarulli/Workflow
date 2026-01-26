@@ -235,7 +235,7 @@ const Associa = useCallback(
           >
             <span>🟤</span>
             <span style={{ marginLeft: '10px' }}>Nodo con solo output</span>
-          </div>à 
+          </div>
           {/* Blocco con inserimento testo */}
           <div 
             className="blocco-sidebar" 
@@ -250,10 +250,16 @@ const Associa = useCallback(
         </div>
         </aside>
 
+        {/* Di seguito c'è il codice che riguarda la sidebar di destra */}
         <aside className={`sidebar-gestione ${GestioneAperta ? 'visibile' : ''}`}>
         <h3>Menù gestione blocchi</h3>
         <hr></hr>
-        <div className='lista-nodi'></div>
+        
+
+        <div>
+
+
+        </div>
         </aside>
 
       </div>
