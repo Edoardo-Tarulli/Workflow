@@ -268,3 +268,16 @@ to   { filter: hue-rotate(360deg); }
   overflow: hidden;          /* Evita che i tasti escano dal bordo arrotondato */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Un po' di ombra per staccare dal fondo */
 }
+
+.nodo-merge {
+  height: 50px;
+  width: 100px;
+  border: 1px solid #777;
+  border-radius: 4px;
+  background: white;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.nodo-merge:active {
+  border-color: black;
+}

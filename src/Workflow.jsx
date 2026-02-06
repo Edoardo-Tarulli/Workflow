@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { ReactFlow, Background, Controls, applyEdgeChanges, applyNodeChanges, addEdge, Position, Handle, MiniMap, Panel, ReactFlowProvider, useReactFlow} from '@xyflow/react';
+import { ReactFlow, Background, Controls, applyEdgeChanges, applyNodeChanges, addEdge, Position, Handle, MiniMap, Panel, ReactFlowProvider, useReactFlow, useEdges} from '@xyflow/react';
 import { IoIosArrowDroprightCircle } from "react-icons/io";
 import { IoIosArrowDropleftCircle } from "react-icons/io";
 import { FaCircle } from "react-icons/fa6";
@@ -72,6 +72,14 @@ const NodoTesto = ({ data }) => {
   );
 };
 
+const NodoMerge = ({data}) => (
+  <div className='nodo-merge'>
+    <Handle type="target" position={Position.Left} style={{background: '#FFFF00'}}/>
+    <Handle type="source" position={Position.Right} style={{background: '#FFFF00'}}/>
+  </div>
+
+)
+
 
 const BlocchiIniziali = []
 
@@ -82,6 +90,7 @@ const TipoNodi = {
   default: SingoloInputSingoloOutput,
   testo: NodoTesto,
   output: Output,
+  merge: NodoMerge,
 };
 
 let idContatore = 0;
@@ -150,9 +159,6 @@ const Associa = useCallback(
   (params) => SettaCollegamenti((edgesSnapshot) => addEdge(params, edgesSnapshot)),
   [],
 );
-
-
-
 
   return (
     <>
@@ -246,6 +252,16 @@ const Associa = useCallback(
             <span>🔴</span>
             <span style={{ marginLeft: '10px' }}>Nodo testuale</span>
           </div>
+          {/* Blocco merge */}
+          <div 
+            className="blocco-sidebar" 
+            style={{ borderLeftColor: '#FFFF00' }}
+            onDragStart={(event) => InizioTrascinamento(event, 'merge')} 
+            draggable
+          >
+            <span>🟡</span>
+            <span style={{ marginLeft: '10px' }}>Nodo merge</span>
+          </div>
   
         </div>
         </aside>
@@ -254,12 +270,6 @@ const Associa = useCallback(
         <aside className={`sidebar-gestione ${GestioneAperta ? 'visibile' : ''}`}>
         <h3>Menù gestione blocchi</h3>
         <hr></hr>
-        
-
-        <div>
-
-
-        </div>
         </aside>
 
       </div>
