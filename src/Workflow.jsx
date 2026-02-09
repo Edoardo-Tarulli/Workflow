@@ -214,12 +214,13 @@ const Associa = useCallback(
 
           {/* Blocco Sorgente */}
           <div 
-            className="blocco-sidebar" 
+            className="blocco-sidebar"
+            style={{ borderLeftColor: 'blue' }}
             onDragStart={(event) => InizioTrascinamento(event, 'input')} 
             draggable
           >
             <span>🔵</span> 
-            <span style={{ marginLeft: '10px' }}>Nodo con solo input</span>
+            <span style={{ marginLeft: '10px' }}><b>Nodo con solo input</b></span>
           </div>
 
           {/* Blocco con input e output */}
@@ -230,7 +231,7 @@ const Associa = useCallback(
             draggable
           >
             <span>🟢</span>
-            <span style={{ marginLeft: '10px' }}>Nodo con input e output</span>
+            <span style={{ marginLeft: '10px' }}><b>Nodo con input e output</b></span>
           </div>
           {/* Blocco con solo output */}
           <div 
@@ -240,7 +241,7 @@ const Associa = useCallback(
             draggable
           >
             <span>🟤</span>
-            <span style={{ marginLeft: '10px' }}>Nodo con solo output</span>
+            <span style={{ marginLeft: '10px' }}><b>Nodo con solo output</b></span>
           </div>
           {/* Blocco con inserimento testo */}
           <div 
@@ -250,7 +251,7 @@ const Associa = useCallback(
             draggable
           >
             <span>🔴</span>
-            <span style={{ marginLeft: '10px' }}>Nodo testuale</span>
+            <span style={{ marginLeft: '10px' }}><b>Nodo testuale</b></span>
           </div>
           {/* Blocco merge */}
           <div 
@@ -260,7 +261,7 @@ const Associa = useCallback(
             draggable
           >
             <span>🟡</span>
-            <span style={{ marginLeft: '10px' }}>Nodo merge</span>
+            <span style={{ marginLeft: '10px' }}><b>Nodo merge</b></span>
           </div>
   
         </div>

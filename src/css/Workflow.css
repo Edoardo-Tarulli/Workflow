@@ -60,10 +60,10 @@ top: 0;
 left: -300px; /* Nascosta a sinistra inizialmente */
 width: 300px;
 height: 100%;
-background: rgba(255, 255, 255, 0.95);
 backdrop-filter: blur(5px);
 border-right: 2px solid #121212;
 box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+background: rgba(255, 255, 255, 0.95);
 z-index: 1000;
 padding: 20px;
 transition: left 0.3s ease; /* Effetto slide */
@@ -125,6 +125,7 @@ to   { filter: hue-rotate(360deg); }
 
 /* Stile del blocco generico, cioè la card che rappresenta il blocco prima di diventare effettivamente blocco */
 .blocco-sidebar {
+  margin-top: 40px;
   padding: 12px 15px;
   background-color: #ffffff;
   border: 1px solid #e0e0e0;
@@ -144,10 +145,9 @@ to   { filter: hue-rotate(360deg); }
 
 /* Effetto al passaggio del mouse, quindi evidenziamento e cursore */
 .blocco-sidebar:hover {
-  border-color: #2196f3;
-  background-color: #f8f9fa;
+  border-color: orange;
   transform: translateY(-2px); /* Si alza leggermente al passaggio sopra del mouse */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Effetto mentre l'utente sta cliccando per trascinare */
@@ -161,6 +161,12 @@ to   { filter: hue-rotate(360deg); }
   background-color: #2d2d2d;
   border-color: #444;
   color: #eee;
+}
+
+.dark-mode .blocco-sidebar:hover {
+  border-color: orange;
+  transform: translateY(-2px); /* Si alza leggermente al passaggio sopra del mouse */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 
@@ -254,7 +260,7 @@ to   { filter: hue-rotate(360deg); }
 
 /* Stile del pannello dei controlli, non sono riuscito ad impostare le caption in italiano */
 .react-flow__controls {
-  border: 2px solid #007bff; /* Colore del bordo (es. Blu) */
+  border: 2px solid orange; /* Colore del bordo (es. Blu) */
   border-radius: 8px;        /* Arrotonda gli angoli del blocco */
   overflow: hidden;          /* Evita che i tasti escano dal bordo arrotondato */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Un po' di ombra per staccare dal fondo */
@@ -278,6 +284,7 @@ to   { filter: hue-rotate(360deg); }
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-.nodo-merge:active {
-  border-color: black;
+.dark-mode .nodo-merge {
+  background: #333;
+  border-color: #555;
 }

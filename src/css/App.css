@@ -14,7 +14,6 @@ html, body {
 
 /* Assicurare che il Wrapper (che in React è il contenitore radice) copra l'intera area visibile */
 .Contenitore {
-    background-color: Gray;
     width: 100vw;
     height: 100vh; /* 100% dell'altezza della viewport */
 }

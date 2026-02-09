@@ -25,8 +25,7 @@ const Home = () => {
                 <p> Benvenuto in My Flow! <br />
                 Che cosa puoi fare in questo sito?<br />
                 Puoi creare Workflows di blocchi, quindi organizzarli e gestirli come meglio credi!<br />
-                Ogni blocco corrisponde ad un operazione, alla quale puoi associare delle proprietà. <br></br>
-                Inoltre puoi visionare i workflows che hai salvato, modificarli ed eliminarli.
+                Ogni blocco corrisponde ad un operazione, alla quale puoi associare delle proprietà.
                 </p>
             </div>
             
