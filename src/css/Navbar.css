@@ -22,16 +22,10 @@
 
 .StileElementiNav :hover {
     cursor: pointer;
-    color: darkslategrey
+    color: #FAEBD7;
 }
 
 .StileElementiNav :visited {
     text-decoration: none;
     color: inherit;
-}
-
-.StileBottoneMenu {
-    background: none;
-    border: none;
-    width: 20px;
 }

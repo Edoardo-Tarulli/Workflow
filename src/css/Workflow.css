@@ -6,22 +6,22 @@ margin-top: 50px;
 width: 100vw;
 height: 100vh;
 padding-bottom: 35px;
-transition: background-color 0.5s ease;
+}
+
+.StileDivWorkflow * {
+  transition: background-color 0.5s ease, border-color 0.5s ease, color 0.5s ease;
 }
 
 
-/* Proprietà per impostare il colore di sfondo a nero al clicl del bottone tema */
-.StileDivWorkflow.dark {
-  background-color: #121212; 
-}
+/* Proprietà per impostare il colore di sfondo a nero al click del bottone tema */
 
 
 /* Animazione Icona */
 .icona-toggle {
 font-size: 2.5rem;
 cursor: pointer;
-transition: transform 0.3s ease;
 border-radius: 50%;
+transition: transform 0.3s ease;
 }
 
 
@@ -40,8 +40,8 @@ margin-left: 310px; /* Sposta l'icona quando la sidebar è aperta */
 .icona-gestione {
 font-size: 2.5rem;
 cursor: pointer;
-transition: transform 0.3s ease;
 border-radius: 50%;
+transition: transform 0.3s ease;
 }
 
 .dark-mode .icona-gestione {
@@ -67,10 +67,10 @@ height: 100%;
 backdrop-filter: blur(5px);
 border-right: 2px solid #121212;
 box-shadow: 2px 0 10px rgba(0,0,0,0.1);
-background: rgba(255, 255, 255, 0.95);
+background: #AFEEEE;
 z-index: 1000;
 padding: 20px;
-transition: left 0.3s ease; /* Effetto slide */
+transition: left 0.3s ease;
 }
 
 
@@ -88,7 +88,7 @@ border-left: 2px solid #121212;
 box-shadow: 2px 0 10px rgba(0,0,0,0.1);
 z-index: 5;
 padding: 20px;
-transition: right 0.3s ease; /* Effetto slide */
+transition: right 0.3s ease;
 
 }
 
@@ -129,6 +129,7 @@ to   { filter: hue-rotate(360deg); }
 
 /* Stile del blocco generico, cioè la card che rappresenta il blocco prima di diventare effettivamente blocco */
 .blocco-sidebar {
+  background-color: white;
   margin-top: 40px;
   padding: 12px 15px;
   border: 1px solid black;
@@ -138,7 +139,6 @@ to   { filter: hue-rotate(360deg); }
   font-weight: 500;
   display: flex;
   align-items: center;
-  transition: all 0.2s ease;
   user-select: none;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   border-left: 5px solid #2196f3; 
@@ -149,30 +149,35 @@ to   { filter: hue-rotate(360deg); }
 #input.blocco-sidebar:hover {
   border-color:blue;
   transform: translateY(-2px); /* Si alza leggermente al passaggio sopra del mouse */
+  transition: transform 0.3s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 #inputoutput.blocco-sidebar:hover {
   border-color:#4caf50;
   transform: translateY(-2px); /* Si alza leggermente al passaggio sopra del mouse */
+  transition: transform 0.3s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 #output.blocco-sidebar:hover {
   border-color:#8B4513;
   transform: translateY(-2px); /* Si alza leggermente al passaggio sopra del mouse */
+  transition: transform 0.3s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 #text.blocco-sidebar:hover {
   border-color:#FF0000;
   transform: translateY(-2px); /* Si alza leggermente al passaggio sopra del mouse */
+  transition: transform 0.3s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 #merge.blocco-sidebar:hover {
   border-color:#FFD700;
   transform: translateY(-2px); /* Si alza leggermente al passaggio sopra del mouse */
+  transition: transform 0.3s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -183,7 +188,6 @@ to   { filter: hue-rotate(360deg); }
 }
 
 .dark-mode .blocco-sidebar:hover {
-  border-color: orange;
   transform: translateY(-2px); /* Si alza leggermente al passaggio sopra del mouse */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
@@ -287,7 +291,8 @@ to   { filter: hue-rotate(360deg); }
 
 
 .StileDivWorkflow .react-flow__controls-button {
-  background-color: #AFEEEE; 
+  background-color: #AFEEEE;
+  border-bottom: 1px solid black;
 
 }
 
@@ -300,10 +305,18 @@ to   { filter: hue-rotate(360deg); }
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Un po' di ombra per staccare dal fondo */
 }
 
+
 .dark-mode .react-flow__minimap {
-  border: 2px solid;
+  border: 2px solid white;
   border-radius: 8px;
-  border-color: #FAEBD7;
+}
+
+.dark-mode .react-flow__controls {
+  border: 2px solid white;
+}
+
+.dark-mode .react-flow__controls-button {
+  color: black;
 }
 
 .nodo-merge {
