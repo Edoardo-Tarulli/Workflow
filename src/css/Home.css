@@ -15,17 +15,21 @@
   cursor: context-menu;
 }
 
-/* Stili per la scritta (CustomWorkflowText) */
+/* Stili per la scritta */
 .ScrittaWorkflow {
-  /* Rende la scritta grande e visibile */
-  font-size: 5em; /* Equivalente a 5 volte la dimensione base */
+  font-size: 6em; 
   font-weight: bold;
+  font-family:'Courier New', Courier, monospace;
   
   /* Customizzazione del colore e dell'aspetto */
   color: black; 
   text-transform: uppercase;
   letter-spacing: 0.2em; /* Spaziatura tra le lettere */
   text-shadow: 2px 2px 4px rgba(0.5, 0, 0, 0.5);
+}
+
+.StileDescrizione {
+  font-family:'Courier New', Courier, monospace;
 }
 
 
@@ -42,7 +46,7 @@
 .StileIngranaggio {
   /* Assicurati che l'icona abbia una dimensione visibile */
   font-size: 4em; 
-  color: black;
+  color: #00CED1;
   
   /* Applica l'animazione: nome_animazione durata tipo_ripetizione */
   animation: spin 3s linear infinite; 
@@ -53,7 +57,7 @@
 .StileDescrizioneSito {
   font-weight: bold;
   text-align: center;
-  margin-top: 90px;
+  margin-top: 120px;
   width: 100vw;
   height: 22vh;
   font-size: 2em;
@@ -78,7 +82,7 @@
     width: 100vw; /* Larghezza totale della tua animazione */
     height: 200px;
     position: relative; /* Base per posizionare la pallina in modo assoluto */
-    margin-top: 100px; /* Centra orizzontalmente */
+    margin-top: 40px; /* Centra orizzontalmente */
 }
 
 /* Stile e Animazione della Pallina Luminosa */
@@ -117,19 +121,19 @@
 
 /* 3. Posizionamento Specifico di ogni Icona (usando percentuali) */
 .step-1 {
-    color: green;
+    color:#00CED1;
     left: 20%; /* Posiziona il primo rettangolo al 20% della larghezza del contenitore */
     margin-left: -1.25em; /* Compensazione per centrare l'icona sul punto 20% */
 }
 
 .step-2 {
-    color: red;
+    color:#00CED1;
     left: 50%; /* Posiziona il secondo rettangolo al 50% */
     margin-left: -1.25em; 
 }
 
 .step-3 {
-    color: blue;
+    color:#00CED1;
     left: 80%; /* Posiziona il terzo rettangolo all'80% */
     margin-left: -1.25em;
 }

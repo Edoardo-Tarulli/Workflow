@@ -12,8 +12,8 @@ html, body {
     overflow: hidden; 
 }
 
-/* Assicurare che il Wrapper (che in React è il contenitore radice) copra l'intera area visibile */
 .Contenitore {
     width: 100vw;
-    height: 100vh; /* 100% dell'altezza della viewport */
+    height: 100vh;
+    background-color: 	#FAEBD7;
 }

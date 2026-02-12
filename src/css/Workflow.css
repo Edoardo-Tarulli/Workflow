@@ -1,7 +1,7 @@
 
 /* Css per lo stile della pagina workflow intera, che si trova sotto la navbar */
 .StileDivWorkflow {
-background-color: white;
+background-color:#FAEBD7;
 margin-top: 50px;
 width: 100vw;
 height: 100vh;
@@ -19,10 +19,8 @@ transition: background-color 0.5s ease;
 /* Animazione Icona */
 .icona-toggle {
 font-size: 2.5rem;
-color: #222;
 cursor: pointer;
 transition: transform 0.3s ease;
-background: white;
 border-radius: 50%;
 }
 
@@ -33,15 +31,21 @@ transform: rotate(180deg);
 margin-left: 310px; /* Sposta l'icona quando la sidebar è aperta */
 }
 
+.dark-mode .icona-toggle {
+  background-color: white;
+}
+
 
 /* Freccia della sidebar di destra */
 .icona-gestione {
 font-size: 2.5rem;
-color: #222;
 cursor: pointer;
 transition: transform 0.3s ease;
-background: white;
 border-radius: 50%;
+}
+
+.dark-mode .icona-gestione {
+  background-color: white;
 }
 
 
@@ -83,7 +87,7 @@ backdrop-filter: blur(5px);
 border-left: 2px solid #121212;
 box-shadow: 2px 0 10px rgba(0,0,0,0.1);
 z-index: 5;
-padding: 10px;
+padding: 20px;
 transition: right 0.3s ease; /* Effetto slide */
 
 }
@@ -127,13 +131,11 @@ to   { filter: hue-rotate(360deg); }
 .blocco-sidebar {
   margin-top: 40px;
   padding: 12px 15px;
-  background-color: #ffffff;
-  border: 1px solid #e0e0e0;
+  border: 1px solid black;
   border-radius: 8px;
   cursor: grab;
   font-size: 0.9rem;
   font-weight: 500;
-  color: #333;
   display: flex;
   align-items: center;
   transition: all 0.2s ease;
@@ -144,8 +146,32 @@ to   { filter: hue-rotate(360deg); }
 
 
 /* Effetto al passaggio del mouse, quindi evidenziamento e cursore */
-.blocco-sidebar:hover {
-  border-color: orange;
+#input.blocco-sidebar:hover {
+  border-color:blue;
+  transform: translateY(-2px); /* Si alza leggermente al passaggio sopra del mouse */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#inputoutput.blocco-sidebar:hover {
+  border-color:#4caf50;
+  transform: translateY(-2px); /* Si alza leggermente al passaggio sopra del mouse */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#output.blocco-sidebar:hover {
+  border-color:#8B4513;
+  transform: translateY(-2px); /* Si alza leggermente al passaggio sopra del mouse */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#text.blocco-sidebar:hover {
+  border-color:#FF0000;
+  transform: translateY(-2px); /* Si alza leggermente al passaggio sopra del mouse */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#merge.blocco-sidebar:hover {
+  border-color:#FFD700;
   transform: translateY(-2px); /* Si alza leggermente al passaggio sopra del mouse */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -154,13 +180,6 @@ to   { filter: hue-rotate(360deg); }
 .blocco-sidebar:active {
   cursor: grabbing; /* Manina chiusa */
   transform: scale(0.98);
-}
-
-/* Adattamento Dark Mode per la sidebar */
-.dark-mode .blocco-sidebar {
-  background-color: #2d2d2d;
-  border-color: #444;
-  color: #eee;
 }
 
 .dark-mode .blocco-sidebar:hover {
@@ -259,20 +278,32 @@ to   { filter: hue-rotate(360deg); }
 }
 
 /* Stile del pannello dei controlli, non sono riuscito ad impostare le caption in italiano */
-.react-flow__controls {
-  border: 2px solid orange; /* Colore del bordo (es. Blu) */
-  border-radius: 8px;        /* Arrotonda gli angoli del blocco */
+
+.StileDivWorkflow .react-flow__controls {
+  border: 2px solid;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+
+.StileDivWorkflow .react-flow__controls-button {
+  background-color: #AFEEEE; 
+
+}
+
+/* Stile della minimappa */
+.StileDivWorkflow .react-flow__minimap {
+  border: 2px solid;
+  border-radius: 8px;
+  border-color: black;        /* Arrotonda gli angoli del blocco */
   overflow: hidden;          /* Evita che i tasti escano dal bordo arrotondato */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Un po' di ombra per staccare dal fondo */
 }
 
-
-/* Stile della minimappa */
-.react-flow__minimap {
-  border: 2px solid #007bff; /* Colore del bordo (es. Blu) */
-  border-radius: 8px;        /* Arrotonda gli angoli del blocco */
-  overflow: hidden;          /* Evita che i tasti escano dal bordo arrotondato */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Un po' di ombra per staccare dal fondo */
+.dark-mode .react-flow__minimap {
+  border: 2px solid;
+  border-radius: 8px;
+  border-color: #FAEBD7;
 }
 
 .nodo-merge {
@@ -282,9 +313,4 @@ to   { filter: hue-rotate(360deg); }
   border-radius: 4px;
   background: white;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.dark-mode .nodo-merge {
-  background: #333;
-  border-color: #555;
 }

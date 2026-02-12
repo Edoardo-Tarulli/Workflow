@@ -22,7 +22,7 @@ const Home = () => {
 
             {/*Di seguito il contenitore della scritta*/}
             <div className='StileDescrizioneSito'>
-                <p> Benvenuto in My Flow! <br />
+                <p className='StileDescrizione'> Benvenuto in My Flow!<br />
                 Che cosa puoi fare in questo sito?<br />
                 Puoi creare Workflows di blocchi, quindi organizzarli e gestirli come meglio credi!<br />
                 Ogni blocco corrisponde ad un operazione, alla quale puoi associare delle proprietà.

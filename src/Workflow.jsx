@@ -1,13 +1,12 @@
 import { useState, useCallback } from 'react';
-import { ReactFlow, Background, Controls, applyEdgeChanges, applyNodeChanges, addEdge, Position, Handle, MiniMap, Panel, ReactFlowProvider, useReactFlow, useEdges} from '@xyflow/react';
+import { ReactFlow, Background, Controls, applyEdgeChanges, applyNodeChanges, addEdge, Position, Handle, MiniMap, Panel, ReactFlowProvider, useReactFlow} from '@xyflow/react';
 import { IoIosArrowDroprightCircle } from "react-icons/io";
 import { IoIosArrowDropleftCircle } from "react-icons/io";
 import { FaCircle } from "react-icons/fa6";
 import Navbar from './components/Navbar';
 import { useWorkflow } from './WorkflowContext';
-import '../src/css/Workflow.css';
 import '@xyflow/react/dist/style.css';
-
+import '../src/css/Workflow.css';
 
 
 const SingoloInput = ({data}) => (
@@ -177,11 +176,15 @@ const Associa = useCallback(
           colorMode={ModalitaDark ? 'dark' : 'light'}
           >
           <Background variant="dots" gap={12} size={1} />
-          <Controls className={`sposta-controlli ${SidebarAperta ? 'aperta' : ''}`}
+          <Controls
+            className={`sposta-controlli ${SidebarAperta ? 'aperta' : ''}`}
+            aria-label='Ciao'
+            showZoom showFitView
+            
           />
           <MiniMap
             className={`sposta-minimappa ${GestioneAperta ? 'aperta' : ''}`}
-            maskColor='orange' nodeColor='black' color='orange' bgColor='orange' ariaLabel='Mappa del flusso'></MiniMap>
+            nodeColor='black' ariaLabel='Mappa del flusso' bgColor='#AFEEEE' maskColor='#AFEEEE' pannable: false zoomable: false></MiniMap>
           <Panel position='top-left'>
             <IoIosArrowDroprightCircle
             className={`icona-toggle ${SidebarAperta ? 'aperta' : ''}`}
@@ -213,7 +216,7 @@ const Associa = useCallback(
         <div className="lista-nodi">
 
           {/* Blocco Sorgente */}
-          <div 
+          <div id = 'input'
             className="blocco-sidebar"
             style={{ borderLeftColor: 'blue' }}
             onDragStart={(event) => InizioTrascinamento(event, 'input')} 
@@ -224,7 +227,7 @@ const Associa = useCallback(
           </div>
 
           {/* Blocco con input e output */}
-          <div 
+          <div id = 'inputoutput'
             className="blocco-sidebar" 
             style={{ borderLeftColor: '#4caf50' }}
             onDragStart={(event) => InizioTrascinamento(event, 'default')} 
@@ -234,9 +237,9 @@ const Associa = useCallback(
             <span style={{ marginLeft: '10px' }}><b>Nodo con input e output</b></span>
           </div>
           {/* Blocco con solo output */}
-          <div 
+          <div id = 'output'
             className="blocco-sidebar" 
-            style={{ borderLeftColor: '#800000' }}
+            style={{ borderLeftColor: '#8B4513' }}
             onDragStart={(event) => InizioTrascinamento(event, 'output')} 
             draggable
           >
@@ -244,7 +247,7 @@ const Associa = useCallback(
             <span style={{ marginLeft: '10px' }}><b>Nodo con solo output</b></span>
           </div>
           {/* Blocco con inserimento testo */}
-          <div 
+          <div id = 'text'
             className="blocco-sidebar" 
             style={{ borderLeftColor: '#FF0000' }}
             onDragStart={(event) => InizioTrascinamento(event, 'testo')} 
@@ -254,7 +257,7 @@ const Associa = useCallback(
             <span style={{ marginLeft: '10px' }}><b>Nodo testuale</b></span>
           </div>
           {/* Blocco merge */}
-          <div 
+          <div id = 'merge'
             className="blocco-sidebar" 
             style={{ borderLeftColor: '#FFFF00' }}
             onDragStart={(event) => InizioTrascinamento(event, 'merge')} 
