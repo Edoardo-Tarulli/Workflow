@@ -10,14 +10,14 @@ import '../src/css/Workflow.css';
 
 
 const SingoloInput = ({data}) => (
-  <div>
+  <div style={{color: '#0000FF'}}>
     {data.label}
     <Handle position={Position.Right} style={{ background: '#0000FF'}}/>
   </div>
 );
 
 const SingoloInputSingoloOutput = ({data}) => (
-  <div>
+  <div style={{color: '#00FF00'}}>
     <Handle type="target" position={Position.Left} style={{background: '#00FF00'}}/>
     {data.label}
     <Handle type="source" position={Position.Right} style={{background: '#00FF00'}}/>
@@ -26,7 +26,7 @@ const SingoloInputSingoloOutput = ({data}) => (
 
 
 const Output = ({data}) => (
-  <div>
+  <div style={{color: '#800000'}}>
     {data.label}
     <Handle type="target" position={Position.Left} style={{background: '	#800000'}}></Handle>
   </div>
@@ -184,7 +184,7 @@ const Associa = useCallback(
           />
           <MiniMap
             className={`sposta-minimappa ${GestioneAperta ? 'aperta' : ''}`}
-            nodeColor='black' ariaLabel='Mappa del flusso' bgColor='#AFEEEE' maskColor='#AFEEEE' pannable: false zoomable: false></MiniMap>
+            nodeColor='black' ariaLabel='Mappa del flusso' bgColor='#AFEEEE' maskColor='none' pannable: false zoomable: false></MiniMap>
           <Panel position='top-left'>
             <IoIosArrowDroprightCircle
             className={`icona-toggle ${SidebarAperta ? 'aperta' : ''}`}
