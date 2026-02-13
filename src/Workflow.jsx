@@ -10,25 +10,25 @@ import '../src/css/Workflow.css';
 
 
 const SingoloInput = ({data}) => (
-  <div style={{color: '#0000FF'}}>
+  <div id = 'nodo_input' style={{color: 'blue'}}>
     {data.label}
-    <Handle position={Position.Right} style={{ background: '#0000FF'}}/>
+    <Handle position={Position.Right} style={{ background: 'blue'}}/>
   </div>
 );
 
 const SingoloInputSingoloOutput = ({data}) => (
-  <div style={{color: '#00FF00'}}>
-    <Handle type="target" position={Position.Left} style={{background: '#00FF00'}}/>
+  <div id = 'nodo_inputoutput' style={{color: '#4caf50'}}>
+    <Handle type="target" position={Position.Left} style={{background: '#4caf50'}}/>
     {data.label}
-    <Handle type="source" position={Position.Right} style={{background: '#00FF00'}}/>
+    <Handle type="source" position={Position.Right} style={{background: '#4caf50'}}/>
   </div>
 );
 
 
 const Output = ({data}) => (
-  <div style={{color: '#800000'}}>
+  <div id = 'ciao' style={{color: '#8B4513'}}>
     {data.label}
-    <Handle type="target" position={Position.Left} style={{background: '	#800000'}}></Handle>
+    <Handle type="target" position={Position.Left} style={{background: '#8B4513'}}></Handle>
   </div>
 )
 
@@ -39,7 +39,7 @@ const NodoTesto = ({ data }) => {
   };
 
   return (
-    <div className="nodo-testo-custom">
+    <div id = 'nodo_testo' className="nodo-testo-custom">
       {/* Handle di SINISTRA (Target) */}
       <Handle 
         type="target" 
@@ -72,7 +72,7 @@ const NodoTesto = ({ data }) => {
 };
 
 const NodoMerge = ({data}) => (
-  <div className='nodo-merge'>
+  <div id = 'nodo_merge' className='nodo-merge'>
     <Handle type="target" position={Position.Left} style={{background: '#FFFF00'}}/>
     <Handle type="source" position={Position.Right} style={{background: '#FFFF00'}}/>
   </div>
@@ -145,6 +145,8 @@ const InizioTrascinamento = (event, tipoNodo) => {
     [screenToFlowPosition]
   );
 
+const nodoSelezionato = blocchi.find((blocco) => blocco.selected === true)
+
 const AggiornaBlocchi = useCallback(
   (changes) => SettaBlocchi((nodesSnapshot) => applyNodeChanges(changes, nodesSnapshot)),
   [],
@@ -174,6 +176,7 @@ const Associa = useCallback(
           nodeTypes={TipoNodi}
           fitView
           colorMode={ModalitaDark ? 'dark' : 'light'}
+          proOptions={{ hideAttribution: true }} // serve per nascondere il link al sito React Flow in basso a destra che compare di default
           >
           <Background variant="dots" gap={12} size={1} />
           <Controls
@@ -274,6 +277,41 @@ const Associa = useCallback(
         <aside className={`sidebar-gestione ${GestioneAperta ? 'visibile' : ''}`}>
         <h3>Menù gestione blocchi</h3>
         <hr></hr>
+        {nodoSelezionato ? (
+          <div className="proprieta-nodo">
+            <p style={{height: '23px' , background: 'white', border: '1px solid', borderRadius: '5px'}}><strong>ID:</strong> {nodoSelezionato.id}</p>
+            <p style={{height: '23px' , background: 'white', border: '1px solid', borderRadius: '5px'}}><strong>Tipo:</strong> {nodoSelezionato.type}</p>
+      
+            <div className="coordinate">
+              <p style={{height: '23px' , background: 'white', border: '1px solid', borderRadius: '5px'}}><strong>Posizione X:</strong> {Math.round(nodoSelezionato.position.x)}</p>
+              <br></br>
+              <p style={{height: '23px' , background: 'white', border: '1px solid', borderRadius: '5px'}}><strong>Posizione Y:</strong> {Math.round(nodoSelezionato.position.y)}</p>
+            </div>
+
+            <div className="dati-custom">
+              <p style={{height: '23px' , background: 'white', border: '1px solid', borderRadius: '5px'}}><strong>Label:</strong> {nodoSelezionato.data.label}</p>
+            </div>
+
+            {/* Esempio di input per modificare la label in tempo reale */}
+            <label>Rinomina Blocco:</label>
+            <input 
+              type="text"
+              value={nodoSelezionato.data.label}
+              onChange={(evt) => {
+                const nuovaLabel = evt.target.value;
+                SettaBlocchi((nds) =>
+                  nds.map((node) =>
+                    node.id === nodoSelezionato.id
+                      ? { ...node, data: { ...node.data, label: nuovaLabel } }
+                      : node
+                  )
+                );
+              }}
+            />
+          </div>
+  ) : (
+    <p className="placeholder-text">Seleziona un blocco per vederne le proprietà</p>
+  )}
         </aside>
 
       </div>
