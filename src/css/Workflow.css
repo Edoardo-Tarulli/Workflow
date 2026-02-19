@@ -241,7 +241,6 @@ to   { filter: hue-rotate(360deg); }
 /* Stile per la dark mode */
 .dark-mode .nodo-testo-custom {
   background:#FAEBD7;
-  border-color: #555;
 }
 
 /*  */
@@ -369,13 +368,62 @@ to   { filter: hue-rotate(360deg); }
 }
 
 .dark-mode .proprieta-nodo input {
-  background: #444;
-  color: white;
+  background:#AFEEEE;
+  color: black;
   border-color: #666;
 }
 
 .placeholder-text {
   margin-top: 20px;
-  font-style: italic;
-  color: #888;
+}
+
+#nodo_input, #nodo_inputoutput, #ciao, .nodo-merge {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding: 5px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* Input label nella sidebar */
+.input-label-side {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+}
+
+/* Textarea che si espande */
+.textarea-descrizione {
+  width: 100%;
+  min-height: 80px;
+  max-height: 200px; /* Limite per non rompere il layout */
+  resize: vertical; /* Permette all'utente di espanderla solo in altezza */
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-family: inherit;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.dark-mode .textarea-descrizione {
+  background:#AFEEEE;
+  color: black;
+  border-color: #666;
+}
+
+/* Forza il contenitore delle proprietà a non far uscire gli elementi */
+.proprieta-nodo {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.proprietà-paragrafo-nodo {
+  height: 23px;
+  background: white;
+  border: 1px solid;
+  border-radius: 5px;
 }

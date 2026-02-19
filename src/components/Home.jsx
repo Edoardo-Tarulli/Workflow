@@ -11,10 +11,10 @@ const Home = () => {
         <div className = 'StileHome'>
         {/* Elemento che contiene la scritta "Workflow" */}
             <div className = 'ContenitoreScritta'>
-                <FaCog className = 'StileIngranaggio' />
+                <FaCog className = 'StileIngranaggio' style={{marginRight: '10px'}} />
                 <hr style = {{width: '10px', border: 'none'}}></hr> 
                 <h1 className = 'ScrittaWorkflow'>
-                    WORKFLOW
+                    MyFlow
                 </h1>
                 {/* L'icona dell'ingranaggio */}
                 <FaCog className = 'StileIngranaggio' />
@@ -22,13 +22,14 @@ const Home = () => {
 
             {/*Di seguito il contenitore della scritta*/}
             <div className='StileDescrizioneSito'>
-                <p className='StileDescrizione'> Benvenuto in My Flow!<br />
-                Che cosa puoi fare in questo sito?<br />
-                Puoi creare Workflows di blocchi, quindi organizzarli e gestirli come meglio credi!<br />
-                Ogni blocco corrisponde ad un operazione, alla quale puoi associare delle proprietà.
+                <p className='StileDescrizione'> Benvenuto in My Flow! <br/>
+                Organizza workflows di blocchi<br/>
+                collegandoli tra di loro<br />
+                come più preferisci.
                 </p>
+                <img className='stile-immagine' src='src\assets\workflow_animation.gif' alt='immagine non disponibile' title='Diagramma di flusso'></img>
             </div>
-            
+
 
             {/*Di seguito il contenitore della pallina che attraversa i tre rettangoli colorati*/}
             <div className = 'ContenitoreAnimazione'>

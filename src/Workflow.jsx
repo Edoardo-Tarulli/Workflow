@@ -33,7 +33,7 @@ const Output = ({data}) => (
 )
 
 const NodoTesto = ({ data }) => {
-  // Funzione per gestire il cambiamento del testo se vuoi salvare i dati
+  // Funzione per gestire il cambiamento del testo per salvare i dati
   const onChange = (evt) => {
     if (data.onChange) data.onChange(evt.target.value);
   };
@@ -279,24 +279,26 @@ const Associa = useCallback(
         <hr></hr>
         {nodoSelezionato ? (
           <div className="proprieta-nodo">
-            <p style={{height: '23px' , background: 'white', border: '1px solid', borderRadius: '5px'}}><strong>ID:</strong> {nodoSelezionato.id}</p>
-            <p style={{height: '23px' , background: 'white', border: '1px solid', borderRadius: '5px'}}><strong>Tipo:</strong> {nodoSelezionato.type}</p>
+            <p className='proprietà-paragrafo-nodo'><strong>ID:</strong> {nodoSelezionato.id}</p>
+            <p className='proprietà-paragrafo-nodo'><strong>Tipo:</strong> {nodoSelezionato.type}</p>
       
             <div className="coordinate">
-              <p style={{height: '23px' , background: 'white', border: '1px solid', borderRadius: '5px'}}><strong>Posizione X:</strong> {Math.round(nodoSelezionato.position.x)}</p>
+              <p className='proprietà-paragrafo-nodo'><strong>Posizione X:</strong> {Math.round(nodoSelezionato.position.x)}</p>
               <br></br>
-              <p style={{height: '23px' , background: 'white', border: '1px solid', borderRadius: '5px'}}><strong>Posizione Y:</strong> {Math.round(nodoSelezionato.position.y)}</p>
+              <p className='proprietà-paragrafo-nodo'><strong>Posizione Y:</strong> {Math.round(nodoSelezionato.position.y)}</p>
             </div>
 
             <div className="dati-custom">
-              <p style={{height: '23px' , background: 'white', border: '1px solid', borderRadius: '5px'}}><strong>Label:</strong> {nodoSelezionato.data.label}</p>
+              <p className='proprietà-paragrafo-nodo'><strong>Label:</strong> {nodoSelezionato.data.label}</p>
             </div>
 
-            {/* Esempio di input per modificare la label in tempo reale */}
-            <label>Rinomina Blocco:</label>
+            {/*input per modificare la label in tempo reale */}
+            <label>Titolo (Label):</label>
             <input 
               type="text"
-              value={nodoSelezionato.data.label}
+              className='input-label'
+              value={nodoSelezionato.data.label || ''}
+              maxLength={25} 
               onChange={(evt) => {
                 const nuovaLabel = evt.target.value;
                 SettaBlocchi((nds) =>
@@ -308,7 +310,20 @@ const Associa = useCallback(
                 );
               }}
             />
-          </div>
+
+            <label style={{ marginTop: '15px', display: 'block' }}>Descrizione:</label>
+            <textarea 
+              className="textarea-descrizione"
+              placeholder="Aggiungi una descrizione..."
+              value={nodoSelezionato.data.description || ''}
+              onChange={(evt) => {
+                const nuovaDesc = evt.target.value;
+                SettaBlocchi((nds) =>
+                  nds.map((node) =>
+                    node.id === nodoSelezionato.id
+                      ? { ...node, data: { ...node.data, description: nuovaDesc } }
+                      : node ) ); } } />
+          </div>          
   ) : (
     <p className="placeholder-text">Seleziona un blocco per vederne le proprietà</p>
   )}

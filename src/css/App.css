@@ -5,15 +5,15 @@
     box-sizing: border-box;
 }
 
-/* Rendiamo l'html e il body del sito largo e alto come tutta la schermata */
+
 html, body {
     width: 100%;
-    height: 100%; 
-    overflow: hidden; 
+    height: 100%;
+    overflow: hidden;
 }
 
 .Contenitore {
     width: 100vw;
     height: 100vh;
-    background-color: 	#FAEBD7;
+    background-color:#FAEBD7;
 }
