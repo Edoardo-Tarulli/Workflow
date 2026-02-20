@@ -27,6 +27,7 @@
 
 .StileDescrizione {
   font-family:'Courier New', Courier, monospace;
+  margin-left: 150px;
 }
 
 
@@ -48,96 +49,78 @@
 
 
 .StileDescrizioneSito {
-  padding-left: 20%;
   align-items: center;
   display: flex;
   flex-direction: row;
   font-weight: bold;
-  margin-top: 120px;
+  margin-top: 200px;
   width: 100vw;
   height: 30vh;
   font-size: 2em;
   cursor: context-menu;
 }
 
-@keyframes scorrimento {
-    0% {
-        /* Inizio animazione: posizionata a sinistra (appena fuori o all'inizio del contenitore) */
-        transform: translateX(0); 
-    }
-    100% {
-        /* Fine animazione: posizionata a destra (spostata di X pixel) */
-        transform: translateX(100vw); 
-    }
-}
-
-
-/* Contenitore per posizionare gli elementi in modo relativo */
-.ContenitoreAnimazione {
-    display: flex;
-    width: 100vw; /* Larghezza totale della tua animazione */
-    height: 200px;
-    position: relative; /* Base per posizionare la pallina in modo assoluto */
-    margin-top: 40px;
-}
-
-/* Stile e Animazione della Pallina Luminosa */
-.PallinaAnimata {
-    /* Posizionamento assoluto all'interno del contenitore */
-    position: absolute;
-    top: 43%;
-    transform: translateY(-50%);
-    font-size: 1.5em; /* Dimensione della pallina */
-    
-    color: black; /* Colore acceso (simula la luce verde) */
-    text-shadow: 0 0 10px #4CAF50, 0 0 20px #4CAF50; /* Effetto luminoso */
-    
-    /* Applica l'animazione: */
-    animation: 
-        scorrimento 5s /* 2 secondi di durata */
-        linear /* Velocità costante */
-        infinite; /* Ripeti all'infinito */
-
-    /* Regola il punto di partenza affinché il centro della pallina inizi sulla linea */
-    margin-left: -0.75em; /* Sposta a sinistra di metà della sua dimensione (circa metà dell'1.5em) */
-}
-
-
-.IconaStep {
-    font-size: 2.5em; /* Dimensione delle icone */
-    color: #555;     /* Colore scuro */
-    
-    position: absolute; /* Posizionamento preciso */
-    top: 50%;           /* Centra verticalmente sulla linea */
-    transform: translateY(-50%); 
-    
-    /* Z-index inferiore alla pallina per stare SOTTO */
-    z-index: 5; 
-}
-
-/* 3. Posizionamento Specifico di ogni Icona (usando percentuali) */
-.step-1 {
-    color:#00CED1;
-    left: 20%; /* Posiziona il primo rettangolo al 20% della larghezza del contenitore */
-    margin-left: -1.25em; /* Compensazione per centrare l'icona sul punto 20% */
-}
-
-.step-2 {
-    color:#00CED1;
-    left: 50%; /* Posiziona il secondo rettangolo al 50% */
-    margin-left: -1.25em; 
-}
-
-.step-3 {
-    color:#00CED1;
-    left: 80%; /* Posiziona il terzo rettangolo all'80% */
-    margin-left: -1.25em;
-}
-
-
 .stile-immagine {
   width: 300px;
   border: 1px solid;
   border-radius: 50%;
-  margin-left: 200px;
+  margin-left: 50px;
+}
+
+.imgPersonalizzazione {
+  margin-left: 500px;
+  border: 1px solid;
+  border-radius: 50%;
+  width: 300px;
+  height: 300px;
+}
+
+.buttonStart {
+  width: 300px;
+  height: 60px;
+  border: 2px solid;
+  border-radius: 10px;
+  font-family:'Courier New', Courier, monospace;
+  font-size: 2em;
+}
+
+.buttonStart:hover {
+  cursor: pointer;
+  background-color:#AFEEEE;
+}
+
+/* --- 1. ANIMAZIONE IMMEDIATA (TITOLO) --- */
+.ApparizioneImmediata {
+    animation: fadeInScale 1.2s ease-out forwards;
+}
+
+@keyframes fadeInScale {
+    0% { opacity: 0; transform: scale(0.95); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+/* --- 2. ANIMAZIONE A SCORRIMENTO (SEZIONI) --- */
+.rivela-elemento {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 1s cubic-bezier(0.17, 0.55, 0.55, 1), 
+                transform 1s cubic-bezier(0.17, 0.55, 0.55, 1);
+    will-change: opacity, transform;
+}
+
+.rivela-elemento.visibile {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* --- 3. EFFETTO RITARDO PER LE FRECCE --- */
+/* Quando il contenitore diventa visibile, la freccia aspetta 0.4s */
+.rivela-elemento.visibile .StileFrecciaAnimata {
+    animation: frecciaFade 0.8s ease-out 0.4s forwards;
+    opacity: 0; /* Parte invisibile */
+}
+
+@keyframes frecciaFade {
+    0% { opacity: 0; transform: translateX(-20px); } /* Piccola spinta laterale */
+    100% { opacity: 1; transform: translateX(0); }
 }

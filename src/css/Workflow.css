@@ -1,3 +1,8 @@
+Worflow.html, body {
+  overflow: hidden;
+}
+
+
 
 /* Css per lo stile della pagina workflow intera, che si trova sotto la navbar */
 .StileDivWorkflow {
