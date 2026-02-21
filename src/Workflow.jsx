@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
 import { ReactFlow, Background, Controls, applyEdgeChanges, applyNodeChanges, addEdge, Position, Handle, MiniMap, Panel, ReactFlowProvider, useReactFlow} from '@xyflow/react';
 import { IoIosArrowDroprightCircle } from "react-icons/io";
 import { IoIosArrowDropleftCircle } from "react-icons/io";
@@ -30,55 +30,7 @@ const Output = ({data}) => (
     {data.label}
     <Handle type="target" position={Position.Left} style={{background: '#8B4513'}}></Handle>
   </div>
-)
-
-const NodoTesto = ({ data }) => {
-  // Funzione per gestire il cambiamento del testo per salvare i dati
-  const onChange = (evt) => {
-    if (data.onChange) data.onChange(evt.target.value);
-  };
-
-  return (
-    <div id = 'nodo_testo' className="nodo-testo-custom">
-      {/* Handle di SINISTRA (Target) */}
-      <Handle 
-        type="target" 
-        position={Position.Left} 
-        style={{ background: '#FF0000', width: '8px', height: '8px' }}
-      />
-
-      {/* Area di trascinamento (Maniglia) */}
-      <div className="drag-handle">
-        <div className="dots">:::</div>
-      </div>
-      
-      <div className="input-container">
-        <input 
-          type="text" 
-          placeholder="Scrivi qui..." 
-          onChange={onChange}
-          className='nodrag'
-        />
-      </div>
-
-      {/* Handle di DESTRA (Source) */}
-      <Handle 
-        type="source" 
-        position={Position.Right} 
-        style={{ background: '#FF0000', width: '8px', height: '8px' }}
-      />
-    </div>
-  );
-};
-
-const NodoMerge = ({data}) => (
-  <div id = 'nodo_merge' className='nodo-merge'>
-    <Handle type="target" position={Position.Left} style={{background: '#FFFF00'}}/>
-    <Handle type="source" position={Position.Right} style={{background: '#FFFF00'}}/>
-  </div>
-
-)
-
+);
 
 const BlocchiIniziali = []
 
@@ -87,9 +39,7 @@ const Associazioni = []
 const TipoNodi = {
   input: SingoloInput,
   default: SingoloInputSingoloOutput,
-  testo: NodoTesto,
   output: Output,
-  merge: NodoMerge,
 };
 
 let idContatore = 0;
@@ -181,13 +131,12 @@ const Associa = useCallback(
           <Background variant="dots" gap={12} size={1} />
           <Controls
             className={`sposta-controlli ${SidebarAperta ? 'aperta' : ''}`}
-            aria-label='Ciao'
             showZoom showFitView
             
           />
           <MiniMap
             className={`sposta-minimappa ${GestioneAperta ? 'aperta' : ''}`}
-            nodeColor='black' ariaLabel='Mappa del flusso' bgColor='#AFEEEE' maskColor='none' pannable: false zoomable: false></MiniMap>
+            nodeColor='black' ariaLabel='Mappa del flusso' bgColor='#AFEEEE' maskColor='none' pannable={false} zoomable={false}></MiniMap>
           <Panel position='top-left'>
             <IoIosArrowDroprightCircle
             className={`icona-toggle ${SidebarAperta ? 'aperta' : ''}`}
@@ -248,28 +197,7 @@ const Associa = useCallback(
           >
             <span>🟤</span>
             <span style={{ marginLeft: '10px' }}><b>Nodo con solo output</b></span>
-          </div>
-          {/* Blocco con inserimento testo */}
-          <div id = 'text'
-            className="blocco-sidebar" 
-            style={{ borderLeftColor: '#FF0000' }}
-            onDragStart={(event) => InizioTrascinamento(event, 'testo')} 
-            draggable
-          >
-            <span>🔴</span>
-            <span style={{ marginLeft: '10px' }}><b>Nodo testuale</b></span>
-          </div>
-          {/* Blocco merge */}
-          <div id = 'merge'
-            className="blocco-sidebar" 
-            style={{ borderLeftColor: '#FFFF00' }}
-            onDragStart={(event) => InizioTrascinamento(event, 'merge')} 
-            draggable
-          >
-            <span>🟡</span>
-            <span style={{ marginLeft: '10px' }}><b>Nodo merge</b></span>
-          </div>
-  
+          </div>  
         </div>
         </aside>
 
@@ -277,58 +205,7 @@ const Associa = useCallback(
         <aside className={`sidebar-gestione ${GestioneAperta ? 'visibile' : ''}`}>
         <h3>Menù gestione blocchi</h3>
         <hr></hr>
-        {nodoSelezionato ? (
-          <div className="proprieta-nodo">
-            <p className='proprietà-paragrafo-nodo'><strong>ID:</strong> {nodoSelezionato.id}</p>
-            <p className='proprietà-paragrafo-nodo'><strong>Tipo:</strong> {nodoSelezionato.type}</p>
-      
-            <div className="coordinate">
-              <p className='proprietà-paragrafo-nodo'><strong>Posizione X:</strong> {Math.round(nodoSelezionato.position.x)}</p>
-              <br></br>
-              <p className='proprietà-paragrafo-nodo'><strong>Posizione Y:</strong> {Math.round(nodoSelezionato.position.y)}</p>
-            </div>
-
-            <div className="dati-custom">
-              <p className='proprietà-paragrafo-nodo'><strong>Label:</strong> {nodoSelezionato.data.label}</p>
-            </div>
-
-            {/*input per modificare la label in tempo reale */}
-            <label>Titolo (Label):</label>
-            <input 
-              type="text"
-              className='input-label'
-              value={nodoSelezionato.data.label || ''}
-              maxLength={25} 
-              onChange={(evt) => {
-                const nuovaLabel = evt.target.value;
-                SettaBlocchi((nds) =>
-                  nds.map((node) =>
-                    node.id === nodoSelezionato.id
-                      ? { ...node, data: { ...node.data, label: nuovaLabel } }
-                      : node
-                  )
-                );
-              }}
-            />
-
-            <label style={{ marginTop: '15px', display: 'block' }}>Descrizione:</label>
-            <textarea 
-              className="textarea-descrizione"
-              placeholder="Aggiungi una descrizione..."
-              value={nodoSelezionato.data.description || ''}
-              onChange={(evt) => {
-                const nuovaDesc = evt.target.value;
-                SettaBlocchi((nds) =>
-                  nds.map((node) =>
-                    node.id === nodoSelezionato.id
-                      ? { ...node, data: { ...node.data, description: nuovaDesc } }
-                      : node ) ); } } />
-          </div>          
-  ) : (
-    <p className="placeholder-text">Seleziona un blocco per vederne le proprietà</p>
-  )}
         </aside>
-
       </div>
 
     </>

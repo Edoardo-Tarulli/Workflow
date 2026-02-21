@@ -204,74 +204,6 @@ to   { filter: hue-rotate(360deg); }
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-
-/* Caratteristiche del blocco testo  */
-.nodo-testo-custom {
-  background: white;
-  border: 1px solid #777;
-  border-radius: 4px;
-  padding: 0;
-  width: 200px; 
-  height: 40px;
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-/* Contenitore del blocco testo quindi l'intero blocco  */
-.nodo-testo-custom .input-container {
-  width: 100%;
-  height: 100%;
-}
-
-/* Contenitore dell'input vero e proprio di testo, quindi dove si scrive.  */
-.nodo-testo-custom input {
-  width: 100%;
-  height: 100%;
-  border: none;
-  padding: 0 15px;
-  font-size: 14px;
-  outline: none;
-  box-sizing: border-box;
-  background: transparent;
-}
-
-/* La caption che indica "scrivi qui" */
-.nodo-testo-custom input::placeholder {
-  color: #aaa;
-  font-style: italic;
-}
-
-/* Stile per la dark mode */
-.dark-mode .nodo-testo-custom {
-  background:#FAEBD7;
-}
-
-/*  */
-.dark-mode .nodo-testo-custom input {
-  color: black;
-}
-
-/* Questo è lo stile della maniglia del blocco testo */
-.drag-handle {
-  width: 30px;
-  height: 100%;
-  background: #f0f0f0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: grab;
-  border-right: 1px solid #eee;
-  color: #999;
-  font-weight: bold;
-}
-
-/* Serve per modificare la manina quando viene preso il blocco testo per spostarlo */
-.drag-handle:active {
-  cursor: grabbing;
-}
-
 /* Quando viene aperta la sidebar di sinistra, i controlli (zoom, lock) vengono spostati a destra con traslazione */
 .sposta-controlli {
   transition: transform 0.3s ease;
@@ -340,15 +272,6 @@ to   { filter: hue-rotate(360deg); }
   color: black;
 }
 
-.nodo-merge {
-  height: 50px;
-  width: 100px;
-  border: 1px solid #777;
-  border-radius: 4px;
-  background: white;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
 .dark-mode .react-flow__node {
   background: #FAEBD7;
 }
@@ -357,32 +280,7 @@ to   { filter: hue-rotate(360deg); }
   border-color: #800000;
 }
 
-.proprieta-nodo {
-  margin-top: 40px;
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-  color: #333;
-}
-
-.proprieta-nodo input {
-  padding: 8px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  background: white;
-}
-
-.dark-mode .proprieta-nodo input {
-  background:#AFEEEE;
-  color: black;
-  border-color: #666;
-}
-
-.placeholder-text {
-  margin-top: 20px;
-}
-
-#nodo_input, #nodo_inputoutput, #ciao, .nodo-merge {
+#nodo_input, #nodo_inputoutput, #ciao {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -393,42 +291,4 @@ to   { filter: hue-rotate(360deg); }
   text-align: center;
 }
 
-/* Input label nella sidebar */
-.input-label-side {
-  width: 100%;
-  box-sizing: border-box;
-  margin-bottom: 10px;
-}
 
-/* Textarea che si espande */
-.textarea-descrizione {
-  width: 100%;
-  min-height: 80px;
-  max-height: 200px; /* Limite per non rompere il layout */
-  resize: vertical; /* Permette all'utente di espanderla solo in altezza */
-  padding: 8px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  font-family: inherit;
-  font-size: 14px;
-  box-sizing: border-box;
-}
-
-.dark-mode .textarea-descrizione {
-  background:#AFEEEE;
-  color: black;
-  border-color: #666;
-}
-
-/* Forza il contenitore delle proprietà a non far uscire gli elementi */
-.proprieta-nodo {
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-}
-
-.proprietà-paragrafo-nodo {
-  height: 23px;
-  background: white;
-  border: 1px solid;
-  border-radius: 5px;
-}

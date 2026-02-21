@@ -6,7 +6,6 @@ import { PiArrowBendLeftDownBold } from "react-icons/pi";
 import { FaLongArrowAltLeft } from "react-icons/fa";
 import { FaLongArrowAltDown } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
-import '../Workflow.jsx'
 import Rivelatore from './Rivelatore.jsx';
 
 
@@ -37,7 +36,7 @@ const navigatore = useNavigate()
                 come più preferisci.
                 </p>
                 <FaLongArrowAltRight className='StileFrecciaAnimata' style={{marginLeft: '50px', width: '200px', height: '100px'}}></FaLongArrowAltRight>
-                <img className='stile-immagine' src='src\assets\workflow_animation.gif' alt='immagine non disponibile' title='Diagramma di flusso'></img>
+                <img className='stile-immagine' src='src/assets/workflow_animation.gif' alt='immagine non disponibile' title='Diagramma di flusso'></img>
             </div>
             </Rivelatore>
             
@@ -47,7 +46,7 @@ const navigatore = useNavigate()
             
             <Rivelatore>
             <div className='StileDescrizioneSito'>
-                <img className='imgPersonalizzazione' alt='Immagine non disponibile' title='Personalizzazione' src='src\assets\Personalizzazione.png'></img>
+                <img className='imgPersonalizzazione' alt='Immagine non disponibile' title='Personalizzazione' src='src/assets/Personalizzazione.png'></img>
                 <FaLongArrowAltLeft className='StileFrecciaAnimata' style={{marginLeft: '80px', width: '200px', height: '100px'}}></FaLongArrowAltLeft>
                 <p style={{marginLeft: '80px'}} className='StileDescrizione'> Ogni blocco è un'operazione <br/> sulla quale puoi stabilire <br/> delle proprietà e che verrà <br/> applicata a datastream di dati </p>
             </div>
@@ -62,7 +61,7 @@ const navigatore = useNavigate()
             <div className='StileDescrizioneSito'>
                 <p style={{marginLeft: '200px'}} className='StileDescrizione'> Ed infine salva ed esporta <br/> il tuo lavoro!</p>
                 <FaLongArrowAltRight className='StileFrecciaAnimata' style={{marginLeft: '50px', width: '200px', height: '100px'}}></FaLongArrowAltRight>
-                <img style={{height: '300px', width: '300px', color: 'black', marginLeft: '80px', border: '1px solid', borderRadius: '50%'}} title='Salva' src='src\assets\saveProject.gif'></img>
+                <img style={{height: '300px', width: '350px', color: 'black', marginLeft: '80px', border: '1px solid', borderRadius: '50%'}} title='Salva' src='src/assets/saveProject.gif'></img>
             </div>
             </Rivelatore>
             
