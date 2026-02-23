@@ -14,6 +14,7 @@ padding-bottom: 50px;
 }
 
 .StileDivWorkflow * {
+  font-family:'Courier New', Courier, monospace;
   transition: background-color 0.5s ease, border-color 0.5s ease, color 0.5s ease;
 }
 
@@ -105,7 +106,6 @@ transition: right 0.3s ease;
 }
 
 
-
 /* Inizialmente la sidebar di sinistra è coperta, al click della freccia la sua "left" diventa zero, quindi diventa visibile */
 .sidebar-blocchi.visibile {
 left: 0; /* Appare scorrendo */
@@ -142,6 +142,7 @@ to   { filter: hue-rotate(360deg); }
 
 /* Stile del blocco generico, cioè la card che rappresenta il blocco prima di diventare effettivamente blocco */
 .blocco-sidebar {
+  font-family:'Courier New', Courier, monospace;
   background-color: white;
   margin-top: 40px;
   padding: 12px 15px;
@@ -158,36 +159,8 @@ to   { filter: hue-rotate(360deg); }
 }
 
 /* Effetto al passaggio del mouse, quindi evidenziamento e cursore */
-#input.blocco-sidebar:hover {
-  border-color:blue;
-  transform: translateY(-2px); /* Si alza leggermente al passaggio sopra del mouse */
-  transition: transform 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-#inputoutput.blocco-sidebar:hover {
-  border-color:#4caf50;
-  transform: translateY(-2px); /* Si alza leggermente al passaggio sopra del mouse */
-  transition: transform 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-#output.blocco-sidebar:hover {
-  border-color:#8B4513;
-  transform: translateY(-2px); /* Si alza leggermente al passaggio sopra del mouse */
-  transition: transform 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-#text.blocco-sidebar:hover {
-  border-color:#FF0000;
-  transform: translateY(-2px); /* Si alza leggermente al passaggio sopra del mouse */
-  transition: transform 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-#merge.blocco-sidebar:hover {
-  border-color:#FFD700;
+.blocco-sidebar:hover {
+  border-color: var(--colore-hover);
   transform: translateY(-2px); /* Si alza leggermente al passaggio sopra del mouse */
   transition: transform 0.3s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -202,6 +175,16 @@ to   { filter: hue-rotate(360deg); }
 .dark-mode .blocco-sidebar:hover {
   transform: translateY(-2px); /* Si alza leggermente al passaggio sopra del mouse */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+.stileNodo {
+  font-family:'Courier New', Courier, monospace;
+  padding: 10px;
+  border-radius: 8px;
+  width: 150px;
+  background: white;
+  text-align: center;
 }
 
 /* Quando viene aperta la sidebar di sinistra, i controlli (zoom, lock) vengono spostati a destra con traslazione */
@@ -273,22 +256,9 @@ to   { filter: hue-rotate(360deg); }
 }
 
 .dark-mode .react-flow__node {
-  background: #FAEBD7;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important; /* Evita che il contenitore sia più grande del tuo div */
 }
-
-#ciao .react-flow__node {
-  border-color: #800000;
-}
-
-#nodo_input, #nodo_inputoutput, #ciao {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  padding: 5px 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-
 

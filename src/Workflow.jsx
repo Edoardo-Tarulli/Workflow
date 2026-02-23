@@ -9,24 +9,64 @@ import '@xyflow/react/dist/style.css';
 import '../src/css/Workflow.css';
 
 
-const SingoloInput = ({data}) => (
-  <div id = 'nodo_input' style={{color: 'blue'}}>
+const Source = ({data}) => (
+  <div className='stileNodo' style={{color: '#FF0000', border: '2px solid #FF0000'}}>
+    <div style={{ fontSize: '10px', fontWeight: 'bold'}}></div>
     {data.label}
-    <Handle position={Position.Right} style={{ background: 'blue'}}/>
+    <Handle position={Position.Right} style={{ background: '#FF0000'}}/>
   </div>
 );
 
-const SingoloInputSingoloOutput = ({data}) => (
-  <div id = 'nodo_inputoutput' style={{color: '#4caf50'}}>
-    <Handle type="target" position={Position.Left} style={{background: '#4caf50'}}/>
+const Filter = ({data}) => (
+  <div className='stileNodo' style={{color: '#FFA500', border: '2px solid #FFA500'}}>
+    <Handle type="target" position={Position.Left} style={{background: '#FFA500'}}/>
+    <div style={{ fontSize: '10px', fontWeight: 'bold'}}></div>
     {data.label}
-    <Handle type="source" position={Position.Right} style={{background: '#4caf50'}}/>
+    <Handle type="source" position={Position.Right} style={{background: '#FFA500'}}/>
+  </div>
+);
+
+const Map = ({data}) => (
+  <div className='stileNodo' style={{color: '#FFFF00', border: '2px solid #FFFF00'}}>
+    <Handle type="target" position={Position.Left} style={{background: '#FFFF00'}}/>
+    <div style={{ fontSize: '10px', fontWeight: 'bold'}}></div>
+    {data.label}
+    <Handle type="source" position={Position.Right} style={{background: '#FFFF00'}}/>
+  </div>
+);
+
+const KeyBy = ({data}) => (
+  <div className='stileNodo' style={{color: '#3CB371', border: '2px solid #3CB371'}}>
+    <Handle type="target" position={Position.Left} style={{background: '#3CB371'}}/>
+    <div style={{ fontSize: '10px', fontWeight: 'bold'}}></div>
+    {data.label}
+    <Handle type="source" position={Position.Right} style={{background: '#3CB371'}}/>
+  </div>
+);
+
+const Window = ({data}) => (
+  <div className='stileNodo' style={{color: '#0000FF', border: '2px solid #0000FF'}}>
+    <Handle type="target" position={Position.Left} style={{background: '#0000FF'}}/>
+    <div style={{ fontSize: '10px', fontWeight: 'bold'}}></div>
+    {data.label}
+    <Handle type="source" position={Position.Right} style={{background: '#0000FF'}}/>
   </div>
 );
 
 
-const Output = ({data}) => (
-  <div id = 'ciao' style={{color: '#8B4513'}}>
+const Aggregate = ({data}) => (
+  <div className='stileNodo' style={{color: '#800080', border: '2px solid #800080'}}>
+    <Handle type="target" position={Position.Left} style={{background: '#800080'}}/>
+    <div style={{ fontSize: '10px', fontWeight: 'bold'}}></div>
+    {data.label}
+    <Handle type="source" position={Position.Right} style={{background: '#800080'}}/>
+  </div>
+);
+
+
+const Sink = ({data}) => (
+  <div className='stileNodo' style={{color: '#8B4513', border: '2px solid #8B4513'}}>
+    <div style={{ fontSize: '10px', fontWeight: 'bold'}}></div>
     {data.label}
     <Handle type="target" position={Position.Left} style={{background: '#8B4513'}}></Handle>
   </div>
@@ -37,13 +77,32 @@ const BlocchiIniziali = []
 const Associazioni = []
 
 const TipoNodi = {
-  input: SingoloInput,
-  default: SingoloInputSingoloOutput,
-  output: Output,
+  source: Source,
+  filter: Filter,
+  sink: Sink,
+  map: Map,
+  keyby: KeyBy,
+  window: Window,
+  aggregate: Aggregate
 };
 
-let idContatore = 0;
-const generaNuovoId = () => `nodo_${idContatore++}`;
+const contatoriTipi = {
+  source: 0,
+  filter: 0,
+  sink: 0,
+  map: 0,
+  keyby: 0,
+  window: 0,
+  aggregate: 0
+};
+
+const generaNuovoIdPerTipo = (tipo) => {
+  if (!(tipo in contatoriTipi)) {
+    contatoriTipi[tipo] = 0;
+  }
+  contatoriTipi[tipo]++;
+  return `${tipo}_${contatoriTipi[tipo]}`;
+};
 
 
 function WorkflowEditor() {
@@ -82,12 +141,14 @@ const InizioTrascinamento = (event, tipoNodo) => {
         y: event.clientY,
       });
 
+      const nuovoId = generaNuovoIdPerTipo(tipo);
+
       // Creiamo il nuovo oggetto nodo
       const nuovoNodo = {
-        id: generaNuovoId(), 
+        id: nuovoId, 
         type: tipo,
         position: posizione,
-        data: { label: `Blocco ${idContatore}` },
+        data: { label: nuovoId.toUpperCase() },
       };
 
       SettaBlocchi((nds) => nds.concat(nuovoNodo));
@@ -161,49 +222,96 @@ const Associa = useCallback(
             </IoIosArrowDropleftCircle>
           </Panel>
         </ReactFlow>
+
         {/* Sidebar Laterale */}
         <aside className={`sidebar-blocchi ${SidebarAperta ? 'visibile' : ''}`}>
         <h3>Libreria Blocchi</h3>
         <hr></hr>
         <div className="lista-nodi">
 
-          {/* Blocco Sorgente */}
-          <div id = 'input'
+          {/* Blocco Source (input) */}
+          <div
             className="blocco-sidebar"
-            style={{ borderLeftColor: 'blue' }}
-            onDragStart={(event) => InizioTrascinamento(event, 'input')} 
+            style={{ borderLeftColor: '#FF0000', '--colore-hover': '#FF0000' }}
+            onDragStart={(event) => InizioTrascinamento(event, 'source')} 
             draggable
           >
-            <span>🔵</span> 
-            <span style={{ marginLeft: '10px' }}><b>Nodo con solo input</b></span>
+            <span>🔴</span> 
+            <span style={{ marginLeft: '10px' }}><b>Nodo "Source"</b></span>
           </div>
 
-          {/* Blocco con input e output */}
-          <div id = 'inputoutput'
+          {/* Blocco Filter (filtraggio) */}
+          <div
             className="blocco-sidebar" 
-            style={{ borderLeftColor: '#4caf50' }}
-            onDragStart={(event) => InizioTrascinamento(event, 'default')} 
+            style={{ borderLeftColor: '#FFA500', '--colore-hover': '#FFA500' }}
+            onDragStart={(event) => InizioTrascinamento(event, 'filter')} 
+            draggable
+          >
+            <span>🟠</span>
+            <span style={{ marginLeft: '10px' }}><b>Nodo "Filter"</b></span>
+          </div>
+
+          {/* Blocco Map (mapping) */}
+          <div
+            className="blocco-sidebar" 
+            style={{ borderLeftColor: '#FFFF00', '--colore-hover': '#FFFF00' }}
+            onDragStart={(event) => InizioTrascinamento(event, 'map')} 
+            draggable
+          >
+            <span>🟡</span>
+            <span style={{ marginLeft: '10px' }}><b>Nodo "Map"</b></span>
+          </div>
+
+          {/* Blocco KeyBy (si va a filtrare per chiave) */}
+          <div
+            className="blocco-sidebar" 
+            style={{ borderLeftColor: '#3CB371', '--colore-hover': '#3CB371' }}
+            onDragStart={(event) => InizioTrascinamento(event, 'keyby')} 
             draggable
           >
             <span>🟢</span>
-            <span style={{ marginLeft: '10px' }}><b>Nodo con input e output</b></span>
+            <span style={{ marginLeft: '10px' }}><b>Nodo "KeyBy"</b></span>
           </div>
-          {/* Blocco con solo output */}
-          <div id = 'output'
+
+          {/* Blocco Window (finestra) */}
+          <div
             className="blocco-sidebar" 
-            style={{ borderLeftColor: '#8B4513' }}
-            onDragStart={(event) => InizioTrascinamento(event, 'output')} 
+            style={{ borderLeftColor: '#0000FF', '--colore-hover': '#0000FF' }}
+            onDragStart={(event) => InizioTrascinamento(event, 'window')} 
+            draggable
+          >
+            <span>🔵</span>
+            <span style={{ marginLeft: '10px' }}><b>Nodo "Window"</b></span>
+          </div>
+
+          {/* Blocco Aggregate (aggregazione) */}
+          <div
+            className="blocco-sidebar" 
+            style={{ borderLeftColor: '#800080', '--colore-hover': '#800080' }}
+            onDragStart={(event) => InizioTrascinamento(event, 'aggregate')} 
+            draggable
+          >
+            <span>🟣</span>
+            <span style={{ marginLeft: '10px' }}><b>Nodo "Aggregate"</b></span>
+          </div>
+
+          {/* Blocco Sink (output) */}
+          <div
+            className="blocco-sidebar" 
+            style={{ borderLeftColor: '#8B4513', '--colore-hover': '#8B4513' }}
+            onDragStart={(event) => InizioTrascinamento(event, 'sink')} 
             draggable
           >
             <span>🟤</span>
-            <span style={{ marginLeft: '10px' }}><b>Nodo con solo output</b></span>
-          </div>  
+            <span style={{ marginLeft: '10px' }}><b>Nodo "Sink"</b></span>
+          </div>
+
         </div>
         </aside>
 
         {/* Di seguito c'è il codice che riguarda la sidebar di destra */}
         <aside className={`sidebar-gestione ${GestioneAperta ? 'visibile' : ''}`}>
-        <h3>Menù gestione blocchi</h3>
+        <h3>Proprietà</h3>
         <hr></hr>
         </aside>
       </div>

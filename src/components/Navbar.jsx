@@ -10,7 +10,7 @@ const Navbar = () => {
         <div className='StileNavbar'> {/* Contenitore principale della navbar */}
             <nav className='StileElementiNav'> {/* Contenitore degli elementi della navbar e del loro stile*/}
                 <button onClick={() => navigatore('/')} title='Vai alla schermata Home' className='StileBottoneNav'><b>HOME</b></button>
-                <button onClick={() => navigatore('/Workflow')} title='Vai alla pagina Workflow' className='StileBottoneNav'><b>WORKFLOW</b></button>
+                <button onClick={() => navigatore('/Workflow')} title='Vai alla schermata del Workflow' className='StileBottoneNav'><b>WORKFLOW</b></button>
             </nav>
         </div>
     )
