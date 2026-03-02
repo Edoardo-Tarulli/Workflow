@@ -99,6 +99,7 @@ box-shadow: 2px 0 10px rgba(0,0,0,0.1);
 z-index: 5;
 padding: 20px;
 transition: right 0.3s ease;
+overflow-y: scroll;
 }
 
 .dark-mode .sidebar-gestione {
@@ -177,8 +178,22 @@ to   { filter: hue-rotate(360deg); }
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.blocco-gestione {
+  width: 180px;
+  height: 25px;
+  border: 1px solid black;
+  border-radius: 5px;
+  font-size: large;
+  font-family: 'Courier New', Courier, monospace;
+  background-color: white;
+}
+
 
 .stileNodo {
+  border-top: 2px solid black;
+  border-right: 2px solid black;
+  border-bottom: 2px solid black;
+  border-left: var(--colore-bordo-sinistra);
   font-family:'Courier New', Courier, monospace;
   padding: 10px;
   border-radius: 8px;
@@ -186,6 +201,21 @@ to   { filter: hue-rotate(360deg); }
   background: white;
   text-align: center;
 }
+
+.stileNodo:focus {
+  border-color: var(--colore-selezione);
+}
+
+.dark-mode .stileNodo {
+  border-top: 2px solid grey;
+  border-right: 2px solid grey;
+  border-bottom: 2px solid grey;
+}
+
+.dark-mode .stileNodo:focus {
+  border-color: var(--colore-selezione);
+}
+
 
 /* Quando viene aperta la sidebar di sinistra, i controlli (zoom, lock) vengono spostati a destra con traslazione */
 .sposta-controlli {
@@ -247,7 +277,7 @@ to   { filter: hue-rotate(360deg); }
 }
 
 .dark-mode .react-flow__controls {
-  border: 2px solid ;
+  border: 2px solid;
 }
 
 .dark-mode .react-flow__controls-button {
@@ -257,8 +287,13 @@ to   { filter: hue-rotate(360deg); }
 
 .dark-mode .react-flow__node {
     background: transparent !important;
-    border: none !important;
+    border: none;
     box-shadow: none !important;
-    padding: 0 !important; /* Evita che il contenitore sia più grande del tuo div */
+}
+
+.react-flow__edge-path {
+  stroke: gray; /* Colore grigio chiaro di default */
+  stroke-width: 2;   /* Spessore della linea */
+  transition: stroke 0.3s, stroke-width 0.3s;
 }
 

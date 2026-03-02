@@ -10,64 +10,57 @@ import '../src/css/Workflow.css';
 
 
 const Source = ({data}) => (
-  <div className='stileNodo' style={{color: '#FF0000', border: '2px solid #FF0000'}}>
-    <div style={{ fontSize: '10px', fontWeight: 'bold'}}></div>
-    {data.label}
+  <div tabIndex={0} className='stileNodo' style={{color: '#FF0000', '--colore-bordo-sinistra': '15px solid #FF0000', '--colore-selezione': '#FF0000'}}>
+    <div style={{fontSize: '15px', fontWeight: 'bold'}}>{data.label}</div>
     <Handle position={Position.Right} style={{ background: '#FF0000'}}/>
   </div>
 );
 
 const Filter = ({data}) => (
-  <div className='stileNodo' style={{color: '#FFA500', border: '2px solid #FFA500'}}>
+  <div tabIndex={0} className='stileNodo' style={{color: '#FFD700', '--colore-bordo-sinistra': '15px solid #FFA500', '--colore-selezione': '#FFA500'}}>
     <Handle type="target" position={Position.Left} style={{background: '#FFA500'}}/>
-    <div style={{ fontSize: '10px', fontWeight: 'bold'}}></div>
-    {data.label}
+    <div style={{ fontSize: '15px', fontWeight: 'bold'}}>{data.label}</div>
     <Handle type="source" position={Position.Right} style={{background: '#FFA500'}}/>
   </div>
 );
 
 const Map = ({data}) => (
-  <div className='stileNodo' style={{color: '#FFFF00', border: '2px solid #FFFF00'}}>
+  <div tabIndex={0} className='stileNodo' style={{color: '#FFFF00', '--colore-bordo-sinistra': '15px solid #FFFF00', '--colore-selezione': '#FFFF00'}}>
     <Handle type="target" position={Position.Left} style={{background: '#FFFF00'}}/>
-    <div style={{ fontSize: '10px', fontWeight: 'bold'}}></div>
-    {data.label}
+    <div style={{ fontSize: '15px', fontWeight: 'bold'}}>{data.label}</div>
     <Handle type="source" position={Position.Right} style={{background: '#FFFF00'}}/>
   </div>
 );
 
 const KeyBy = ({data}) => (
-  <div className='stileNodo' style={{color: '#3CB371', border: '2px solid #3CB371'}}>
+  <div tabIndex={0} className='stileNodo' style={{color: '#3CB371', '--colore-bordo-sinistra': '15px solid #3CB371', '--colore-selezione': '#3CB371'}}>
     <Handle type="target" position={Position.Left} style={{background: '#3CB371'}}/>
-    <div style={{ fontSize: '10px', fontWeight: 'bold'}}></div>
-    {data.label}
+    <div style={{ fontSize: '15px', fontWeight: 'bold'}}>{data.label}</div>
     <Handle type="source" position={Position.Right} style={{background: '#3CB371'}}/>
   </div>
 );
 
 const Window = ({data}) => (
-  <div className='stileNodo' style={{color: '#0000FF', border: '2px solid #0000FF'}}>
+  <div tabIndex={0} className='stileNodo' style={{color: '#0000FF', '--colore-bordo-sinistra': '15px solid #0000FF', '--colore-selezione': '#0000FF'}}>
     <Handle type="target" position={Position.Left} style={{background: '#0000FF'}}/>
-    <div style={{ fontSize: '10px', fontWeight: 'bold'}}></div>
-    {data.label}
+    <div style={{ fontSize: '15px', fontWeight: 'bold'}}>{data.label}</div>
     <Handle type="source" position={Position.Right} style={{background: '#0000FF'}}/>
   </div>
 );
 
 
 const Aggregate = ({data}) => (
-  <div className='stileNodo' style={{color: '#800080', border: '2px solid #800080'}}>
+  <div tabIndex={0} className='stileNodo' style={{color: '#800080', '--colore-bordo-sinistra': '15px solid #800080', '--colore-selezione': '#800080'}}>
     <Handle type="target" position={Position.Left} style={{background: '#800080'}}/>
-    <div style={{ fontSize: '10px', fontWeight: 'bold'}}></div>
-    {data.label}
+    <div style={{ fontSize: '15px', fontWeight: 'bold'}}>{data.label}</div>
     <Handle type="source" position={Position.Right} style={{background: '#800080'}}/>
   </div>
 );
 
 
 const Sink = ({data}) => (
-  <div className='stileNodo' style={{color: '#8B4513', border: '2px solid #8B4513'}}>
-    <div style={{ fontSize: '10px', fontWeight: 'bold'}}></div>
-    {data.label}
+  <div tabIndex={0} className='stileNodo' style={{color: '#8B4513', '--colore-bordo-sinistra': '15px solid #8B4513', '--colore-selezione': '#8B4513'}}>
+    <div style={{ fontSize: '15px', fontWeight: 'bold'}}>{data.label}</div>
     <Handle type="target" position={Position.Left} style={{background: '#8B4513'}}></Handle>
   </div>
 );
@@ -102,6 +95,67 @@ const generaNuovoIdPerTipo = (tipo) => {
   }
   contatoriTipi[tipo]++;
   return `${tipo}_${contatoriTipi[tipo]}`;
+};
+
+
+const SCHEMA_PROPRIETA = {
+  source: [
+    { label: "Type", key: "type", tipo: "fisso", default: "kafka"  },
+    { label: "Topic", key: "topic", tipo: "testo", placeholder: "Scrivi campo..." },
+    { label: "Bootstrap Servers", key: "bootstrap_servers", tipo: "testo", placeholder: "Scrivi campo..." },
+    { label: "Timestamp Field", key: "timestamp_field", tipo: "testo", placeholder: "Scrivi qui..."}
+  ],
+  filter: [
+    { 
+      label: "Filter Condition",
+      key: "filter_condition",
+      tipo: "testo",
+      placeholder: "Inserisci condizione..."
+    }
+  ],
+  map: [
+    {
+      label: "Applies To Fields",
+      key: "appliesToFields",
+      tipo: "array_stringhe",
+      placeholder: "Aggiungi campo..."
+    }
+  ],
+  keyby: [
+    {
+      label: "Applies To Fields",
+      key: "appliesToFields", 
+      tipo: "testo", 
+      placeholder: "Scrivi campo..."
+    }
+  ],
+  window: {
+    comuni: [
+      { label: "Window Type", key: "windowType", tipo: "select", opzioni: ["tumbling", "hopping", "count"] }
+    ],
+    specifici: {
+      tumbling: [
+        { label: "Duration", key: "duration", tipo: "numero", placeholder: "Inserisci numero intero..." },
+        { label: "Size", key: "size", tipo: "numero", placeholder: "Inserisci numero intero..." }
+      ],
+      hopping: [
+        { label: "Duration", key: "duration", tipo: "numero", placeholder: "Inserisci numero intero..." },
+        { label: "Slide", key: "slide", tipo: "numero", placeholder: "Inserisci numero intero..."}
+      ],
+      count: [
+        { label: "Size", key: "size", tipo: "numero", placeholder: "Inserisci numero intero..." },
+        { label: "Slide", key: "slide", tipo: "numero", placeholder: "Inserisci numero intero" }
+      ]
+    }
+  },
+  aggregate: [
+    { label: "Aggregazioni", key: "aggregations", tipo: "dizionario_aggregazioni", funzioni: ["min", "max", "avg", "sum"] }
+  ],
+  sink: [
+    { label: "Type", key: "type", tipo: "fisso", default: "kafka"  },
+    { label: "Topic", key: "topic", tipo: "testo", placeholder: "Scrivi campo..." },
+    { label: "Bootstrap Servers", key: "bootstrap_servers", tipo: "testo", placeholder: "Scrivi campo..." },
+  ]
 };
 
 
@@ -171,6 +225,26 @@ const Associa = useCallback(
   (params) => SettaCollegamenti((edgesSnapshot) => addEdge(params, edgesSnapshot)),
   [],
 );
+
+const aggiornaDatoNodo = (chiave, valore) => {
+  // 1. Usiamo la funzione SettaBlocchi che arriva dal Context
+  SettaBlocchi((vecchiBlocchi) =>
+    vecchiBlocchi.map((nodo) => {
+      // 2. Cerchiamo il nodo che l'utente sta modificando nella sidebar
+      if (nodo.id === nodoSelezionato.id) {
+        return {
+          ...nodo,
+          data: {
+            ...nodo.data,    // Mantieni i dati esistenti (es. label)
+            [chiave]: valore // Aggiorna o aggiungi la nuova proprietà (es. topic: "A")
+          },
+        };
+      }
+      // 3. Gli altri nodi rimangono invariati
+      return nodo;
+    })
+  );
+};
 
   return (
     <>
@@ -313,6 +387,54 @@ const Associa = useCallback(
         <aside className={`sidebar-gestione ${GestioneAperta ? 'visibile' : ''}`}>
         <h3>Proprietà</h3>
         <hr></hr>
+        {!nodoSelezionato ?
+         (
+          <p style={{fontFamily: 'Courier New, Courier, monospace', marginTop: '40px', fontSize: 'large'}}><b>Seleziona un blocco per vederne i parametri.</b></p>
+         ) :
+         (
+          <div style={{display: 'flex', flexDirection: 'column', gap: '40px', fontFamily: 'Courier New, Courier, monospace', fontSize: 'large'}}>
+            <h3 style={{marginTop: '40px', textAlign: 'center'}}> Caratteristiche del nodo </h3>
+            <div>
+              <label><b>ID:</b></label>
+                <p style={{textAlign: 'center'}} className='blocco-gestione'>{nodoSelezionato.id}</p>
+            </div>
+            <div>
+              <label><b>Position X:</b></label>
+                <p style={{textAlign: 'center'}} className='blocco-gestione'>{Math.round(nodoSelezionato.position.x)}</p>
+            </div>
+            <div>
+              <label><b>Position Y:</b></label>
+                <p style={{textAlign: 'center'}} className='blocco-gestione'>{Math.round(nodoSelezionato.position.y)}</p>
+            </div>
+            <hr/>
+            <h3 style={{textAlign: 'center'}}> Caratteristiche proprie del nodo {nodoSelezionato.id}</h3>
+            <hr style={{width: '100%', color: 'none', border: 'none'}}></hr>
+
+            {SCHEMA_PROPRIETA[nodoSelezionato.type] && Array.isArray(SCHEMA_PROPRIETA[nodoSelezionato.type]) && (
+              SCHEMA_PROPRIETA[nodoSelezionato.type].map((campo) => (
+                <div key={campo.key} style={{ marginBottom: '15px' }}>
+                  <p><b>{campo.label}:</b></p>
+                  {campo.tipo === "fisso" ? (
+                    /* Se è fisso, mostro il valore di default */
+                    <p className='blocco-gestione'>{campo.default}</p>
+                  ) : (
+                    /* Se è testo, mostro un input collegato allo stato del nodo */
+                    <input
+                      style={{width: '250px', height: '25px', fontSize: 'large'}}
+                      placeholder='Scrivi qui...'
+                      value={nodoSelezionato.data[campo.key] || ""} 
+                      onChange={(e) => aggiornaDatoNodo(campo.key, e.target.value)}
+                    />
+                  )}
+                </div>
+              ))
+            )}
+            <hr style={{width: '100%', color: 'none', border: 'none'}}></hr>
+          </div>
+
+
+         )
+        }
         </aside>
       </div>
 
