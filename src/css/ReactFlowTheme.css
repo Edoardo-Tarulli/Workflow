@@ -1,4 +1,5 @@
-/* Spostamento UI dinamico */
+/* Serve per fare in modo che quando le sidebar vengono aperte, la minimappa e il pannello controlli traslano verso
+, rispettivamente, sinistra e destra, così che non vengano oscurate */
 .sposta-controlli { transition: transform 0.3s ease; }
 .sposta-minimappa { transition: transform 0.3s ease; }
 .sposta-controlli.aperta { transform: translateX(310px); }
@@ -11,6 +12,8 @@
   overflow: hidden;
 }
 
+/*React flow controls, button, minimap e tutto quello legato a react-flow sono stili css che vengono applicati
+in automatica di default da relax e qui li andiamo ad adattare al nostro editor. */
 .StileDivWorkflow .react-flow__controls-button {
   background-color: #AFEEEE;
   border-bottom: 1px solid black;
@@ -30,12 +33,13 @@
   transition: stroke 0.3s, stroke-width 0.3s;
 }
 
+/*Quando i collegamenti vengono selezionati, cambiano colore*/
 .react-flow__edge.selected .react-flow__edge-path {
   stroke: #AFEEEE !important;
   stroke-width: 4;
 }
 
-/* Dark Mode per componenti interni */
+/*Specifichiamo le caratteristiche di tutti gli elementi precedenti quando si passa alla dark mode*/
 .dark-mode .react-flow__minimap { background-color: #FAEBD7; border: 2px solid white; }
 .dark-mode .react-flow__controls-button { background-color: #FAEBD7; color: black; }
 .dark-mode .react-flow__edge-path { stroke: white; }

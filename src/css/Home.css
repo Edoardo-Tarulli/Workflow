@@ -1,4 +1,5 @@
 
+/*Css che descrive lo stile intero della pagina home e come i suoi elementi vengono disposti*/
 .StileHome {
   display: flex;
   width: 100vw;
@@ -6,7 +7,7 @@
   min-height: 100vh;
 }
 
-
+/*Classe che descrive lo stile del contenitore del titolo*/
 .ContenitoreScritta {
   margin-top: 150px;
   display: flex;
@@ -25,12 +26,14 @@
   text-shadow: 2px 2px 4px rgba(0.5, 0, 0, 0.5);
 }
 
+/*Stile dei paragrafi che descrivono il sito*/
 .StileDescrizione {
   font-family:'Courier New', Courier, monospace;
   margin-left: 150px;
 }
 
 
+/*Serve per fare in modo che gli ingranaggi ruotino, riproducendo in continuazione la rotazione*/
 @keyframes spin {
   from {
     transform: rotate(0deg); /*Fa partire la rotazione da 0 gradi*/
@@ -48,6 +51,7 @@
 }
 
 
+/*Stile dei singoli elementi che compongono i vari elementi di ogni div delle sezioni descrizioni*/
 .StileDescrizioneSito {
   align-items: center;
   display: flex;
@@ -60,6 +64,7 @@
   cursor: context-menu;
 }
 
+/*Css che gestisce lo stile della prima immagine*/
 .stile-immagine {
   width: 300px;
   border: 1px solid;
@@ -67,6 +72,7 @@
   margin-left: 50px;
 }
 
+/*Css che descrive lo stile della seconda immagine*/
 .imgPersonalizzazione {
   margin-left: 500px;
   border: 1px solid;
@@ -75,6 +81,7 @@
   height: 300px;
 }
 
+/*Stile del bottone "inizia ora" che porta alla schermata del workflow*/
 .buttonStart {
   width: 300px;
   height: 60px;
@@ -84,6 +91,7 @@
   font-size: 2em;
 }
 
+/*Quando si passa con il mouse sopra al bottone*/
 .buttonStart:hover {
   cursor: pointer;
   background-color:#AFEEEE;
@@ -108,6 +116,7 @@
     will-change: opacity, transform;
 }
 
+/*Quando l'elemento diventa visibile scorrendo, viene applicata opacità e trasla dando l'effetto che compaia*/
 .rivela-elemento.visibile {
     opacity: 1;
     transform: translateY(0);

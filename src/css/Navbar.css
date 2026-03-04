@@ -1,3 +1,5 @@
+
+/*Css che descrive lo stile della navbar intera*/
 .StileNavbar {
     width: 100%;
     height: 60px;
@@ -9,6 +11,7 @@
     border-bottom: 2px solid #121212;
 }
 
+/*Css che descrive i singoli elementi che compongono la navbar*/
 .StileElementiNav {
     padding-left: 40px;
     display: flex;
@@ -19,16 +22,19 @@
     font-family:'Courier New', Courier, monospace;
 }
 
+/*Quando si passa con il mouse sopra gli elementi della navbar*/
 .StileElementiNav :hover {
     cursor: pointer;
     background-color:#FAEBD7;
 }
 
+/*Facciamo in modo che se un link sia già stato "visitato" e cioè premuto, non cambi colore*/
 .StileElementiNav :visited {
     text-decoration: none;
     color: inherit;
 }
 
+/*Ogni elemento della navbar è un bottone premibile, che fa navigare tra le schermate*/
 .StileBottoneNav {
     width: 150px;
     height: 30px;

@@ -1,3 +1,8 @@
+
+/*In questo file andiamo a definire lo schema delle proprietà di tutti i nodi.
+Esse le andiamo poi a richiamare quando le dobbiamo mandare a schermo in base alla selezione del blocco specifico.
+Ogni nodo ha delle proprietà specifiche che vengono definite qui*/
+
 export const SCHEMA_PROPRIETA = {
   source: [
     { label: "Type", key: "type", tipo: "fisso", default: "kafka" },

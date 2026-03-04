@@ -15,6 +15,7 @@
   border-left: 5px solid #2196f3;
 }
 
+/*Quando si passa il mouse sopra ad una delle card*/
 .blocco-sidebar:hover {
   border-color: var(--colore-hover);
   transform: translateY(-2px);
@@ -34,10 +35,12 @@
   text-align: center;
 }
 
+/*Quando selezioniamo un nodo presente nel workflow, andiamo ad impostare un colore dello stesso, in base al tipo di nodo*/
 .stileNodo:focus {
   border-color: var(--colore-selezione);
 }
 
+/*Stile del nordo quando si passa alla modalità scura*/
 .dark-mode .stileNodo {
   border-top: 2px solid grey;
   border-right: 2px solid grey;
