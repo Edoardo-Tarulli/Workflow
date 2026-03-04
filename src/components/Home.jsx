@@ -1,3 +1,11 @@
+
+/*
+In seguito abbiamo tutti gli import necessari per lo stile e il funzionamento della pagina.
+In particolare abbiamo tutte le frecce, ingranaggi etc che fanno parte di React Icons
+Infine abbiamo l'hook chiamato useNavigate che ci permette di navigare tra le diverse schermate dell'editor e
+il Rivelatore, componente utilizzato per mostrare gli elementi della pagina home in maniera graduale scorrendo verso il basso
+*/
+
 import '../css/Home.css' // Import del css del componente
 import { FaCog } from 'react-icons/fa'; // Import dell'icona ingranaggio
 import { FaLongArrowAltRight } from "react-icons/fa";
@@ -18,7 +26,7 @@ const navigatore = useNavigate()
     return (
     <>
         <div className = 'StileHome'>
-        {/* Elemento che contiene la scritta "Workflow" */}
+        {/* Elemento che contiene la scritta "Workflow" e gli ingranaggi */}
             <div className = 'ContenitoreScritta ApparizioneImmediata'>
                 <FaCog className = 'StileIngranaggio' style={{marginRight: '10px'}} />
                 <hr style = {{width: '10px', border: 'none'}}></hr> 
@@ -27,8 +35,11 @@ const navigatore = useNavigate()
                 <FaCog className = 'StileIngranaggio' />
             </div>
 
-            {/*Di seguito il contenitore della scritta*/}
-            <Rivelatore>
+            {/*Di seguito il contenitore della scritta e la prima sezione della descrizione con le relative frecce e l'immagine
+            Il tutto viene wrappato all'interno del componente Rivelatore che ne permette lo "slice" scorrendo verso il basso
+            */}
+
+            <Rivelatore>    
             <div className='StileDescrizioneSito'>
                 <p className='StileDescrizione'> Benvenuto in My Flow! <br/>
                 Organizza workflows di blocchi<br/>
@@ -39,11 +50,15 @@ const navigatore = useNavigate()
                 <img className='stile-immagine' src='src/assets/workflow_animation.gif' alt='immagine non disponibile' title='Diagramma di flusso'></img>
             </div>
             </Rivelatore>
-            
+
+
+            {/* Stile e inserimento della freccia di destra che prosegue il percorso */}
             <div style={{width: '100vw', height: '150px', marginLeft: '80%', marginTop: '160px'}}>
                 <PiArrowBendRightDownBold style={{width: '200px', height: '100px', marginTop: '40px'}}></PiArrowBendRightDownBold>
             </div>
-            
+
+
+            {/* Continuo di descrizione sito con seconda sezione descrizione, immagine e frecce */}
             <Rivelatore>
             <div className='StileDescrizioneSito'>
                 <img className='imgPersonalizzazione' alt='Immagine non disponibile' title='Personalizzazione' src='src/assets/Personalizzazione.png'></img>
@@ -52,11 +67,12 @@ const navigatore = useNavigate()
             </div>
             </Rivelatore>
             
-
+            {/* Stile e inserimento della freccia di sinistra che continua il percorso*/}
             <div style={{width: '100vw', height: '150px',  marginTop: '160px', marginLeft: '10%'}}>
                 <PiArrowBendLeftDownBold style={{width: '200px', height: '100px', marginTop: '40px'}}></PiArrowBendLeftDownBold>
             </div>
 
+            {/* Ultima sezione descrizione sito con immagine salva */}
             <Rivelatore>
             <div className='StileDescrizioneSito'>
                 <p style={{marginLeft: '200px'}} className='StileDescrizione'> Ed infine salva ed esporta <br/> il tuo lavoro!</p>
@@ -65,11 +81,12 @@ const navigatore = useNavigate()
             </div>
             </Rivelatore>
             
-
+            {/* Inserimento e stile freccia verso il basso che punta verso il bottone inizia ora */}
             <div style={{width: '100vw', height: '100px', marginTop: '150px', alignItems: 'center', justifyContent: 'center' , display: 'flex'}}>
                 <FaLongArrowAltDown style={{height: '100px', width: '200px'}}></FaLongArrowAltDown>
             </div>
 
+            {/* Inserimento e stile del bottone inizia ora, che porta al workflow */}
             <Rivelatore>
             <div style={{marginTop: '80px', width: '100vw', height: '100px', alignContent: 'center', display: 'flex', justifyContent: 'center'}}>
                 <button  className='buttonStart' onClick={() => navigatore('/Workflow')}><b>Inizia Ora!</b> </button>

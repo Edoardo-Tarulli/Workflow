@@ -1,12 +1,26 @@
+
+/*Andiamo ad inserire gli input necessari per il funzionamento, in particolare
+importiamo Handle e Position che ci serviranno per impostare la posizione delle maniglie
+relative ad ogni singolo blocco che comparirà poi nel workflow e naturalmente
+il foglio di stile css
+*/
+
 import { Handle, Position } from '@xyflow/react';
 import '../css/CustomNodes.css'
 
+
+// Questo è il nodo source, da cui si parte e che ha solo output quindi verso i blocchi successivi
 export const Source = ({data}) => (
   <div tabIndex={0} className='stileNodo' style={{color: '#FF0000', '--colore-bordo-sinistra': '15px solid #FF0000', '--colore-selezione': '#FF0000'}}>
     <div style={{fontSize: '15px', fontWeight: 'bold'}}>{data.label}</div>
     <Handle position={Position.Right} style={{ background: '#FF0000'}}/>
   </div>
 );
+
+/*
+Da qui fino all'ultimo blocco eslcuso, cioè sink, sono definiti tutti blocchi che hanno
+due maniglie, una di input e una di output, e un colore univoco che li contraddistingue
+*/
 
 export const Filter = ({data}) => (
   <div tabIndex={0} className='stileNodo' style={{color: '#FFD700', '--colore-bordo-sinistra': '15px solid #FFA500', '--colore-selezione': '#FFA500'}}>
@@ -49,7 +63,7 @@ export const Aggregate = ({data}) => (
   </div>
 );
 
-
+// Questo è il nodo Sink, cioè quello di arrivo, che appunto ha una maniglia solo in ingresso. 
 export const Sink = ({data}) => (
   <div tabIndex={0} className='stileNodo' style={{color: '#8B4513', '--colore-bordo-sinistra': '15px solid #8B4513', '--colore-selezione': '#8B4513'}}>
     <div style={{ fontSize: '15px', fontWeight: 'bold'}}>{data.label}</div>
@@ -57,6 +71,7 @@ export const Sink = ({data}) => (
   </div>
 );
 
+// Andiamo ad esportare la funzione TipoNodi, che ci permette di settare il tipo personalizzato di nodo
 export const TipoNodi = {
   source: Source,
   filter: Filter,
