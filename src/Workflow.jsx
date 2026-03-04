@@ -1,162 +1,18 @@
 import { useCallback } from 'react';
-import { ReactFlow, Background, Controls, applyEdgeChanges, applyNodeChanges, addEdge, Position, Handle, MiniMap, Panel, ReactFlowProvider, useReactFlow} from '@xyflow/react';
+import { ReactFlow, Background, Controls, MiniMap, Panel, ReactFlowProvider, useReactFlow} from '@xyflow/react';
 import { IoIosArrowDroprightCircle } from "react-icons/io";
 import { IoIosArrowDropleftCircle } from "react-icons/io";
 import { FaCircle } from "react-icons/fa6";
 import Navbar from './components/Navbar';
+import { SCHEMA_PROPRIETA } from './data/schemaProprieta';
+import { useWorkflowActions } from './hooks/useWorkflowActions';
+import { getCampiFinali, generaNuovoIdPerTipo } from './utils/workflowHelpers';
 import { useWorkflow } from './WorkflowContext';
+import { TipoNodi } from './components/CustomNodes';
 import '@xyflow/react/dist/style.css';
-import '../src/css/Workflow.css';
-
-
-const Source = ({data}) => (
-  <div tabIndex={0} className='stileNodo' style={{color: '#FF0000', '--colore-bordo-sinistra': '15px solid #FF0000', '--colore-selezione': '#FF0000'}}>
-    <div style={{fontSize: '15px', fontWeight: 'bold'}}>{data.label}</div>
-    <Handle position={Position.Right} style={{ background: '#FF0000'}}/>
-  </div>
-);
-
-const Filter = ({data}) => (
-  <div tabIndex={0} className='stileNodo' style={{color: '#FFD700', '--colore-bordo-sinistra': '15px solid #FFA500', '--colore-selezione': '#FFA500'}}>
-    <Handle type="target" position={Position.Left} style={{background: '#FFA500'}}/>
-    <div style={{ fontSize: '15px', fontWeight: 'bold'}}>{data.label}</div>
-    <Handle type="source" position={Position.Right} style={{background: '#FFA500'}}/>
-  </div>
-);
-
-const Map = ({data}) => (
-  <div tabIndex={0} className='stileNodo' style={{color: '#FFFF00', '--colore-bordo-sinistra': '15px solid #FFFF00', '--colore-selezione': '#FFFF00'}}>
-    <Handle type="target" position={Position.Left} style={{background: '#FFFF00'}}/>
-    <div style={{ fontSize: '15px', fontWeight: 'bold'}}>{data.label}</div>
-    <Handle type="source" position={Position.Right} style={{background: '#FFFF00'}}/>
-  </div>
-);
-
-const KeyBy = ({data}) => (
-  <div tabIndex={0} className='stileNodo' style={{color: '#3CB371', '--colore-bordo-sinistra': '15px solid #3CB371', '--colore-selezione': '#3CB371'}}>
-    <Handle type="target" position={Position.Left} style={{background: '#3CB371'}}/>
-    <div style={{ fontSize: '15px', fontWeight: 'bold'}}>{data.label}</div>
-    <Handle type="source" position={Position.Right} style={{background: '#3CB371'}}/>
-  </div>
-);
-
-const Window = ({data}) => (
-  <div tabIndex={0} className='stileNodo' style={{color: '#0000FF', '--colore-bordo-sinistra': '15px solid #0000FF', '--colore-selezione': '#0000FF'}}>
-    <Handle type="target" position={Position.Left} style={{background: '#0000FF'}}/>
-    <div style={{ fontSize: '15px', fontWeight: 'bold'}}>{data.label}</div>
-    <Handle type="source" position={Position.Right} style={{background: '#0000FF'}}/>
-  </div>
-);
-
-
-const Aggregate = ({data}) => (
-  <div tabIndex={0} className='stileNodo' style={{color: '#800080', '--colore-bordo-sinistra': '15px solid #800080', '--colore-selezione': '#800080'}}>
-    <Handle type="target" position={Position.Left} style={{background: '#800080'}}/>
-    <div style={{ fontSize: '15px', fontWeight: 'bold'}}>{data.label}</div>
-    <Handle type="source" position={Position.Right} style={{background: '#800080'}}/>
-  </div>
-);
-
-
-const Sink = ({data}) => (
-  <div tabIndex={0} className='stileNodo' style={{color: '#8B4513', '--colore-bordo-sinistra': '15px solid #8B4513', '--colore-selezione': '#8B4513'}}>
-    <div style={{ fontSize: '15px', fontWeight: 'bold'}}>{data.label}</div>
-    <Handle type="target" position={Position.Left} style={{background: '#8B4513'}}></Handle>
-  </div>
-);
-
-const BlocchiIniziali = []
-
-const Associazioni = []
-
-const TipoNodi = {
-  source: Source,
-  filter: Filter,
-  sink: Sink,
-  map: Map,
-  keyby: KeyBy,
-  window: Window,
-  aggregate: Aggregate
-};
-
-const contatoriTipi = {
-  source: 0,
-  filter: 0,
-  sink: 0,
-  map: 0,
-  keyby: 0,
-  window: 0,
-  aggregate: 0
-};
-
-const generaNuovoIdPerTipo = (tipo) => {
-  if (!(tipo in contatoriTipi)) {
-    contatoriTipi[tipo] = 0;
-  }
-  contatoriTipi[tipo]++;
-  return `${tipo}_${contatoriTipi[tipo]}`;
-};
-
-
-const SCHEMA_PROPRIETA = {
-  source: [
-    { label: "Type", key: "type", tipo: "fisso", default: "kafka"  },
-    { label: "Topic", key: "topic", tipo: "testo", placeholder: "Scrivi campo..." },
-    { label: "Bootstrap Servers", key: "bootstrap_servers", tipo: "testo", placeholder: "Scrivi campo..." },
-    { label: "Timestamp Field", key: "timestamp_field", tipo: "testo", placeholder: "Scrivi qui..."}
-  ],
-  filter: [
-    { 
-      label: "Filter Condition",
-      key: "filter_condition",
-      tipo: "testo",
-      placeholder: "Inserisci condizione..."
-    }
-  ],
-  map: [
-    {
-      label: "Applies To Fields",
-      key: "appliesToFields",
-      tipo: "array_stringhe",
-      placeholder: "Aggiungi campo..."
-    }
-  ],
-  keyby: [
-    {
-      label: "Applies To Fields",
-      key: "appliesToFields", 
-      tipo: "testo", 
-      placeholder: "Scrivi campo..."
-    }
-  ],
-  window: {
-    comuni: [
-      { label: "Window Type", key: "windowType", tipo: "select", opzioni: ["tumbling", "hopping", "count"] }
-    ],
-    specifici: {
-      tumbling: [
-        { label: "Duration", key: "duration", tipo: "numero", placeholder: "Inserisci numero intero..." },
-        { label: "Size", key: "size", tipo: "numero", placeholder: "Inserisci numero intero..." }
-      ],
-      hopping: [
-        { label: "Duration", key: "duration", tipo: "numero", placeholder: "Inserisci numero intero..." },
-        { label: "Slide", key: "slide", tipo: "numero", placeholder: "Inserisci numero intero..."}
-      ],
-      count: [
-        { label: "Size", key: "size", tipo: "numero", placeholder: "Inserisci numero intero..." },
-        { label: "Slide", key: "slide", tipo: "numero", placeholder: "Inserisci numero intero" }
-      ]
-    }
-  },
-  aggregate: [
-    { label: "Aggregazioni", key: "aggregations", tipo: "dizionario_aggregazioni", funzioni: ["min", "max", "avg", "sum"] }
-  ],
-  sink: [
-    { label: "Type", key: "type", tipo: "fisso", default: "kafka"  },
-    { label: "Topic", key: "topic", tipo: "testo", placeholder: "Scrivi campo..." },
-    { label: "Bootstrap Servers", key: "bootstrap_servers", tipo: "testo", placeholder: "Scrivi campo..." },
-  ]
-};
+import '../src/css/Workflow.css'
+import '../src/css/CustomNodes.css';
+import '../src/css/ReactFlowTheme.css';
 
 
 function WorkflowEditor() {
@@ -170,11 +26,21 @@ function WorkflowEditor() {
   } = useWorkflow();
 
   const { screenToFlowPosition } = useReactFlow();
+  const nodoSelezionato = blocchi.find((blocco) => blocco.selected === true)
+  const {
+    AggiornaBlocchi,
+    AggiornaCollegamenti,
+    Associa,
+    aggiornaDatoNodo, 
+    gestisciArrayStringhe, 
+    gestisciDizionarioAggregazioni 
+  } = useWorkflowActions(SettaBlocchi, SettaCollegamenti, nodoSelezionato?.id);
+  const campiFinali = getCampiFinali(nodoSelezionato, SCHEMA_PROPRIETA);
 
-const InizioTrascinamento = (event, tipoNodo) => {
-    event.dataTransfer.setData('application/reactflow', tipoNodo);
-    event.dataTransfer.effectAllowed = 'move';
-  };
+  const InizioTrascinamento = (event, tipoNodo) => {
+      event.dataTransfer.setData('application/reactflow', tipoNodo);
+      event.dataTransfer.effectAllowed = 'move';
+    };
 
   // 2. Permettere il rilascio sopra il workflow
   const SopraWorkflow = useCallback((event) => {
@@ -209,42 +75,6 @@ const InizioTrascinamento = (event, tipoNodo) => {
     },
     [screenToFlowPosition]
   );
-
-const nodoSelezionato = blocchi.find((blocco) => blocco.selected === true)
-
-const AggiornaBlocchi = useCallback(
-  (changes) => SettaBlocchi((nodesSnapshot) => applyNodeChanges(changes, nodesSnapshot)),
-  [],
-);
-const AggiornaCollegamenti = useCallback(
-  (changes) => SettaCollegamenti((edgesSnapshot) => applyEdgeChanges(changes, edgesSnapshot)),
-  [],
-);
-
-const Associa = useCallback(
-  (params) => SettaCollegamenti((edgesSnapshot) => addEdge(params, edgesSnapshot)),
-  [],
-);
-
-const aggiornaDatoNodo = (chiave, valore) => {
-  // 1. Usiamo la funzione SettaBlocchi che arriva dal Context
-  SettaBlocchi((vecchiBlocchi) =>
-    vecchiBlocchi.map((nodo) => {
-      // 2. Cerchiamo il nodo che l'utente sta modificando nella sidebar
-      if (nodo.id === nodoSelezionato.id) {
-        return {
-          ...nodo,
-          data: {
-            ...nodo.data,    // Mantieni i dati esistenti (es. label)
-            [chiave]: valore // Aggiorna o aggiungi la nuova proprietà (es. topic: "A")
-          },
-        };
-      }
-      // 3. Gli altri nodi rimangono invariati
-      return nodo;
-    })
-  );
-};
 
   return (
     <>
@@ -386,56 +216,106 @@ const aggiornaDatoNodo = (chiave, valore) => {
         {/* Di seguito c'è il codice che riguarda la sidebar di destra */}
         <aside className={`sidebar-gestione ${GestioneAperta ? 'visibile' : ''}`}>
         <h3>Proprietà</h3>
-        <hr></hr>
-        {!nodoSelezionato ?
-         (
-          <p style={{fontFamily: 'Courier New, Courier, monospace', marginTop: '40px', fontSize: 'large'}}><b>Seleziona un blocco per vederne i parametri.</b></p>
-         ) :
-         (
-          <div style={{display: 'flex', flexDirection: 'column', gap: '40px', fontFamily: 'Courier New, Courier, monospace', fontSize: 'large'}}>
-            <h3 style={{marginTop: '40px', textAlign: 'center'}}> Caratteristiche del nodo </h3>
-            <div>
-              <label><b>ID:</b></label>
-                <p style={{textAlign: 'center'}} className='blocco-gestione'>{nodoSelezionato.id}</p>
-            </div>
-            <div>
-              <label><b>Position X:</b></label>
-                <p style={{textAlign: 'center'}} className='blocco-gestione'>{Math.round(nodoSelezionato.position.x)}</p>
-            </div>
-            <div>
-              <label><b>Position Y:</b></label>
-                <p style={{textAlign: 'center'}} className='blocco-gestione'>{Math.round(nodoSelezionato.position.y)}</p>
-            </div>
-            <hr/>
-            <h3 style={{textAlign: 'center'}}> Caratteristiche proprie del nodo {nodoSelezionato.id}</h3>
-            <hr style={{width: '100%', color: 'none', border: 'none'}}></hr>
+        <hr />
+        {!nodoSelezionato ? (
+          <p className="testo-vuoto">Seleziona un blocco per vederne i parametri.</p>
+        ) : (
+          <div className="container-proprieta">
 
-            {SCHEMA_PROPRIETA[nodoSelezionato.type] && Array.isArray(SCHEMA_PROPRIETA[nodoSelezionato.type]) && (
-              SCHEMA_PROPRIETA[nodoSelezionato.type].map((campo) => (
-                <div key={campo.key} style={{ marginBottom: '15px' }}>
-                  <p><b>{campo.label}:</b></p>
-                  {campo.tipo === "fisso" ? (
-                    /* Se è fisso, mostro il valore di default */
-                    <p className='blocco-gestione'>{campo.default}</p>
-                  ) : (
-                    /* Se è testo, mostro un input collegato allo stato del nodo */
-                    <input
-                      style={{width: '250px', height: '25px', fontSize: 'large'}}
-                      placeholder='Scrivi qui...'
-                      value={nodoSelezionato.data[campo.key] || ""} 
-                      onChange={(e) => aggiornaDatoNodo(campo.key, e.target.value)}
-                    />
-                  )}
-                </div>
-              ))
-            )}
+            <h3>Caratteristiche del nodo</h3>
+            {/* PARAMETRI COMUNI */}
+            <div className="campo-gruppo">
+              <p><b>ID Nodo:</b></p>
+              <p className="valore-fisso">{nodoSelezionato.id}</p>
+            </div>
+
+            <div className="campo-gruppo">
+              <p><b>Posizione X:</b></p>
+              <p className="valore-fisso">{Math.round(nodoSelezionato.position.x)}px</p>
+            </div>
+
+            <div className="campo-gruppo">
+              <p><b>Posizione Y:</b></p>
+              <p className="valore-fisso">{Math.round(nodoSelezionato.position.y)}px</p>
+            </div>
+            
+            <hr />
+            <h3>Parametri Specifici: {nodoSelezionato.id}</h3>
+
+            {campiFinali.map((campo) => (
+              <div key={campo.key} className="campo-gruppo">
+                <p><b>{campo.label}:</b></p>
+
+                {/* 1. SELECT */}
+                {campo.tipo === "select" && (
+                  <select
+                    value={nodoSelezionato.data[campo.key] || ""}
+                    onChange={(e) => aggiornaDatoNodo(campo.key, e.target.value)}
+                  >
+                    <option value="">Seleziona...</option>
+                    {campo.opzioni.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                  </select>
+                )}
+
+                {/* 2. FISSO */}
+                {campo.tipo === "fisso" && <p className="valore-fisso">{campo.default}</p>}
+
+                {/* 3. ARRAY DI STRINGHE (MAP / KEYBY) */}
+                {campo.tipo === "array_stringhe" && (
+                  <div className="lista-dinamica">
+                    {(nodoSelezionato.data[campo.key] || [""]).map((valore, indice) => (
+                      <div key={indice} className="riga-input">
+                        <input
+                          placeholder={campo.placeholder}
+                          value={valore}
+                          onChange={(e) => gestisciArrayStringhe(campo.key, "MODIFICA", indice, e.target.value)}
+                        />
+                        <button className='btn-azione btn-rimuovi' onClick={() => gestisciArrayStringhe(campo.key, "RIMUOVI", indice)}>x</button>
+                      </div>
+                    ))}
+                    <button className='btn-azione btn-aggiungi' onClick={() => gestisciArrayStringhe(campo.key, "AGGIUNGI")}>+ Aggiungi</button>
+                  </div>
+                )}
+
+                {/* 4. DIZIONARIO AGGREGAZIONI (AGGREGATE) */}
+                {campo.tipo === "dizionario_aggregazioni" && (
+                  <div className="lista-aggregazioni">
+                    {(nodoSelezionato.data[campo.key] || [{ field: "", op: "min" }]).map((item, indice) => (
+                      <div key={indice} className="riga-aggregazione">
+                        <input
+                          placeholder={campo.placeholder}
+                          value={item.field}
+                          onChange={(e) => gestisciDizionarioAggregazioni(campo.key, "MODIFICA", indice, "field", e.target.value)}
+                        />
+                        <select
+                          value={item.op}
+                          onChange={(e) => gestisciDizionarioAggregazioni(campo.key, "MODIFICA", indice, "op", e.target.value)}
+                        >
+                          {campo.funzioni.map(f => <option key={f} value={f}>{f.toUpperCase()}</option>)}
+                        </select>
+                        <button className='btn-azione btn-rimuovi' onClick={() => gestisciDizionarioAggregazioni(campo.key, "RIMUOVI", indice)}>x</button>
+                      </div>
+                    ))}
+                    <button className='btn-azione btn-aggiungi' onClick={() => gestisciDizionarioAggregazioni(campo.key, "AGGIUNGI")}>+ Aggiungi</button>
+                  </div>
+                )}
+
+                {/* 5. DEFAULT (TESTO/NUMERO) */}
+                {["testo", "numero"].includes(campo.tipo) && (
+                  <input
+                    placeholder={campo.placeholder}
+                    type={campo.tipo === "numero" ? "number" : "text"}
+                    value={nodoSelezionato.data[campo.key] || ""}
+                    onChange={(e) => aggiornaDatoNodo(campo.key, e.target.value)}
+                  />
+                )}
+              </div>
+            ))}
             <hr style={{width: '100%', color: 'none', border: 'none'}}></hr>
           </div>
-
-
-         )
-        }
-        </aside>
+        )}
+      </aside>
+        
       </div>
 
     </>

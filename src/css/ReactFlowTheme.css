@@ -1,0 +1,42 @@
+/* Spostamento UI dinamico */
+.sposta-controlli { transition: transform 0.3s ease; }
+.sposta-minimappa { transition: transform 0.3s ease; }
+.sposta-controlli.aperta { transform: translateX(310px); }
+.sposta-minimappa.aperta { transform: translateX(-310px); }
+
+/* Personalizzazione Controlli */
+.StileDivWorkflow .react-flow__controls {
+  border: 2px solid;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.StileDivWorkflow .react-flow__controls-button {
+  background-color: #AFEEEE;
+  border-bottom: 1px solid black;
+}
+
+/* Personalizzazione MiniMap */
+.StileDivWorkflow .react-flow__minimap {
+  border: 2px solid black;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Linee di collegamento (Edges) */
+.react-flow__edge-path {
+  stroke: black;
+  stroke-width: 2;
+  transition: stroke 0.3s, stroke-width 0.3s;
+}
+
+.react-flow__edge.selected .react-flow__edge-path {
+  stroke: #AFEEEE !important;
+  stroke-width: 4;
+}
+
+/* Dark Mode per componenti interni */
+.dark-mode .react-flow__minimap { background-color: #FAEBD7; border: 2px solid white; }
+.dark-mode .react-flow__controls-button { background-color: #FAEBD7; color: black; }
+.dark-mode .react-flow__edge-path { stroke: white; }
+.dark-mode .react-flow__node { background: transparent !important; border: none; box-shadow: none !important; }

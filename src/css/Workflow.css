@@ -1,138 +1,37 @@
-Worflow.html, body {
+body {
   overflow: hidden;
 }
 
-
-
-/* Css per lo stile della pagina workflow intera, che si trova sotto la navbar */
 .StileDivWorkflow {
-background-color:#FAEBD7;
-margin-top: 60px;
-width: 100vw;
-height: 100vh;
-padding-bottom: 50px;
+  background-color: #FAEBD7;
+  margin-top: 60px;
+  width: 100vw;
+  height: 100vh;
+  padding-bottom: 50px;
 }
 
 .StileDivWorkflow * {
-  font-family:'Courier New', Courier, monospace;
+  font-family: 'Courier New', Courier, monospace;
   transition: background-color 0.5s ease, border-color 0.5s ease, color 0.5s ease;
 }
 
-
-/* Proprietà per impostare il colore di sfondo a nero al click del bottone tema */
-
-
-/* Animazione Icona */
-.icona-toggle {
-font-size: 2.5rem;
-cursor: pointer;
-border-radius: 50%;
-transition: transform 0.3s ease;
-}
-
-
-/* Quando viene aperta la sidebar di sinistra la freccia si inverte e trasla verso destra per non essere coperta */
-.icona-toggle.aperta {
-transform: rotate(180deg);
-margin-left: 310px; /* Sposta l'icona quando la sidebar è aperta */
-}
-
-.dark-mode .icona-toggle {
-  background-color: white;
-}
-
-
-/* Freccia della sidebar di destra */
-.icona-gestione {
-font-size: 2.5rem;
-cursor: pointer;
-border-radius: 50%;
-transition: transform 0.3s ease;
-}
-
-.dark-mode .icona-gestione {
-  background-color: white;
-}
-
-
-/* Quando viene aperta la sidebar di destra la freccia si inverte e trasla verso sinistra per non essere coperta */
-.icona-gestione.aperta {
-transform: rotate(180deg);
-margin-right: 310px; /* Sposta l'icona quando la sidebar è aperta */
-}
-
-
-/* Sidebar che contiene i blocchi */
+/* Sidebar Blocchi (Sinistra) */
 .sidebar-blocchi {
-position: absolute;
-margin-top: 50px;
-top: 0;
-left: -300px; /* Nascosta a sinistra inizialmente */
-width: 300px;
-height: 100%;
-backdrop-filter: blur(5px);
-border-right: 2px solid #121212;
-box-shadow: 2px 0 10px rgba(0,0,0,0.1);
-background: #AFEEEE;
-z-index: 5;
-padding: 20px;
-transition: left 0.3s ease;
+  position: absolute;
+  margin-top: 50px;
+  top: 0;
+  left: -300px;
+  width: 300px;
+  height: 100%;
+  backdrop-filter: blur(5px);
+  border-right: 2px solid #121212;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+  background: #AFEEEE;
+  z-index: 5;
+  padding: 20px;
+  transition: left 0.3s ease;
 }
 
-.dark-mode .sidebar-blocchi {
-  background-color: #FAEBD7;
-}
-
-
-/* Sidebar che contiene la gestione dei blocchi, cioè le loro proprietà */
-.sidebar-gestione {
-position: absolute;
-margin-top: 50px;
-top: 0;
-right: -300px; /* Nascosta a destra inizialmente */
-width: 300px;
-height: 100%;
-background:#AFEEEE;
-backdrop-filter: blur(5px);
-border-left: 2px solid #121212;
-box-shadow: 2px 0 10px rgba(0,0,0,0.1);
-z-index: 5;
-padding: 20px;
-transition: right 0.3s ease;
-overflow-y: scroll;
-}
-
-.dark-mode .sidebar-gestione {
-  background-color: #FAEBD7;
-}
-
-
-/* Inizialmente la sidebar di sinistra è coperta, al click della freccia la sua "left" diventa zero, quindi diventa visibile */
-.sidebar-blocchi.visibile {
-left: 0; /* Appare scorrendo */
-}
-
-/* Inizialmente la sidebar di destra è coperta, al click della freccia la sua "right" diventa zero, quindi diventa visibile */
-.sidebar-gestione.visibile {
-right: 0;
-}
-
-
-/* Icona che rappresenta il pulsante del cambia tema, per switchare da bianco a nero e viceversa */
-.IconaCambiaSfondo {
-cursor: pointer;
-font-size: 2.0rem;
-color: orange;
-animation: ruotaColori 5s linear infinite;
-}
-
-@keyframes ruotaColori {
-from { filter: hue-rotate(0deg); }
-to   { filter: hue-rotate(360deg); }
-}
-
-
-/* Contenitore della lista dei blocchi nella sidebar di sinistra */
 .lista-nodi {
   margin-top: 20px;
   display: flex;
@@ -141,159 +40,198 @@ to   { filter: hue-rotate(360deg); }
   padding: 10px 0;
 }
 
-/* Stile del blocco generico, cioè la card che rappresenta il blocco prima di diventare effettivamente blocco */
-.blocco-sidebar {
-  font-family:'Courier New', Courier, monospace;
-  background-color: white;
-  margin-top: 40px;
-  padding: 12px 15px;
-  border: 1px solid black;
-  border-radius: 8px;
-  cursor: grab;
-  font-size: 0.9rem;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  user-select: none;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  border-left: 5px solid #2196f3; 
+.sidebar-blocchi.visibile { left: 0; }
+.dark-mode .sidebar-blocchi { background-color: #FAEBD7; }
+
+/* Sidebar Gestione (Destra) */
+.sidebar-gestione {
+  position: absolute;
+  margin-top: 50px;
+  top: 0;
+  right: -300px;
+  width: 300px;
+  height: 100%;
+  background: #AFEEEE;
+  backdrop-filter: blur(5px);
+  border-left: 2px solid #121212;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+  z-index: 5;
+  padding: 20px;
+  transition: right 0.3s ease;
+  overflow-y: scroll;
 }
 
-/* Effetto al passaggio del mouse, quindi evidenziamento e cursore */
-.blocco-sidebar:hover {
-  border-color: var(--colore-hover);
-  transform: translateY(-2px); /* Si alza leggermente al passaggio sopra del mouse */
+.sidebar-gestione.visibile { right: 0; }
+.dark-mode .sidebar-gestione { background-color: #FAEBD7; }
+
+/* Icone e Animazioni */
+.icona-toggle, .icona-gestione {
+  font-size: 2.5rem;
+  cursor: pointer;
+  border-radius: 50%;
   transition: transform 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Effetto mentre l'utente sta cliccando per trascinare */
-.blocco-sidebar:active {
-  cursor: grabbing; /* Manina chiusa */
-  transform: scale(0.98);
+.icona-toggle.aperta { transform: rotate(180deg); margin-left: 310px; }
+.icona-gestione.aperta { transform: rotate(180deg); margin-right: 310px; }
+.dark-mode .icona-toggle, .dark-mode .icona-gestione { background-color: white; }
+
+.IconaCambiaSfondo {
+  cursor: pointer;
+  font-size: 2.0rem;
+  color: orange;
+  animation: ruotaColori 5s linear infinite;
 }
 
-.dark-mode .blocco-sidebar:hover {
-  transform: translateY(-2px); /* Si alza leggermente al passaggio sopra del mouse */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+@keyframes ruotaColori {
+  from { filter: hue-rotate(0deg); }
+  to   { filter: hue-rotate(360deg); }
 }
 
-.blocco-gestione {
-  width: 180px;
-  height: 25px;
-  border: 1px solid black;
-  border-radius: 5px;
-  font-size: large;
+/* --- Struttura Sidebar Proprietà --- */
+
+.container-proprieta {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
   font-family: 'Courier New', Courier, monospace;
-  background-color: white;
+  font-size: large;
+  margin-top: 20px;
 }
 
-
-.stileNodo {
-  border-top: 2px solid black;
-  border-right: 2px solid black;
-  border-bottom: 2px solid black;
-  border-left: var(--colore-bordo-sinistra);
-  font-family:'Courier New', Courier, monospace;
-  padding: 10px;
-  border-radius: 8px;
-  width: 150px;
-  background: white;
+.testo-vuoto {
+  font-family: 'Courier New', Courier, monospace;
+  margin-top: 40px;
+  font-size: large;
+  font-weight: bold;
   text-align: center;
 }
 
-.stileNodo:focus {
-  border-color: var(--colore-selezione);
+.campo-gruppo {
+  margin-bottom: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.dark-mode .stileNodo {
-  border-top: 2px solid grey;
-  border-right: 2px solid grey;
-  border-bottom: 2px solid grey;
+.valore-fisso {
+  width: 180px;
+  height: 25px;
+  line-height: 25px; /* Centra il testo verticalmente */
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 0 10px;
+  background-color: #eee; /* Grigio chiaro per indicare che non è editabile */
+  font-weight: bold;
+  text-align: center;
 }
 
-.dark-mode .stileNodo:focus {
-  border-color: var(--colore-selezione);
+/* --- Liste Dinamiche (Map / Aggregate) --- */
+
+.lista-dinamica, .lista-aggregazioni {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-
-/* Quando viene aperta la sidebar di sinistra, i controlli (zoom, lock) vengono spostati a destra con traslazione */
-.sposta-controlli {
-  transition: transform 0.3s ease;
+.riga-input, .riga-aggregazione {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 5px;
 }
 
-/* Quando viene aperta la sidebar di destra, la minimappa viene spostata a sinistra con traslazione */
-.sposta-minimappa {
-  transition: transform 0.3s ease;
+.riga-aggregazione {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  width: 100%;
 }
 
-/* Quando viene aperta la sidebar di sinistra i controlli traslano a destra per non essere sovrapposti */
-.sposta-controlli.aperta {
-  transform: translateX(310px);
+.riga-aggregazione input {
+  flex: 2;
+  min-width: 0;
+  height: 30px;
+  padding: 4px;
 }
 
-/* Quando viene aperta la sidebar di destra la minimappa viene spostata a sinistra così da non essere sovrapposta */
-.sposta-minimappa.aperta {
-  transform: translateX(-310px);
+.riga-aggregazione select {
+  flex: 1;
+  min-width: 0;
+  height: 30px;
+  padding: 4px;
 }
 
-/* Stile del pannello dei controlli, non sono riuscito ad impostare le caption in italiano */
+/* --- Input e Bottoni specifici della Sidebar --- */
 
-.StileDivWorkflow .react-flow__controls {
-  border: 2px solid;
-  border-radius: 8px;
-  overflow: hidden;
+.container-proprieta input, 
+.container-proprieta select {
+  width: 250px;
+  height: 30px;
+  font-size: 1rem;
+  border: 1px solid #333;
+  border-radius: 4px;
+  padding: 2px 5px;
 }
 
-
-.StileDivWorkflow .react-flow__controls-button {
-  background-color: #AFEEEE;
-  border-bottom: 1px solid black;
-
+/* Bottoni Aggiungi (+) */
+.container-proprieta button {
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  transition: opacity 0.2s;
 }
 
-.StileDivWorkflow .react-flow__controls-button:hover {
-  background-color: white;
+.container-proprieta button:hover {
+  opacity: 0.8;
 }
 
-.dark-mode .react-flow__controls-button:hover {
-  background-color: #AFEEEE;
+/* Stile base per entrambi i bottoni */
+.btn-azione {
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: bold;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Stile della minimappa */
-.StileDivWorkflow .react-flow__minimap {
-  border: 2px solid;
-  border-radius: 8px;
-  border-color: black;        /* Arrotonda gli angoli del blocco */
-  overflow: hidden;          /* Evita che i tasti escano dal bordo arrotondato */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Un po' di ombra per staccare dal fondo */
+/* Bottone Aggiungi (Verde) */
+.btn-aggiungi {
+  background-color: #4CAF50;
+  padding: 8px 15px;
+  margin-top: 10px;
+  font-size: 0.9rem;
+  width: fit-content;
 }
 
-
-.dark-mode .react-flow__minimap {
-  background-color:#FAEBD7;
-  border: 2px solid white;
-  border-radius: 8px;
+.btn-aggiungi:hover {
+  background-color: #45a049;
+  transform: scale(1.02);
 }
 
-.dark-mode .react-flow__controls {
-  border: 2px solid;
+.btn-rimuovi {
+  flex-shrink: 0; /* IMPEDISCE al bottone di sparire o rimpicciolirsi */
+  width: 28px;
+  height: 28px;
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.dark-mode .react-flow__controls-button {
-  background-color:#FAEBD7;
-  color: black;
+.btn-rimuovi:hover {
+  background-color: #e60000;
+  transform: scale(1.1);
 }
-
-.dark-mode .react-flow__node {
-    background: transparent !important;
-    border: none;
-    box-shadow: none !important;
-}
-
-.react-flow__edge-path {
-  stroke: gray; /* Colore grigio chiaro di default */
-  stroke-width: 2;   /* Spessore della linea */
-  transition: stroke 0.3s, stroke-width 0.3s;
-}
-

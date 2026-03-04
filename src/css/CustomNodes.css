@@ -1,0 +1,55 @@
+/* Card nella libreria (sidebar sinistra) */
+.blocco-sidebar {
+  font-family: 'Courier New', Courier, monospace;
+  background-color: white;
+  margin-top: 40px;
+  padding: 12px 15px;
+  border: 1px solid black;
+  border-radius: 8px;
+  cursor: grab;
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  user-select: none;
+  border-left: 5px solid #2196f3;
+}
+
+.blocco-sidebar:hover {
+  border-color: var(--colore-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Nodi effettivi nel Workflow */
+.stileNodo {
+  border-top: 2px solid black;
+  border-right: 2px solid black;
+  border-bottom: 2px solid black;
+  border-left: var(--colore-bordo-sinistra);
+  padding: 10px;
+  border-radius: 8px;
+  width: 150px;
+  background: white;
+  text-align: center;
+}
+
+.stileNodo:focus {
+  border-color: var(--colore-selezione);
+}
+
+.dark-mode .stileNodo {
+  border-top: 2px solid grey;
+  border-right: 2px solid grey;
+  border-bottom: 2px solid grey;
+}
+
+/* Input nelle proprietà (sidebar destra) */
+.blocco-gestione {
+  width: 180px;
+  height: 25px;
+  border: 1px solid black;
+  border-radius: 5px;
+  font-size: large;
+  background-color: white;
+}
