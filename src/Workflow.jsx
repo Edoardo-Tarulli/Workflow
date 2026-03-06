@@ -3,6 +3,7 @@ import { ReactFlow, Background, Controls, MiniMap, Panel, ReactFlowProvider, use
 import { IoIosArrowDroprightCircle } from "react-icons/io";
 import { IoIosArrowDropleftCircle } from "react-icons/io";
 import { FaCircle } from "react-icons/fa6";
+import { CgAdd } from "react-icons/cg";
 import Navbar from './components/Navbar';
 import { SCHEMA_PROPRIETA } from './data/schemaProprieta';
 import { useWorkflowActions } from './hooks/useWorkflowActions';
@@ -16,6 +17,7 @@ import '../src/css/ReactFlowTheme.css';
 
 
 function WorkflowEditor() {
+
   // Recupera tutto dal Context invece che da useState locali
   const {
     blocchi, SettaBlocchi,
@@ -27,6 +29,7 @@ function WorkflowEditor() {
 
   const { screenToFlowPosition } = useReactFlow();
   const nodoSelezionato = blocchi.find((blocco) => blocco.selected === true)
+
   const {
     AggiornaBlocchi,
     AggiornaCollegamenti,
@@ -35,6 +38,7 @@ function WorkflowEditor() {
     gestisciArrayStringhe, 
     gestisciDizionarioAggregazioni 
   } = useWorkflowActions(SettaBlocchi, SettaCollegamenti, nodoSelezionato?.id);
+
   const campiFinali = getCampiFinali(nodoSelezionato, SCHEMA_PROPRIETA);
 
   const InizioTrascinamento = (event, tipoNodo) => {
@@ -55,7 +59,7 @@ function WorkflowEditor() {
       const tipo = event.dataTransfer.getData('application/reactflow'); // Recuperiamo il tipo di nodo passato durante il drag
       if (!tipo) return;
 
-      // Calcoliamo la posizione corretta nel workflow
+      // Calcoliamo la posizione corretta nel workflow trasformando la posizione del nodo in pixel sulla barra di destra in posizione workflow
       const posizione = screenToFlowPosition({
         x: event.clientX,
         y: event.clientY,
@@ -63,7 +67,7 @@ function WorkflowEditor() {
 
       const nuovoId = generaNuovoIdPerTipo(tipo);
 
-      // Creiamo il nuovo oggetto nodo
+      // Creiamo il nuovo oggetto nodo, contraddistinto da id, tipo, posizione e data
       const nuovoNodo = {
         id: nuovoId, 
         type: tipo,
@@ -75,6 +79,74 @@ function WorkflowEditor() {
     },
     [screenToFlowPosition]
   );
+
+/*
+Questa è la funzione che ci consente di andare a trasformare i dati grafici di React Flow, 
+quindi nodi e collegamenti, in formato JSON. 
+*/
+
+// 
+const gestisciEsportazione = useCallback(() => {
+  try {
+    // Va a guardare ogni singolo blocco presente nel workflow, e per ogni di esso
+    // crea un oggetto che diventa poi uno step del JSON di uscita
+    const steps = blocchi.map((nodo) => {
+      /*
+      Con filter va a prendere tutti i collegamenti e tiene solo quelli la cui sorgente è
+      il nodo che stiamo analizzando in quel momento e di tali collegamenti con il map, ne
+      estrae l'id del target (cioè il nodo a cui stiamo puntando). Come risultato ci da 
+      un array di stringhe 
+      */
+      const collegamentiInUscita = collegamenti
+        .filter((edge) => edge.source === nodo.id)
+        .map((edge) => edge.target);
+
+      /*
+      Qui viene utilizzato il destructuring e l'operatore rest (i tre puntini), questo perché
+      react di default inserisce una label dentro data che serve per il testo sul rettangolo del nodo e 
+      quindi la andiamo a separare e teniamo tutto il resto quindi i parametri topic, servers etc. Il || [] serve
+      a evitare errori nel caso in cui il nodo non abbia dati
+      */
+      const { label, ...datiPuliti } = nodo.data || {};
+
+      /*
+      Nel return andiamo a costruire il pezzo del JSON quindi uniamo l'id, il tipo di nodo, 
+      tutti i parametri specifici con datiPuliti e l'array dei successivi nodi che abbiamo
+      calcolato prima
+      */ 
+      return {
+        id: nodo.id,
+        type: nodo.type,
+        ...datiPuliti,
+        next: collegamentiInUscita,
+      };
+    });
+
+    const workflowFinale = { steps };
+
+    /*
+    Questa è la parte finale che trasforma il JSON in un BLOB (che da quello che ho 
+    capito è un oggetto che rappresenta dati binari); crea un url temporaneo che punta 
+    a questi dati binari; crea un elemento di tipo <a> quindi un link, invisibile nel codice
+    Poi simula un click sul link per far partire il download nel browser e infine pulisce
+    tutto tramite revoke per non occupare memoria inutilmente, con un catch in caso di 
+    errore nel processo di esportazione. 
+    */
+    const dataStr = JSON.stringify(workflowFinale, null, 2);
+    const blob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `workflow_${new Date().toISOString().slice(0,10)}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error("Errore durante l'esportazione:", error);
+  }
+}, [blocchi, collegamenti]); // Aggiungi le dipendenze per useCallback
 
   return (
     <>
@@ -124,6 +196,14 @@ function WorkflowEditor() {
             title = 'Apri menù gestione'        
             >
             </IoIosArrowDropleftCircle>
+          </Panel>
+          <Panel position='bottom-center'>
+            <CgAdd
+            title='Salva ed esporta'
+            className='IconaSalvaEsporta'
+            onClick={gestisciEsportazione}
+            >
+            </CgAdd>
           </Panel>
         </ReactFlow>
 
@@ -270,10 +350,10 @@ function WorkflowEditor() {
                           value={valore}
                           onChange={(e) => gestisciArrayStringhe(campo.key, "MODIFICA", indice, e.target.value)}
                         />
-                        <button className='btn-azione btn-rimuovi' onClick={() => gestisciArrayStringhe(campo.key, "RIMUOVI", indice)}>x</button>
+                        <button title='Rimuovi campo' className='btn-azione btn-rimuovi' onClick={() => gestisciArrayStringhe(campo.key, "RIMUOVI", indice)}>x</button>
                       </div>
                     ))}
-                    <button className='btn-azione btn-aggiungi' onClick={() => gestisciArrayStringhe(campo.key, "AGGIUNGI")}>+ Aggiungi</button>
+                    <button title='Aggiungi campo' className='btn-azione btn-aggiungi' onClick={() => gestisciArrayStringhe(campo.key, "AGGIUNGI")}>+ Aggiungi</button>
                   </div>
                 )}
 
@@ -293,10 +373,10 @@ function WorkflowEditor() {
                         >
                           {campo.funzioni.map(f => <option key={f} value={f}>{f.toUpperCase()}</option>)}
                         </select>
-                        <button className='btn-azione btn-rimuovi' onClick={() => gestisciDizionarioAggregazioni(campo.key, "RIMUOVI", indice)}>x</button>
+                        <button title='Rimuovi attributo' className='btn-azione btn-rimuovi' onClick={() => gestisciDizionarioAggregazioni(campo.key, "RIMUOVI", indice)}>x</button>
                       </div>
                     ))}
-                    <button className='btn-azione btn-aggiungi' onClick={() => gestisciDizionarioAggregazioni(campo.key, "AGGIUNGI")}>+ Aggiungi</button>
+                    <button title='Aggiungi attributo' className='btn-azione btn-aggiungi' onClick={() => gestisciDizionarioAggregazioni(campo.key, "AGGIUNGI")}>+ Aggiungi</button>
                   </div>
                 )}
 

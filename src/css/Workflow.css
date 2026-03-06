@@ -99,6 +99,18 @@ la sua left, diventa 0, così da renderla visibile. Inoltre, ne cambiamo il colo
   to   { filter: hue-rotate(360deg); }
 }
 
+.IconaSalvaEsporta {
+  border-radius: 50%;
+  border: 1px solid;
+  background-color: #AFEEEE;
+  cursor: pointer;
+  font-size: 3.0rem;
+}
+
+.dark-mode .IconaSalvaEsporta {
+  background-color: #FAEBD7;
+}
+
 /* --- Struttura Sidebar Proprietà --- */
 
 .container-proprieta {

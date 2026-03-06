@@ -30,6 +30,7 @@ export const useWorkflowActions = (SettaBlocchi, SettaCollegamenti, nodoSelezion
 Ci permette di aggiornare i dati del nodo. In particolar modo andiamo a scorrere tutti i blocchi e quando l'id del nodo
 corrisponde all'id del nodo selezionato allora salva i dati delle modifiche apportate (input inseriti etc) altrimenti lo lascia invariato
 */
+
 const aggiornaDatoNodo = (chiave, valore) => {
     SettaBlocchi((nds) => nds.map((n) => 
       n.id === nodoSelezionatoId ? { ...n, data: { ...n.data, [chiave]: valore } } : n
@@ -59,6 +60,7 @@ const aggiornaDatoNodo = (chiave, valore) => {
   crea l'array se già non c'è e lo va a popolare in base all'azione fatta e in più ogni campo avrà anche l'operazione di aggregazione
   associata, min sum etc. 
   */
+
   const gestisciDizionarioAggregazioni = (chiave, azione, indice, campoModificato, valore) => {
     SettaBlocchi((nds) => nds.map((n) => {
       if (n.id === nodoSelezionatoId) {
