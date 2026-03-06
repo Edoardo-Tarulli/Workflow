@@ -109,20 +109,25 @@ const gestisciEsportazione = useCallback(() => {
       */
       const { label, ...datiPuliti } = nodo.data || {};
 
-      /*
-      Nel return andiamo a costruire il pezzo del JSON quindi uniamo l'id, il tipo di nodo, 
-      tutti i parametri specifici con datiPuliti e l'array dei successivi nodi che abbiamo
-      calcolato prima
-      */ 
-      return {
+      const nuovoStep = {
         id: nodo.id,
         type: nodo.type,
         ...datiPuliti,
-        next: collegamentiInUscita,
       };
-    });
 
-    const workflowFinale = { steps };
+      // 4. LOGICA CONDIZIONALE:
+      // Se NON è un sink, aggiungiamo l'array next.
+      // Se È un sink, non aggiungiamo next (come da tua richiesta).
+      if (nodo.type !== 'sink') {
+        nuovoStep.next = collegamentiInUscita;
+      } 
+      // Se vuoi forzare un sinkType di default qualora l'utente non l'abbia scelto:
+      else if (!nuovoStep.sinkType) {
+        nuovoStep.sinkType = "print"; 
+      }
+
+      return nuovoStep;
+    });
 
     /*
     Questa è la parte finale che trasforma il JSON in un BLOB (che da quello che ho 
@@ -132,6 +137,8 @@ const gestisciEsportazione = useCallback(() => {
     tutto tramite revoke per non occupare memoria inutilmente, con un catch in caso di 
     errore nel processo di esportazione. 
     */
+
+    const workflowFinale = { steps };
     const dataStr = JSON.stringify(workflowFinale, null, 2);
     const blob = new Blob([dataStr], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
