@@ -49,7 +49,7 @@ di TUTTI gli elementi che fanno parte del workflow*/
 
 /*Stile delle card che popolano la sidebar di sinistra*/
 .lista-nodi {
-  margin-top: 20px;
+  margin-top: 10px;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -135,7 +135,7 @@ la sua left, diventa 0, così da renderla visibile. Inoltre, ne cambiamo il colo
 
 .testo-vuoto {
   font-family: 'Courier New', Courier, monospace;
-  margin-top: 40px;
+  margin-top: 60px;
   font-size: large;
   font-weight: bold;
   text-align: center;
