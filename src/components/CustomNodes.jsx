@@ -31,10 +31,10 @@ export const Filter = ({data}) => (
 );
 
 export const Map = ({data}) => (
-  <div tabIndex={0} className='stileNodo' style={{color: '#FFFF00', '--colore-bordo-sinistra': '15px solid #FFFF00', '--colore-selezione': '#FFFF00'}}>
-    <Handle type="target" position={Position.Left} style={{background: '#FFFF00'}}/>
+  <div tabIndex={0} className='stileNodo' style={{color: '#BDB76B', '--colore-bordo-sinistra': '15px solid', '--colore-selezione': '#BDB76B'}}>
+    <Handle type="target" position={Position.Left} style={{background: '#BDB76B'}}/>
     <div style={{ fontSize: '15px', fontWeight: 'bold'}}>{data.label}</div>
-    <Handle type="source" position={Position.Right} style={{background: '#FFFF00'}}/>
+    <Handle type="source" position={Position.Right} style={{background: '#BDB76B'}}/>
   </div>
 );
 
@@ -71,6 +71,25 @@ export const Sink = ({data}) => (
   </div>
 );
 
+// In CustomNodes.js
+export const Union = ({ data }) => (
+  <div tabIndex={0} className='stileNodo' style={{color: '#BC8F8F', '--colore-bordo-sinistra': '15px solid #BC8F8F', '--colore-selezione': '#BC8F8F'}}>
+    {/* Handle di sinistra che accetta connessioni multiple */}
+    <Handle 
+      type="target" 
+      position={Position.Left} 
+      style={{ background: '#BC8F8F', width: '10px', height: '10px' }} 
+    />
+    <div style={{ fontSize: '15px', fontWeight: 'bold' }}>{data.label || 'UNION'}</div>
+    {/* Handle di destra per l'uscita dello stream unito */}
+    <Handle 
+      type="source" 
+      position={Position.Right} 
+      style={{ background: '#BC8F8F' }} 
+    />
+  </div>
+);
+
 // Andiamo ad esportare la funzione TipoNodi, che ci permette di settare il tipo personalizzato di nodo
 export const TipoNodi = {
   source: Source,
@@ -79,5 +98,6 @@ export const TipoNodi = {
   map: Map,
   keyby: KeyBy,
   window: Window,
-  aggregate: Aggregate
+  aggregate: Aggregate,
+  union: Union
 };

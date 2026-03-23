@@ -47,6 +47,10 @@
   border-bottom: 2px solid grey;
 }
 
+.dark-mode .stileNodo:focus {
+  border-color: var(--colore-selezione);
+}
+
 /* Input nelle proprietà (sidebar destra) */
 .blocco-gestione {
   width: 180px;

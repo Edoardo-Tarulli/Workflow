@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { ReactFlow, Background, Controls, MiniMap, Panel, ReactFlowProvider, useReactFlow} from '@xyflow/react';
 import { IoIosArrowDroprightCircle } from "react-icons/io";
 import { IoIosArrowDropleftCircle } from "react-icons/io";
@@ -27,8 +27,9 @@ function WorkflowEditor() {
     ModalitaDark, SettaModalitaDark
   } = useWorkflow();
 
+  const [messaggioErrore, SettaMessaggioErrore] = useState(null);
   const { screenToFlowPosition } = useReactFlow();
-  const nodoSelezionato = blocchi.find((blocco) => blocco.selected === true)
+  const nodoSelezionato = blocchi.find((blocco) => blocco.selected === true);
 
   const {
     AggiornaBlocchi,
@@ -80,6 +81,47 @@ function WorkflowEditor() {
     [screenToFlowPosition]
   );
 
+
+/*
+Questa è la funzione che ci permette di gestire i collegamenti "validi", vale a dire che due nodi diversi possono essere mandati 
+allo stesso nodo solo se quest'ultimo è un union, altrimenti per due nodi abbiamo bisogno ad esempio di due aggregate, due filter etc.
+Inoltre utilizziamo quello che viene chiamato react-hot-toast per una visualizzazione a schermo di un messaggio errore in caso
+l'utente provi a collegare un nodo ad un nodo successivo, al quale è già collegato un altro nodo (a meno che non sia union!)
+*/
+
+const connessioneValida = useCallback((connection) => {
+    const targetNode = blocchi.find((n) => n.id === connection.target);
+    
+    if (targetNode && targetNode.type !== 'union') {
+      const collegamentiInIngresso = collegamenti.filter(
+        (edge) => edge.target === connection.target
+      );
+      
+      if (collegamentiInIngresso.length >= 1) {
+        // TRIGGER MESSAGGIO
+        SettaMessaggioErrore("Solo il nodo Union può ricevere più stream in ingresso!");
+        
+        // Autoreset del messaggio dopo 3 secondi
+        setTimeout(() => SettaMessaggioErrore(null), 3000);
+        
+        return false; 
+      }
+    }
+    return true;
+  }, [blocchi, collegamenti]);
+
+/*
+La funzione che segue ci permette di andare a verificare se il nodo selezionato è union e in caso
+troviamo i nodi che sono connessi ad esso.
+*/
+
+const nodiSorgenteConnessi = (nodoSelezionato?.type === 'union') 
+  ? collegamenti
+      .filter((edge) => edge.target === nodoSelezionato.id)
+      .map((edge) => edge.source) // Prendiamo l'ID del nodo di origine
+  : [];
+
+
 /*
 Questa è la funzione che ci consente di andare a trasformare i dati grafici di React Flow, 
 quindi nodi e collegamenti, in formato JSON. 
@@ -117,10 +159,11 @@ const gestisciEsportazione = useCallback(() => {
 
       // 4. LOGICA CONDIZIONALE:
       // Se NON è un sink, aggiungiamo l'array next.
-      // Se È un sink, non aggiungiamo next (come da tua richiesta).
+      // Se È un sink, non aggiungiamo next perché è l'ultimo blocco, quello che chiude il workflow
       if (nodo.type !== 'sink') {
         nuovoStep.next = collegamentiInUscita;
-      } 
+      }
+
       // Se vuoi forzare un sinkType di default qualora l'utente non l'abbia scelto:
       else if (!nuovoStep.sinkType) {
         nuovoStep.sinkType = "print"; 
@@ -153,11 +196,18 @@ const gestisciEsportazione = useCallback(() => {
   } catch (error) {
     console.error("Errore durante l'esportazione:", error);
   }
-}, [blocchi, collegamenti]); // Aggiungi le dipendenze per useCallback
+}, [blocchi, collegamenti]); 
 
   return (
     <>
       <div className={`StileDivWorkflow ${ModalitaDark ? 'dark-mode' : ''}`}>
+
+        {/* MESSAGGIO DI AVVISO A SCHERMO */}
+        {messaggioErrore && (
+          <div className="toast-errore-workflow">
+            <span>⚠️ {messaggioErrore}</span>
+          </div>
+        )}
 
         <ReactFlow
           nodes = {blocchi}
@@ -171,6 +221,7 @@ const gestisciEsportazione = useCallback(() => {
           fitView
           colorMode={ModalitaDark ? 'dark' : 'light'}
           proOptions={{ hideAttribution: true }} // serve per nascondere il link al sito React Flow in basso a destra che compare di default
+          isValidConnection={connessioneValida}
           >
           <Background variant="dots" gap={12} size={1} />
           <Controls
@@ -227,8 +278,8 @@ const gestisciEsportazione = useCallback(() => {
             onDragStart={(event) => InizioTrascinamento(event, 'source')} 
             draggable
           >
-            <span>🔴</span> 
-            <span style={{ marginLeft: '10px' }}><b>Nodo "Source"</b></span>
+            <div className="punto-colore" style={{ '--colore-nodo': '#FF0000' }}></div>
+            <span style={{marginLeft: '15px'}}><b>Nodo "Source"</b></span>
           </div>
 
           {/* Blocco Filter (filtraggio) */}
@@ -238,30 +289,30 @@ const gestisciEsportazione = useCallback(() => {
             onDragStart={(event) => InizioTrascinamento(event, 'filter')} 
             draggable
           >
-            <span>🟠</span>
-            <span style={{ marginLeft: '10px' }}><b>Nodo "Filter"</b></span>
+            <div className="punto-colore" style={{ '--colore-nodo': '#FFA500' }}></div>
+            <span style={{marginLeft: '15px'}}><b>Nodo "Filter"</b></span>
           </div>
 
           {/* Blocco Map (mapping) */}
           <div
             className="blocco-sidebar" 
-            style={{ borderLeftColor: '#FFFF00', '--colore-hover': '#FFFF00' }}
+            style={{ borderLeftColor: '#BDB76B', '--colore-hover': '#BDB76B' }}
             onDragStart={(event) => InizioTrascinamento(event, 'map')} 
             draggable
           >
-            <span>🟡</span>
-            <span style={{ marginLeft: '10px' }}><b>Nodo "Map"</b></span>
+            <div className="punto-colore" style={{ '--colore-nodo': '#BDB76B' }}></div>
+            <span style={{marginLeft: '15px'}}><b>Nodo "Map"</b></span>
           </div>
 
-          {/* Blocco KeyBy (si va a filtrare per chiave) */}
+          {/* Blocco KeyBy (si va a filtrare i campi del nodo) */}
           <div
             className="blocco-sidebar" 
             style={{ borderLeftColor: '#3CB371', '--colore-hover': '#3CB371' }}
             onDragStart={(event) => InizioTrascinamento(event, 'keyby')} 
             draggable
           >
-            <span>🟢</span>
-            <span style={{ marginLeft: '10px' }}><b>Nodo "KeyBy"</b></span>
+            <div className="punto-colore" style={{ '--colore-nodo': '#3CB371' }}></div>
+            <span style={{marginLeft: '15px'}}><b>Nodo "KeyBy"</b></span>
           </div>
 
           {/* Blocco Window (finestra) */}
@@ -271,8 +322,8 @@ const gestisciEsportazione = useCallback(() => {
             onDragStart={(event) => InizioTrascinamento(event, 'window')} 
             draggable
           >
-            <span>🔵</span>
-            <span style={{ marginLeft: '10px' }}><b>Nodo "Window"</b></span>
+            <div className="punto-colore" style={{ '--colore-nodo': '#0000FF' }}></div>
+            <span style={{marginLeft: '15px'}}><b>Nodo "Window"</b></span>
           </div>
 
           {/* Blocco Aggregate (aggregazione) */}
@@ -282,8 +333,19 @@ const gestisciEsportazione = useCallback(() => {
             onDragStart={(event) => InizioTrascinamento(event, 'aggregate')} 
             draggable
           >
-            <span>🟣</span>
-            <span style={{ marginLeft: '10px' }}><b>Nodo "Aggregate"</b></span>
+            <div className="punto-colore" style={{ '--colore-nodo': '#800080' }}></div>
+            <span style={{marginLeft: '15px'}}><b>Nodo "Aggregate"</b></span>
+          </div>
+
+          {/* Blocco Union (unione di due o più nodi) */}
+          <div
+            className="blocco-sidebar" 
+            style={{ borderLeftColor: '#BC8F8F', '--colore-hover': '#BC8F8F' }}
+            onDragStart={(event) => InizioTrascinamento(event, 'union')} 
+            draggable
+          >
+            <div className="punto-colore" style={{ '--colore-nodo': '#BC8F8F' }}></div>
+            <span style={{marginLeft: '15px'}}><b>Nodo "Union"</b></span>
           </div>
 
           {/* Blocco Sink (output) */}
@@ -293,8 +355,8 @@ const gestisciEsportazione = useCallback(() => {
             onDragStart={(event) => InizioTrascinamento(event, 'sink')} 
             draggable
           >
-            <span>🟤</span>
-            <span style={{ marginLeft: '10px' }}><b>Nodo "Sink"</b></span>
+            <div className="punto-colore" style={{ '--colore-nodo': '#8B4513' }}></div>
+            <span style={{marginLeft: '15px'}}><b>Nodo "Sink"</b></span>
           </div>
 
         </div>
@@ -328,6 +390,24 @@ const gestisciEsportazione = useCallback(() => {
             
             <hr />
             <h3>Parametri Specifici: {nodoSelezionato.id}</h3>
+
+            {/* AGGIUNTA PER IL NODO UNION */}
+            {nodoSelezionato.type === 'union' && (
+              <div className="campo-gruppo">
+                <p><b>Input Streams Connessi:</b></p>
+                <div className="lista-connessioni-union">
+                  {nodiSorgenteConnessi.length > 0 ? (
+                    nodiSorgenteConnessi.map((idSorgente) => (
+                      <div key={idSorgente} className="tag-connessione">
+                        <span>🔗 {idSorgente}</span>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="testo-avviso">Nessun input collegato.</p>
+                  )}
+                </div>
+              </div>
+            )}
 
             {campiFinali.map((campo) => (
               <div key={campo.key} className="campo-gruppo">

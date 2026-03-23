@@ -41,6 +41,9 @@ export const SCHEMA_PROPRIETA = {
   aggregate: [
     { label: "Aggregations", key: "aggregations", tipo: "dizionario_aggregazioni", funzioni: ["min", "max", "avg", "sum"], placeholder: 'Inserisci attributo' }
   ],
+  union: [
+    { label: "Operation", key: "op", tipo: "fisso", default: "UNION ALL" }
+  ],
   sink: [
     { label: "Type", key: "type", tipo: "fisso", default: "kafka" },
     { label: "Topic", key: "topic", tipo: "testo", placeholder: "Scrivi qui..." },

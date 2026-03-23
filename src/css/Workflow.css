@@ -36,6 +36,17 @@ di TUTTI gli elementi che fanno parte del workflow*/
   transition: left 0.3s ease;
 }
 
+/* La pallina colorata dinamica */
+.punto-colore {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%; /* La rende un cerchio perfetto */
+  display: inline-block;
+  background-color: var(--colore-nodo, #ccc); /* Grigio di default se manca il colore */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Un leggero rilievo */
+  flex-shrink: 0; /* Impedisce che si schiacci se il testo è lungo */
+}
+
 /*Stile delle card che popolano la sidebar di sinistra*/
 .lista-nodi {
   margin-top: 20px;
@@ -257,4 +268,51 @@ la sua left, diventa 0, così da renderla visibile. Inoltre, ne cambiamo il colo
 .btn-rimuovi:hover {
   background-color: #e60000;
   transform: scale(1.1);
+}
+
+.lista-connessioni-union {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+  background: rgba(0, 0, 0, 0.05);
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.tag-connessione {
+  background-color:	#BC8F8F; /* Stesso colore del nodo Union */
+  color: white;
+  padding: 4px 10px;
+  border-radius: 15px;
+  font-size: 12px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+
+.testo-avviso {
+  font-style: italic;
+  font-size: 13px;
+  color: #666;
+}
+
+.toast-errore-workflow {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  background-color: #ff4d4d;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: bold;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from { top: -50px; opacity: 0; }
+  to { top: 20px; opacity: 1; }
 }
