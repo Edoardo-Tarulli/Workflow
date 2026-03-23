@@ -34,6 +34,8 @@ di TUTTI gli elementi che fanno parte del workflow*/
   z-index: 5;
   padding: 20px;
   transition: left 0.3s ease;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 
 /* La pallina colorata dinamica */
@@ -49,11 +51,11 @@ di TUTTI gli elementi che fanno parte del workflow*/
 
 /*Stile delle card che popolano la sidebar di sinistra*/
 .lista-nodi {
-  margin-top: 10px;
   display: flex;
   flex-direction: column;
   gap: 12px;
   padding: 10px 0;
+  margin-bottom: 60px;
 }
 
 /*Quando lo stato della sidebar diventa "visibile" significa che è stata cliccata la freccia per aprirla e di conseguenza,

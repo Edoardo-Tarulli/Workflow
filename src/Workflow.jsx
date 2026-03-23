@@ -269,6 +269,8 @@ const gestisciEsportazione = useCallback(() => {
         <aside className={`sidebar-blocchi ${SidebarAperta ? 'visibile' : ''}`}>
         <h3>Libreria Blocchi</h3>
         <hr></hr>
+        <p className='testo-vuoto'>Seleziona un nodo e trascinalo nel workflow.</p>
+
         <div className="lista-nodi">
 
           {/* Blocco Source (input) */}
