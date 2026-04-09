@@ -2,8 +2,10 @@
 , rispettivamente, sinistra e destra, così che non vengano oscurate */
 .sposta-controlli { transition: transform 0.3s ease; }
 .sposta-minimappa { transition: transform 0.3s ease; }
+.sposta-contenitore-warning { transition: transform 0.3s ease; }
 .sposta-controlli.aperta { transform: translateX(310px); }
 .sposta-minimappa.aperta { transform: translateX(-310px); }
+.sposta-contenitore-warning.aperta { transform: translateX(-310px); }
 
 /* Personalizzazione Controlli */
 .StileDivWorkflow .react-flow__controls {

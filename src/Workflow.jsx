@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useMemo } from 'react';
 import { ReactFlow, Background, Controls, MiniMap, Panel, ReactFlowProvider, useReactFlow} from '@xyflow/react';
 import { IoIosArrowDroprightCircle } from "react-icons/io";
 import { IoIosArrowDropleftCircle } from "react-icons/io";
@@ -28,6 +28,7 @@ function WorkflowEditor() {
   } = useWorkflow();
 
   const [messaggioErrore, SettaMessaggioErrore] = useState(null);
+  const [mostraErrori, SettaMostraErrori] = useState(false);
   const { screenToFlowPosition } = useReactFlow();
   const nodoSelezionato = blocchi.find((blocco) => blocco.selected === true);
 
@@ -110,6 +111,7 @@ const connessioneValida = useCallback((connection) => {
     return true;
   }, [blocchi, collegamenti]);
 
+
 /*
 La funzione che segue ci permette di andare a verificare se il nodo selezionato è union e in caso
 troviamo i nodi che sono connessi ad esso.
@@ -122,12 +124,36 @@ const nodiSorgenteConnessi = (nodoSelezionato?.type === 'union')
   : [];
 
 
+const erroriValidazione = useMemo(() => {
+  const lista = [];
+
+  // Regola: Almeno un Source
+  if (!blocchi.some(n => n.type === 'source')) {
+    lista.push({ tipo: 'globale', msg: "Manca un nodo Source" });
+  }
+
+  // Regola: Almeno un Sink
+  if (!blocchi.some(n => n.type === 'sink')) {
+    lista.push({ tipo: 'globale', msg: "Manca un nodo Sink" });
+  }
+
+  // Regola: Union con almeno 2 ingressi
+  blocchi.filter(n => n.type === 'union').forEach(u => {
+    const numIn = collegamenti.filter(e => e.target === u.id).length;
+    if (numIn < 2) {
+      lista.push({ tipo: 'nodo', id: u.id, msg: `Il nodo ${u.id} richiede almeno 2 ingressi` });
+    }
+  });
+
+  return lista;
+}, [blocchi, collegamenti]); // Si ricalcola solo se cambiano nodi o archi
+
+
 /*
 Questa è la funzione che ci consente di andare a trasformare i dati grafici di React Flow, 
 quindi nodi e collegamenti, in formato JSON. 
 */
 
-// 
 const gestisciEsportazione = useCallback(() => {
   try {
     // Va a guardare ogni singolo blocco presente nel workflow, e per ogni di esso
@@ -263,6 +289,41 @@ const gestisciEsportazione = useCallback(() => {
             >
             </CgAdd>
           </Panel>
+
+          {/* Pannello Warning */}
+          {erroriValidazione.length > 0 && (
+            <Panel className={`sposta-contenitore-warning ${GestioneAperta ? 'aperta' : ''}`} position="top-right" style={{ marginRight: '70px' }}>
+              
+              <div className="container-warning-workflow">
+                
+                {/* Triangolo Giallo: Clicca per aprire/chiudere */}
+                <div 
+                  className="pulsante-warning" 
+                  onClick={() => SettaMostraErrori(!mostraErrori)}
+                  title="Clicca per vedere i problemi del workflow"
+                  style={{ cursor: 'pointer'}}
+                >
+                  ⚠️ <span className="contatore-errori">{erroriValidazione.length}</span>
+                </div>
+
+                {/* Lista Errori: compare solo se mostraErrori è true */}
+                {mostraErrori && (
+                  <div className="popover-lista-errori">
+                    <div className="header-popover">
+                      <b>Problemi rilevati:</b>
+                      <button onClick={() => SettaMostraErrori(false)} className="btn-chiudi-popover">×</button>
+                    </div>
+                    <hr />
+                    <ul>
+                      {erroriValidazione.map((err, i) => (
+                        <li key={i}>{err.msg}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            </Panel>
+          )}   
         </ReactFlow>
 
         {/* Sidebar Laterale */}
