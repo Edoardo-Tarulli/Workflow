@@ -18,12 +18,18 @@ export const getCampiFinali = (nodo, schema) => {
   return schema[nodo.type] || [];
 };
 
-// E' una variabile che specifica i contatori per l'id di ogni nodo. Questo per incrementare l'id di ogni nodo specifico
-// quando ne vengono immessi più dello stesso tipo nel workflow. La funzione generaNuovoIdPerTipo va a generare l'id
-// di ogni nodo, in particolare il primo e poi lo incrementa in base al tipo
-let contatori = { source: 0, filter: 0, sink: 0, map: 0, keyby: 0, window: 0, aggregate: 0 };
-
-export const generaNuovoIdPerTipo = (tipo) => {
-  contatori[tipo] = (contatori[tipo] || 0) + 1;
-  return `${tipo}_${contatori[tipo]}`;
+/*
+Funzione che ci permette di gestire l'id dinamico dei blocchi in modo tale che non si vengano 
+a creare dei problemi a seguito di import/esport e successivo inserimento di nuovi nodi (indipendentemente dal tipo).
+Essa sostituisce la precedente funzione che era statica.
+*/
+export const calcolaNuovoId = (tipo, blocchi) => {
+  const massimoId = blocchi
+    .filter((n) => n.type === tipo)
+    .reduce((max, n) => {
+      const parti = n.id.split('_');
+      const numero = parseInt(parti[parti.length - 1]);
+      return !isNaN(numero) && numero > max ? numero : max;
+    }, 0);
+  return `${tipo}_${massimoId + 1}`;
 };

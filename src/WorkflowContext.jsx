@@ -6,8 +6,6 @@ quindi se lo stato si trova al suo interno, si resetta. In questo modo, spostato
 */ 
 
 
-
-
 import { createContext, useContext, useState } from 'react';
 
 const WorkflowContext = createContext();

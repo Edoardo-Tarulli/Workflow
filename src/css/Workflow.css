@@ -136,6 +136,7 @@ la sua left, diventa 0, così da renderla visibile. Inoltre, ne cambiamo il colo
 }
 
 .testo-vuoto {
+  cursor: default;
   font-family: 'Courier New', Courier, monospace;
   margin-top: 60px;
   font-size: large;
@@ -144,6 +145,7 @@ la sua left, diventa 0, così da renderla visibile. Inoltre, ne cambiamo il colo
 }
 
 .campo-gruppo {
+  cursor: default;
   margin-bottom: 25px;
   display: flex;
   flex-direction: column;
@@ -151,6 +153,7 @@ la sua left, diventa 0, così da renderla visibile. Inoltre, ne cambiamo il colo
 }
 
 .valore-fisso {
+  cursor: default;
   width: 180px;
   height: 25px;
   line-height: 25px; /* Centra il testo verticalmente senza usare flexbox */
@@ -389,4 +392,125 @@ la sua left, diventa 0, così da renderla visibile. Inoltre, ne cambiamo il colo
 
 .popover-lista-errori li {
   margin-bottom: 8px;
+}
+
+/* Container per i pulsanti nel Panel bottom-center */
+.panel-azioni-finali {
+  display: flex;
+  gap: 15px;
+  background: #AFEEEE;
+  padding: 10px 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  border: 1px solid black;
+}
+
+.dark-mode .panel-azioni-finali {
+  background-color: #FAEBD7;
+}
+
+/* Stile base per i bottoni del workflow */
+.btn-workflow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+/* Bottone Bozza (Azzurro/Blu) */
+.btn-workflow.bozza {
+  background-color: #FAEBD7;
+  color: black;
+}
+
+.btn-workflow.bozza:hover {
+  background-color:#F4A460;
+  transform: translateY(-2px);
+}
+
+.dark-mode .btn-workflow.bozza {
+  background-color: #AFEEEE;
+}
+
+.dark-mode .btn-workflow.bozza:hover {
+  background-color:#2980b9;
+}
+
+/* Bottone Esporta (Verde) */
+.btn-workflow.esporta {
+  background-color: #27ae60;
+  color: white;
+}
+
+.btn-workflow.esporta:hover:not(.disabilitato) {
+  background-color: #219150;
+  transform: translateY(-2px);
+}
+
+/* Stato Disabilitato per l'esportazione */
+.btn-workflow.disabilitato {
+  background-color: #bdc3c7;
+  color: #7f8c8d;
+  cursor: not-allowed;
+  opacity: 0.7;
+  filter: grayscale(1);
+}
+
+/* Bottone Importa (Arancione o Grigio scuro) */
+.btn-workflow.importa {
+  font-family: 'Courier New', Courier, monospace;
+  margin-top: 50px;
+  background-color: #FAEBD7;
+  color: black;
+  width: 100%; /* Se messo nella sidebar */
+  justify-content: center;
+  border: 1px solid black;
+}
+
+.btn-workflow.importa:hover {
+  background-color:#F4A460;
+  transform: translateY(-2px);
+}
+
+.dark-mode .btn-workflow.importa {
+  background-color: #AFEEEE;
+}
+
+.dark-mode .btn-workflow.importa:hover {
+  background-color:#2980b9;
+}
+
+.dark-mode .panel-azioni-finali {
+  border-color: #FAEBD7;
+}
+
+.dark-mode .btn-workflow.disabilitato {
+  background-color: #444;
+  color: #666;
+}
+
+/* Animazione per il toast di errore (se non l'avevi già) */
+.toast-errore-workflow {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  background-color: #e74c3c;
+  color: white;
+  padding: 12px 25px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from { top: -50px; opacity: 0; }
+  to { top: 20px; opacity: 1; }
 }

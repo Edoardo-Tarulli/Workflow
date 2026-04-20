@@ -3,11 +3,10 @@ import { ReactFlow, Background, Controls, MiniMap, Panel, ReactFlowProvider, use
 import { IoIosArrowDroprightCircle } from "react-icons/io";
 import { IoIosArrowDropleftCircle } from "react-icons/io";
 import { FaCircle } from "react-icons/fa6";
-import { CgAdd } from "react-icons/cg";
 import Navbar from './components/Navbar';
 import { SCHEMA_PROPRIETA } from './data/schemaProprieta';
 import { useWorkflowActions } from './hooks/useWorkflowActions';
-import { getCampiFinali, generaNuovoIdPerTipo } from './utils/workflowHelpers';
+import { getCampiFinali, calcolaNuovoId} from './utils/workflowHelpers';
 import { useWorkflow } from './WorkflowContext';
 import { TipoNodi } from './components/CustomNodes';
 import '@xyflow/react/dist/style.css';
@@ -18,7 +17,7 @@ import '../src/css/ReactFlowTheme.css';
 
 function WorkflowEditor() {
 
-  // Recupera tutto dal Context invece che da useState locali
+  // Recupera tutto dal Context invece che da useState locali. Sono istanze del Workflow context
   const {
     blocchi, SettaBlocchi,
     collegamenti, SettaCollegamenti,
@@ -27,6 +26,9 @@ function WorkflowEditor() {
     ModalitaDark, SettaModalitaDark
   } = useWorkflow();
 
+  /*
+  Queste invece sono locali del file perché tanto le utilizziamo solo nel workflow
+  */
   const [messaggioErrore, SettaMessaggioErrore] = useState(null);
   const [mostraErrori, SettaMostraErrori] = useState(false);
   const { screenToFlowPosition } = useReactFlow();
@@ -48,13 +50,14 @@ function WorkflowEditor() {
       event.dataTransfer.effectAllowed = 'move';
     };
 
-  // 2. Permettere il rilascio sopra il workflow
+  // Questa è la funzione che permette il rilascio del nodo sopra il workflow una volta preso dalla liberia blocchi
   const SopraWorkflow = useCallback((event) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
   }, []);
 
-  // 3. Azione al rilascio (Creazione Nodo)
+  // Azione al rilascio: andiamo a mappare la posizione del nodo sul workflow e nella label comparirà l'id sequenziale in base al tipo di nodo
+  // inoltre creiamo l'oggetto nodo con le sue proprietà che poi riprendiamo per l'esportazione della bozza o del JSON.
   const AlRilascio = useCallback(
     (event) => {
       event.preventDefault();
@@ -67,7 +70,7 @@ function WorkflowEditor() {
         y: event.clientY,
       });
 
-      const nuovoId = generaNuovoIdPerTipo(tipo);
+      const nuovoId = calcolaNuovoId(tipo, blocchi);
 
       // Creiamo il nuovo oggetto nodo, contraddistinto da id, tipo, posizione e data
       const nuovoNodo = {
@@ -79,7 +82,7 @@ function WorkflowEditor() {
 
       SettaBlocchi((nds) => nds.concat(nuovoNodo));
     },
-    [screenToFlowPosition]
+    [screenToFlowPosition, blocchi, SettaBlocchi]
   );
 
 
@@ -114,7 +117,8 @@ const connessioneValida = useCallback((connection) => {
 
 /*
 La funzione che segue ci permette di andare a verificare se il nodo selezionato è union e in caso
-troviamo i nodi che sono connessi ad esso.
+troviamo i nodi che sono connessi ad esso. Cosìcche i nodi che sono connessi all'union li andiamo ad inserire nelle 
+sue proprietà.
 */
 
 const nodiSorgenteConnessi = (nodoSelezionato?.type === 'union') 
@@ -127,17 +131,17 @@ const nodiSorgenteConnessi = (nodoSelezionato?.type === 'union')
 const erroriValidazione = useMemo(() => {
   const lista = [];
 
-  // Regola: Almeno un Source
+  // 1. Regola: Almeno un Source
   if (!blocchi.some(n => n.type === 'source')) {
     lista.push({ tipo: 'globale', msg: "Manca un nodo Source" });
   }
 
-  // Regola: Almeno un Sink
+  // 2. Regola: Almeno un Sink
   if (!blocchi.some(n => n.type === 'sink')) {
     lista.push({ tipo: 'globale', msg: "Manca un nodo Sink" });
   }
 
-  // Regola: Union con almeno 2 ingressi
+  // 3. Regola: Union con almeno 2 ingressi
   blocchi.filter(n => n.type === 'union').forEach(u => {
     const numIn = collegamenti.filter(e => e.target === u.id).length;
     if (numIn < 2) {
@@ -145,90 +149,184 @@ const erroriValidazione = useMemo(() => {
     }
   });
 
+  // 4. Regola: Nodi non isolati, cioè significa che ogni nodo deve essere collegato ad un altro. 
+  blocchi.forEach(nodo => {
+    const haCollegamentiInEntrata = collegamenti.some(e => e.target === nodo.id);
+    const haCollegamentiInUscita = collegamenti.some(e => e.source === nodo.id);
+
+    // Un nodo è isolato se non ha né entrate né uscite
+    if (!haCollegamentiInEntrata && !haCollegamentiInUscita) {
+      lista.push({ 
+        tipo: 'nodo', 
+        id: nodo.id, 
+        msg: `Il nodo ${nodo.id} è isolato e deve essere collegato` 
+      });
+    } 
+    // 5. Regola: Ovviamente il nodo Source e Sink devono avere rispettivamente un collegamento in uscita e uno in ingresso, dato che
+    // rappresentano i nodi di inizio e fine. 
+    else {
+      if (nodo.type === 'source' && !haCollegamentiInUscita) {
+        lista.push({ tipo: 'nodo', id: nodo.id, msg: `Il nodo Source (${nodo.id}) non ha collegamenti in uscita` });
+      }
+      if (nodo.type === 'sink' && !haCollegamentiInEntrata) {
+        lista.push({ tipo: 'nodo', id: nodo.id, msg: `Il nodo Sink (${nodo.id}) non ha collegamenti in ingresso` });
+      }
+      if (nodo.type !== 'source' && nodo.type !== 'sink' && (!haCollegamentiInEntrata || !haCollegamentiInUscita)) {
+        // Se è un nodo intermedio ma gli manca un pezzo della catena
+        const manca = !haCollegamentiInEntrata ? "ingresso" : "uscita";
+        lista.push({ tipo: 'nodo', id: nodo.id, msg: `Il nodo ${nodo.id} è incompleto: manca un collegamento in ${manca}` });
+      }
+    }
+  });
+
   return lista;
-}, [blocchi, collegamenti]); // Si ricalcola solo se cambiano nodi o archi
+}, [blocchi, collegamenti]);
 
 
 /*
 Questa è la funzione che ci consente di andare a trasformare i dati grafici di React Flow, 
-quindi nodi e collegamenti, in formato JSON. 
+quindi nodi e collegamenti, in formato JSON. Viene gestito il fatto che se il workflow non è corretto, viene data la possibilità di esportare
+solo la bozza, la quale può contenere anche errori e nel JSON di essa ci saranno anche le posizioni in modo tale che la possiamo importare
+nuovamente per continuare a lavorarci. Se invece il workflow non presenta errori allora lo possiamo esportare e rappresenta il workflow
+corretto che poi verrà usato su flink quindi contiene solo dati puliti, senza posizioni o altro. 
 */
 
-const gestisciEsportazione = useCallback(() => {
+const gestisciEsportazione = useCallback((isDraft = false) => {
+  if (!isDraft && erroriValidazione.length > 0) {
+    SettaMessaggioErrore("Impossibile esportare: risolvi prima tutti i problemi nel workflow.");
+    setTimeout(() => SettaMessaggioErrore(null), 4000);
+    return;
+  }
+
   try {
-    // Va a guardare ogni singolo blocco presente nel workflow, e per ogni di esso
-    // crea un oggetto che diventa poi uno step del JSON di uscita
     const steps = blocchi.map((nodo) => {
-      /*
-      Con filter va a prendere tutti i collegamenti e tiene solo quelli la cui sorgente è
-      il nodo che stiamo analizzando in quel momento e di tali collegamenti con il map, ne
-      estrae l'id del target (cioè il nodo a cui stiamo puntando). Come risultato ci da 
-      un array di stringhe 
-      */
       const collegamentiInUscita = collegamenti
         .filter((edge) => edge.source === nodo.id)
         .map((edge) => edge.target);
 
-      /*
-      Qui viene utilizzato il destructuring e l'operatore rest (i tre puntini), questo perché
-      react di default inserisce una label dentro data che serve per il testo sul rettangolo del nodo e 
-      quindi la andiamo a separare e teniamo tutto il resto quindi i parametri topic, servers etc. Il || [] serve
-      a evitare errori nel caso in cui il nodo non abbia dati
-      */
       const { label, ...datiPuliti } = nodo.data || {};
 
-      const nuovoStep = {
+      // Se non è una bozza, creiamo un oggetto senza la proprietà 'position'
+      let stepDati = {
         id: nodo.id,
         type: nodo.type,
         ...datiPuliti,
       };
 
-      // 4. LOGICA CONDIZIONALE:
-      // Se NON è un sink, aggiungiamo l'array next.
-      // Se È un sink, non aggiungiamo next perché è l'ultimo blocco, quello che chiude il workflow
+      if (isDraft) {
+        stepDati.position = nodo.position; // Includiamo la posizione solo nella bozza
+      }
+
       if (nodo.type !== 'sink') {
-        nuovoStep.next = collegamentiInUscita;
+        stepDati.next = collegamentiInUscita;
+      } else if (!stepDati.sinkType) {
+        stepDati.sinkType = "print"; 
       }
 
-      // Se vuoi forzare un sinkType di default qualora l'utente non l'abbia scelto:
-      else if (!nuovoStep.sinkType) {
-        nuovoStep.sinkType = "print"; 
-      }
-
-      return nuovoStep;
+      return stepDati;
     });
 
-    /*
-    Questa è la parte finale che trasforma il JSON in un BLOB (che da quello che ho 
-    capito è un oggetto che rappresenta dati binari); crea un url temporaneo che punta 
-    a questi dati binari; crea un elemento di tipo <a> quindi un link, invisibile nel codice
-    Poi simula un click sul link per far partire il download nel browser e infine pulisce
-    tutto tramite revoke per non occupare memoria inutilmente, con un catch in caso di 
-    errore nel processo di esportazione. 
-    */
+    // Serve per generare la data di esportazione solo nel momento in cui il workflow è una bozza 
+    const workflowFinale = isDraft 
+      ? { steps, status: 'draft', dataEsportazione: new Date().toISOString() } 
+      : { steps };
 
-    const workflowFinale = { steps };
     const dataStr = JSON.stringify(workflowFinale, null, 2);
     const blob = new Blob([dataStr], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     
     const link = document.createElement('a');
     link.href = url;
-    link.download = `workflow_${new Date().toISOString().slice(0,10)}.json`;
+    const prefix = isDraft ? 'BOZZA_workflow' : 'workflow_flink';
+    link.download = `${prefix}_${new Date().toISOString().slice(0,10)}.json`;
+    
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
+
+    // Messaggio informativo post-esportazione
+    if (!isDraft) {
+      alert("Esportazione per Flink completata.\n\nNOTA: Questo file è ottimizzato per la produzione e NON contiene le posizioni dei nodi. Per modifiche grafiche future, usa sempre il file 'BOZZA'.");
+    }
   } catch (error) {
     console.error("Errore durante l'esportazione:", error);
   }
-}, [blocchi, collegamenti]); 
+}, [blocchi, collegamenti, erroriValidazione]);
+
+
+/*
+Funzione per la gestione dell'importazione di un JSON da file. Naturalmente nella ricerca del file ci vengono mostrati solo
+i file che hanno estensione JSON. Nel caso in cui l'utente dovesse importare un workflow già completo e corretto, in esso non ci sonno
+le posizioni quindi implementiamo una piccola griglia così da dare comunque una posizione ai nodi, da verificare se funziona correttamente
+o sufficientemente bene 
+*/
+
+const gestisciImportazione = useCallback((event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const json = JSON.parse(e.target.result);
+      if (!json.steps) throw new Error("Formato non valido");
+
+      const nuoviNodi = json.steps.map((step, indice) => {
+        // Algoritmo di emergenza: Griglia 3xN se manca la posizione
+        const xDefault = (indice % 3) * 300; 
+        const yDefault = Math.floor(indice / 3) * 200;
+
+        return {
+          id: step.id,
+          type: step.type,
+          position: step.position || { x: xDefault, y: yDefault },
+          data: { 
+            label: step.id.toUpperCase(),
+            ...Object.keys(step)
+              .filter(key => !['id', 'type', 'position', 'next'].includes(key))
+              .reduce((obj, key) => ({ ...obj, [key]: step[key] }), {})
+          },
+        };
+      });
+
+      const nuoviEdges = [];
+      json.steps.forEach((step) => {
+        if (step.next && Array.isArray(step.next)) {
+          step.next.forEach((targetId) => {
+            nuoviEdges.push({
+              id: `e-${step.id}-${targetId}`,
+              source: step.id,
+              target: targetId,
+              animated: false, // Così le linee rimangono continue altrimenti, quando reimportiamo, diventano tratteggiate
+              style: { strokeWidth: 2 } 
+            });
+          });
+        }
+      });
+
+      SettaBlocchi(nuoviNodi);
+      SettaCollegamenti(nuoviEdges);
+      event.target.value = ''; // Reset input
+    } catch (err) {
+      SettaMessaggioErrore("Errore nell'importazione del file JSON.");
+      setTimeout(() => SettaMessaggioErrore(null), 3000);
+    }
+  };
+  reader.readAsText(file);
+}, [SettaBlocchi, SettaCollegamenti]);
+
+
+/*
+Inizio del return che ci restituisce la nostra pagina workflow
+con tutte le sue caratteristiche.
+*/
 
   return (
     <>
       <div className={`StileDivWorkflow ${ModalitaDark ? 'dark-mode' : ''}`}>
 
-        {/* MESSAGGIO DI AVVISO A SCHERMO */}
+        {/* Messaggio di avviso a schermo quando si prova a collegare più nodi ad un nodo che non è di tipo union. */}
         {messaggioErrore && (
           <div className="toast-errore-workflow">
             <span>⚠️ {messaggioErrore}</span>
@@ -249,23 +347,30 @@ const gestisciEsportazione = useCallback(() => {
           proOptions={{ hideAttribution: true }} // serve per nascondere il link al sito React Flow in basso a destra che compare di default
           isValidConnection={connessioneValida}
           >
-          <Background variant="dots" gap={12} size={1} />
+          <Background variant="dots" gap={12} size={1} /> {/*Impostiamo lo sfondo con puntini e distanza tra di loro*/}
+          
+          {/*Pannello dei controlli (zoom in, out, fitView, Lock) che quando viene aperta la liberia, trasla */}
           <Controls
-            className={`sposta-controlli ${SidebarAperta ? 'aperta' : ''}`}
+            className={`sposta-controlli ${SidebarAperta ? 'aperta' : ''}`} 
             showZoom showFitView
-            
           />
+
+          {/*Pannello minimappa che mostra i nodi e quando viene aperta la sidebar di gestione, trasla per non essere sovrapposta*/}
           <MiniMap
             className={`sposta-minimappa ${GestioneAperta ? 'aperta' : ''}`}
-            nodeColor='black' ariaLabel='Mappa del flusso' bgColor='#AFEEEE' maskColor='none' pannable={false} zoomable={false}></MiniMap>
+            nodeColor='black' ariaLabel='Mappa del flusso' bgColor='#AFEEEE' maskColor='none' pannable={false} zoomable={false}>
+          </MiniMap>
+
+          {/*Freccia per aprire la sidebar dei blocchi e trasla quando viene cliccata per non essere sovrapposta*/}
           <Panel position='top-left'>
             <IoIosArrowDroprightCircle
             className={`icona-toggle ${SidebarAperta ? 'aperta' : ''}`}
             onClick={ () => SettaAperturaSidebar(!SidebarAperta)}
-            title = 'Apri Sidebar'
-            >
+            title = 'Apri liberia blocchi'>
             </IoIosArrowDroprightCircle>
           </Panel>
+
+          {/*Pannello dei colori per il cambio tema*/}
           <Panel position='top-center'>
             <FaCircle
             className='IconaCambiaSfondo' 
@@ -273,26 +378,46 @@ const gestisciEsportazione = useCallback(() => {
             onClick={() => SettaModalitaDark(!ModalitaDark)}>
             </FaCircle>
           </Panel>
+
+          {/*Freccia di destra per l'apertura della sidebar dove possiamo stabilire i campi dei nodi*/}
           <Panel position='top-right'>
             <IoIosArrowDropleftCircle
             className={`icona-gestione ${GestioneAperta ? 'aperta' : ''}`}
             onClick={() => SettaGestioneAperta(!GestioneAperta)}
-            title = 'Apri menù gestione'        
-            >
+            title = 'Apri menù gestione'>
             </IoIosArrowDropleftCircle>
           </Panel>
-          <Panel position='bottom-center'>
-            <CgAdd
-            title='Salva ed esporta'
-            className='IconaSalvaEsporta'
-            onClick={gestisciEsportazione}
-            >
-            </CgAdd>
-          </Panel>
 
-          {/* Pannello Warning */}
+          {/*Pannello in basso al centro per le "azioni finali", cioè l'esportazione di bozza/workflow finale completo*/}
+          <Panel position='bottom-center' className="panel-azioni-finali">
+            <input
+              type='file'
+              id='file-import'
+              accept='.json'
+              onChange={gestisciImportazione}
+              style={{display: 'none'}}
+            />  
+            {/* Pulsante SALVA BOZZA (Sempre attivo), per salvare la bozza anche con errori */}
+            <button 
+              className="btn-workflow bozza" 
+              onClick={() => gestisciEsportazione(true)}
+              title="Salva bozza (anche con errori)">
+              💾 Salva Bozza
+            </button>
+
+            {/* Pulsante Esporta, che è disabilitato fino a che non vengono risolti tutti gli errori */}
+            <button 
+              className={`btn-workflow esporta ${erroriValidazione.length > 0 ? 'disabilitato' : ''}`}
+              onClick={() => gestisciEsportazione(false)}
+              title={erroriValidazione.length > 0 ? "Risolvi gli errori per esportare" : "Esporta workflow finale"}>
+              🚀 Esporta JSON
+            </button>
+
+          </Panel>
+          {/* Pannello Warning che trasla se la sidebar gestione viene aperta così da non essere sovrapposta. Se viene cliccato si apre il pannello
+          che contiene gli errori presenti e dinamicamente vengono rimossi se risolti */}
           {erroriValidazione.length > 0 && (
-            <Panel className={`sposta-contenitore-warning ${GestioneAperta ? 'aperta' : ''}`} position="top-right" style={{ marginRight: '70px' }}>
+            <Panel className={`sposta-contenitore-warning ${GestioneAperta ? 'aperta' : ''}`} position="top-right" style={{ marginTop: '70px' }}>
               
               <div className="container-warning-workflow">
                 
@@ -301,22 +426,21 @@ const gestisciEsportazione = useCallback(() => {
                   className="pulsante-warning" 
                   onClick={() => SettaMostraErrori(!mostraErrori)}
                   title="Clicca per vedere i problemi del workflow"
-                  style={{ cursor: 'pointer'}}
-                >
+                  style={{ cursor: 'pointer'}}>
                   ⚠️ <span className="contatore-errori">{erroriValidazione.length}</span>
                 </div>
 
-                {/* Lista Errori: compare solo se mostraErrori è true */}
+                {/* Lista Errori: compare solo se mostraErrori è true, quindi significa che il workflow è "errato" */}
                 {mostraErrori && (
                   <div className="popover-lista-errori">
                     <div className="header-popover">
-                      <b>Problemi rilevati:</b>
+                      <b style={{cursor: 'default'}}>Problemi rilevati:</b>
                       <button onClick={() => SettaMostraErrori(false)} className="btn-chiudi-popover">×</button>
                     </div>
                     <hr />
                     <ul>
                       {erroriValidazione.map((err, i) => (
-                        <li key={i}>{err.msg}</li>
+                        <li style={{cursor: 'default'}} key={i}>{err.msg}</li>
                       ))}
                     </ul>
                   </div>
@@ -328,9 +452,26 @@ const gestisciEsportazione = useCallback(() => {
 
         {/* Sidebar Laterale */}
         <aside className={`sidebar-blocchi ${SidebarAperta ? 'visibile' : ''}`}>
-        <h3>Libreria Blocchi</h3>
+        <h3 style={{cursor: 'default'}}>Libreria Blocchi</h3>
         <hr></hr>
-        <p className='testo-vuoto'>Seleziona un nodo e trascinalo nel workflow.</p>
+          {/*Questo è il contenitore dell'import che contiene il bottone cliccabile per scegliere il file*/}
+          <div style={{ padding: '0 10px'}}>
+            <input
+              type="file"
+              id="file-import"
+              accept=".json"
+              onChange={gestisciImportazione}
+              style={{ display: 'none' }}
+            />
+            <button 
+              className="btn-workflow importa"
+              onClick={() => document.getElementById('file-import').click()}
+              title='Importa da file'
+            >
+              📂 Importa Progetto
+            </button>
+          </div>
+        <p className='testo-vuoto'>Seleziona un nodo e trascinalo nel workflow oppure importa un progetto esistente.</p>
 
         <div className="lista-nodi">
 
@@ -427,14 +568,14 @@ const gestisciEsportazione = useCallback(() => {
 
         {/* Di seguito c'è il codice che riguarda la sidebar di destra */}
         <aside className={`sidebar-gestione ${GestioneAperta ? 'visibile' : ''}`}>
-        <h3>Proprietà</h3>
+        <h3 style={{cursor: 'default'}}>Proprietà</h3>
         <hr />
         {!nodoSelezionato ? (
           <p className="testo-vuoto">Seleziona un blocco per vederne i parametri.</p>
         ) : (
           <div className="container-proprieta">
 
-            <h3>Caratteristiche del nodo</h3>
+            <h3 style={{cursor: 'default'}}>Caratteristiche del nodo</h3>
             {/* PARAMETRI COMUNI */}
             <div className="campo-gruppo">
               <p><b>ID Nodo:</b></p>
@@ -452,7 +593,7 @@ const gestisciEsportazione = useCallback(() => {
             </div>
             
             <hr />
-            <h3>Parametri Specifici: {nodoSelezionato.id}</h3>
+            <h3 style={{cursor: 'default'}}>Parametri Specifici: {nodoSelezionato.id}</h3>
 
             {/* AGGIUNTA PER IL NODO UNION */}
             {nodoSelezionato.type === 'union' && (
