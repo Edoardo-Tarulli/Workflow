@@ -1,4 +1,4 @@
-
+/* --- STILE INTERO CONTENITORE --- */
 .StileNavbar {
     width: 100%;
     height: 60px;
@@ -10,6 +10,9 @@
     border-bottom: 2px solid #121212;
 }
 
+/* -------------------------------- */
+
+/* STILE DEI SINGOLI ELEMENTI CHE COMPONGONO LA NAVBAR */
 .StileElementiNav {
     padding-left: 40px;
     display: flex;
@@ -38,4 +41,6 @@
     border: 1px solid;
     border-radius: 20px;
 }
+
+/* -------------------------------- */
 

@@ -4,7 +4,7 @@ import { IoIosArrowDroprightCircle } from "react-icons/io";
 import { IoIosArrowDropleftCircle } from "react-icons/io";
 import { FaCircle } from "react-icons/fa6";
 import Navbar from './components/Navbar';
-import { SCHEMA_PROPRIETA } from './data/schemaProprieta';
+import { Properties } from './data/Properties';
 import { useWorkflowActions } from './hooks/useWorkflowActions';
 import { getCampiFinali, calcolaNuovoId, connessioneValida, calcolaErroriValidazione, gestisciEsportazione, gestisciImportazione} from './utils/workflowHelpers';
 import { useWorkflow } from './WorkflowContext';
@@ -13,7 +13,6 @@ import '@xyflow/react/dist/style.css';
 import '../src/css/Workflow.css'
 import '../src/css/CustomNodes.css';
 import '../src/css/ReactFlowTheme.css';
-
 
 function WorkflowEditor() {
 
@@ -52,7 +51,7 @@ function WorkflowEditor() {
   AlRilascio
   } = actions;
 
-  const campiFinali = getCampiFinali(nodoSelezionato, SCHEMA_PROPRIETA);
+  const campiFinali = getCampiFinali(nodoSelezionato, Properties);
 
   // Memorizziamo gli errori chiamando l'helper
   const erroriValidazione = useMemo(() => 
