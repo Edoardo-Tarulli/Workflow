@@ -1,6 +1,7 @@
 
 /* Gli import sono gli hook nativi di react che permettono di aggiungere collegamenti ed applicarli tra un nodo e l'altro e la funzione
 di callback che permette di restituirci il blocco/collegamento aggiornato */
+
 import { applyNodeChanges, applyEdgeChanges, addEdge } from '@xyflow/react';
 import { useCallback } from 'react';
 import { calcolaNuovoId } from '../utils/workflowHelpers';

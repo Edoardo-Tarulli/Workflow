@@ -1,29 +1,5 @@
-/* --- CSS RELATIVO ALLA SIDEBAR DI SINISTRA --- */
 
-.blocco-sidebar {
-  font-family: 'Courier New', Courier, monospace;
-  background-color: white;
-  margin-top: 40px;
-  padding: 12px 15px;
-  border: 1px solid black;
-  border-radius: 8px;
-  cursor: grab;
-  font-size: 0.9rem;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  user-select: none;
-  border-left: 5px solid #AFEEEE;
-}
-
-.blocco-sidebar:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* -------------------------------------------- */
-
-/* CSS RELATIVO AL NODO PRESENTE NELLA SCHERMATA, QUELLO EFFETTIVO */
+/* --- CSS RELATIVO AL NODO PRESENTE NELLA SCHERMATA, QUELLO EFFETTIVO --- */
 
 .stile-nodo {
   border: 2px solid black;
@@ -42,11 +18,3 @@
 
 /* -------------------------------------------------------------- */
 
-.blocco-gestione {
-  width: 180px;
-  height: 25px;
-  border: 1px solid black;
-  border-radius: 5px;
-  font-size: large;
-  background-color: white;
-}

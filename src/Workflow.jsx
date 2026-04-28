@@ -77,7 +77,7 @@ con tutte le sue caratteristiche.
 
   return (
     <>
-      <div className={`StileDivWorkflow ${ModalitaDark ? 'dark-mode' : ''}`}>
+      <div className={`stile-div-workflow ${ModalitaDark ? 'dark-mode' : ''}`}>
 
         {/* Messaggio di avviso a schermo quando si prova a collegare più nodi ad un nodo che non è di tipo union. */}
         {messaggioErrore && (

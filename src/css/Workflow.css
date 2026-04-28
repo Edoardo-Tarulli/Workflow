@@ -1,24 +1,25 @@
-/* Stile generale del corpo dell'editor. */
+/* --- STILE DEI DIV PRINCIPALI --- */
+
 body {
   overflow: hidden;
 }
 
-/*Stile del contenitore principale di tutto il workflow*/
-.StileDivWorkflow {
+.stile-div-workflow {
   margin-top: 60px;
   width: 100vw;
   height: 100vh;
   padding-bottom: 50px;
 }
 
-/*Andiamo ad impostare il font delle scritte e la transizione (quando gli elementi traslano lo fanno con fluidità)
-di TUTTI gli elementi che fanno parte del workflow*/
-.StileDivWorkflow * {
+.stile-div-workflow * {
   font-family: 'Courier New', Courier, monospace;
   transition: background-color 0.5s ease, border-color 0.5s ease, color 0.5s ease;
 }
 
-/* Stile della Sidebar Blocchi (Sinistra) */
+/* -------------------------------- */
+
+/* --- STILE SIDEBAR DI SINISTRA E SUOI COMPONENTI --- */
+
 .sidebar-blocchi {
   background-color: white;
   position: absolute;
@@ -37,7 +38,31 @@ di TUTTI gli elementi che fanno parte del workflow*/
   overflow-y: scroll;
 }
 
-/* La pallina colorata dinamica */
+/* --- CSS RELATIVO ALLA SIDEBAR DI SINISTRA --- */
+
+.blocco-sidebar {
+  font-family: 'Courier New', Courier, monospace;
+  background-color: white;
+  margin-top: 40px;
+  padding: 12px 15px;
+  border: 1px solid black;
+  border-radius: 8px;
+  cursor: grab;
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  user-select: none;
+  border-left: 5px solid #AFEEEE;
+}
+
+.blocco-sidebar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* -------------------------------------------- */
+
 .punto-colore {
   width: 12px;
   height: 12px;
@@ -61,6 +86,10 @@ di TUTTI gli elementi che fanno parte del workflow*/
 la sua left, diventa 0, così da renderla visibile. Inoltre, ne cambiamo il colore quando passiamo alla dark */
 .sidebar-blocchi.visibile { left: 0; }
 
+/* -------------------------------------------------- */
+
+/* --- STILE DELLA SIDEBAR DI DESTRA -- */
+
 /* Stile della Sidebar Gestione (Destra) */
 .sidebar-gestione {
   background-color: white;
@@ -79,8 +108,21 @@ la sua left, diventa 0, così da renderla visibile. Inoltre, ne cambiamo il colo
   overflow-y: scroll;
 }
 
+.blocco-gestione {
+  width: 180px;
+  height: 25px;
+  border: 1px solid black;
+  border-radius: 5px;
+  font-size: large;
+  background-color: white;
+}
+
 /*Stesso discorso di comparsa per quella di destra e cambio colore*/
 .sidebar-gestione.visibile { right: 0; }
+
+/* ----------------------------------------------- */
+
+/* STILE ICONE FRECCE E PALLINA CAMBIA TEMA IN WHITE MODE E DARK MODE */
 
 /*Stile delle freccie per aprire le sidebar*/
 .icona-toggle, .icona-gestione {
@@ -116,7 +158,11 @@ la sua left, diventa 0, così da renderla visibile. Inoltre, ne cambiamo il colo
   font-size: 3.0rem;
 }
 
-/* --- Struttura Sidebar Proprietà --- */
+/* ---------------------------------------------- */
+
+
+
+/* --- STRUTTURA DELLE PROPRIETA' DEI BLOCCHI NELLA SIDEBAR DI DESTRA --- */
 
 .container-proprieta {
   display: flex;
@@ -156,8 +202,6 @@ la sua left, diventa 0, così da renderla visibile. Inoltre, ne cambiamo il colo
   text-align: center;
 }
 
-/* --- Liste Dinamiche (Map / Aggregate) --- */
-
 .lista-dinamica, .lista-aggregazioni {
   display: flex;
   flex-direction: column;
@@ -192,8 +236,6 @@ la sua left, diventa 0, così da renderla visibile. Inoltre, ne cambiamo il colo
   height: 30px;
   padding: 4px;
 }
-
-/* --- Input e Bottoni specifici della Sidebar --- */
 
 .container-proprieta input, 
 .container-proprieta select {
@@ -266,6 +308,10 @@ la sua left, diventa 0, così da renderla visibile. Inoltre, ne cambiamo il colo
   transform: scale(1.1);
 }
 
+/* ------------------------------------------------------------------ */
+
+/* --- STILE COLLEGAMENTI --- */
+
 .lista-connessioni-union {
   display: flex;
   flex-wrap: wrap;
@@ -286,6 +332,10 @@ la sua left, diventa 0, così da renderla visibile. Inoltre, ne cambiamo il colo
   display: flex;
   align-items: center;
 }
+
+/* -------------------------------------------------------------- */
+
+/* --- CONTENITORI E SCRITTE PER ERRORI E VALIDAZIONI --- */
 
 .testo-avviso {
   font-style: italic;
@@ -385,7 +435,10 @@ la sua left, diventa 0, così da renderla visibile. Inoltre, ne cambiamo il colo
   margin-bottom: 8px;
 }
 
-/* Container per i pulsanti nel Panel bottom-center */
+/* ---------------------------------------------------- */
+
+/* --- CONTENITORE DEI BOTTONI SALVA BOZZA E ESPORTA --- */
+
 .panel-azioni-finali {
   background-color: none;
   border: none;
@@ -464,7 +517,10 @@ la sua left, diventa 0, così da renderla visibile. Inoltre, ne cambiamo il colo
   color: #666;
 }
 
-/* Animazione per il toast di errore (se non l'avevi già) */
+/* ------------------------------------------------------- */
+
+/* TOAST CHE COMPARE QUANDO SI PROVA A MANDARE DUE INGRESSI AD UN NODO NON UNION */
+
 .toast-errore-workflow {
   position: absolute;
   top: 20px;
@@ -483,3 +539,5 @@ la sua left, diventa 0, così da renderla visibile. Inoltre, ne cambiamo il colo
   from { top: -50px; opacity: 0; }
   to { top: 20px; opacity: 1; }
 }
+
+/* ----------------------------------------------------------- */
