@@ -1,4 +1,5 @@
-/* Card nella libreria (sidebar sinistra) */
+/* --- CSS RELATIVO ALLA SIDEBAR DI SINISTRA --- */
+
 .blocco-sidebar {
   font-family: 'Courier New', Courier, monospace;
   background-color: white;
@@ -12,46 +13,35 @@
   display: flex;
   align-items: center;
   user-select: none;
-  border-left: 5px solid #2196f3;
+  border-left: 5px solid #AFEEEE;
 }
 
-/*Quando si passa il mouse sopra ad una delle card*/
 .blocco-sidebar:hover {
-  border-color: var(--colore-hover);
   transform: translateY(-2px);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Nodi effettivi nel Workflow */
-.stileNodo {
-  border-top: 2px solid black;
-  border-right: 2px solid black;
-  border-bottom: 2px solid black;
-  border-left: var(--colore-bordo-sinistra);
+/* -------------------------------------------- */
+
+/* CSS RELATIVO AL NODO PRESENTE NELLA SCHERMATA, QUELLO EFFETTIVO */
+
+.stile-nodo {
+  border: 2px solid black;
   padding: 10px;
-  border-radius: 8px;
+  border-radius: 20px;
   width: 150px;
   background: white;
   text-align: center;
 }
 
-/*Quando selezioniamo un nodo presente nel workflow, andiamo ad impostare un colore dello stesso, in base al tipo di nodo*/
-.stileNodo:focus {
-  border-color: var(--colore-selezione);
+.descrizione-nodo {
+  font-size: 15px;
+  font-weight: bold;
+  font-family: 'Courier New', Courier, monospace;
 }
 
-/*Stile del nordo quando si passa alla modalità scura*/
-.dark-mode .stileNodo {
-  border-top: 2px solid grey;
-  border-right: 2px solid grey;
-  border-bottom: 2px solid grey;
-}
+/* -------------------------------------------------------------- */
 
-.dark-mode .stileNodo:focus {
-  border-color: var(--colore-selezione);
-}
-
-/* Input nelle proprietà (sidebar destra) */
 .blocco-gestione {
   width: 180px;
   height: 25px;

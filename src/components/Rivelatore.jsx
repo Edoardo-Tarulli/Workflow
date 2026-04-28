@@ -2,17 +2,16 @@
 /*
 Import dell'hook useInView, nativo di react, che serve per "osservare" lo stato del componente e gestirlo di conseguenza.
 Questo componente rivelatore serve per andare a mostrare i componenti della pagina home man mano che si scorre verso il basso, 
-in maniera fluida e animata
+in maniera fluida e animata. 
 */
-
 
 import { useInView } from 'react-intersection-observer';
 
-{/* Componente rivelatore che va ad integrare le animazioni e i suoi parametri vengono poi restituiti nel return ed esportati */}
+{/* Componente rivelatore che va ad integrare le animazioni e i suoi parametri vengono poi restituiti nel return ed esportati. */}
 const Rivelatore = ({ children }) => {
   const { ref, inView } = useInView({
-    triggerOnce: true, // L'animazione avviene solo la prima volta che scorri
-    threshold: 0.1,    // Parte quando il 10% dell'elemento è visibile
+    triggerOnce: true, // L'animazione avviene solo la prima volta che si scorre verso il basso.
+    threshold: 0.1,    // Parte quando il 10% dell'elemento è visibile.
   });
 
   return (

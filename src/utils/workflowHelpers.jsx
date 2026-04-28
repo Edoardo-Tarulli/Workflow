@@ -1,5 +1,3 @@
-import { useCallback, useState, useMemo } from 'react';
-
 /*
 Questa è la funzione che andiamo poi a richiamare nel codice del workflow per gestire il nodo window che è quello più delicato
 in quanto si tratta di un oggetto e non di un array. Pertanto andiamo a specificare che se il tipo del nodo selezionato è window

@@ -233,88 +233,80 @@ con tutte le sue caratteristiche.
           {/* Blocco Source (input) */}
           <div
             className="blocco-sidebar"
-            style={{ borderLeftColor: '#FF0000', '--colore-hover': '#FF0000' }}
             onDragStart={(event) => InizioTrascinamento(event, 'source')} 
             draggable
           >
-            <div className="punto-colore" style={{ '--colore-nodo': '#FF0000' }}></div>
+            <div className="punto-colore"></div>
             <span style={{marginLeft: '15px'}}><b>Nodo "Source"</b></span>
           </div>
 
           {/* Blocco Filter (filtraggio) */}
           <div
             className="blocco-sidebar" 
-            style={{ borderLeftColor: '#FFA500', '--colore-hover': '#FFA500' }}
             onDragStart={(event) => InizioTrascinamento(event, 'filter')} 
             draggable
           >
-            <div className="punto-colore" style={{ '--colore-nodo': '#FFA500' }}></div>
+            <div className="punto-colore"></div>
             <span style={{marginLeft: '15px'}}><b>Nodo "Filter"</b></span>
           </div>
 
           {/* Blocco Map (mapping) */}
           <div
             className="blocco-sidebar" 
-            style={{ borderLeftColor: '#BDB76B', '--colore-hover': '#BDB76B' }}
             onDragStart={(event) => InizioTrascinamento(event, 'map')} 
             draggable
           >
-            <div className="punto-colore" style={{ '--colore-nodo': '#BDB76B' }}></div>
+            <div className="punto-colore"></div>
             <span style={{marginLeft: '15px'}}><b>Nodo "Map"</b></span>
           </div>
 
           {/* Blocco KeyBy (si va a filtrare i campi del nodo) */}
           <div
             className="blocco-sidebar" 
-            style={{ borderLeftColor: '#3CB371', '--colore-hover': '#3CB371' }}
             onDragStart={(event) => InizioTrascinamento(event, 'keyby')} 
             draggable
           >
-            <div className="punto-colore" style={{ '--colore-nodo': '#3CB371' }}></div>
+            <div className="punto-colore"></div>
             <span style={{marginLeft: '15px'}}><b>Nodo "KeyBy"</b></span>
           </div>
 
           {/* Blocco Window (finestra) */}
           <div
             className="blocco-sidebar" 
-            style={{ borderLeftColor: '#0000FF', '--colore-hover': '#0000FF' }}
             onDragStart={(event) => InizioTrascinamento(event, 'window')} 
             draggable
           >
-            <div className="punto-colore" style={{ '--colore-nodo': '#0000FF' }}></div>
+            <div className="punto-colore"></div>
             <span style={{marginLeft: '15px'}}><b>Nodo "Window"</b></span>
           </div>
 
           {/* Blocco Aggregate (aggregazione) */}
           <div
             className="blocco-sidebar" 
-            style={{ borderLeftColor: '#800080', '--colore-hover': '#800080' }}
             onDragStart={(event) => InizioTrascinamento(event, 'aggregate')} 
             draggable
           >
-            <div className="punto-colore" style={{ '--colore-nodo': '#800080' }}></div>
+            <div className="punto-colore"></div>
             <span style={{marginLeft: '15px'}}><b>Nodo "Aggregate"</b></span>
           </div>
 
           {/* Blocco Union (unione di due o più nodi) */}
           <div
             className="blocco-sidebar" 
-            style={{ borderLeftColor: '#BC8F8F', '--colore-hover': '#BC8F8F' }}
             onDragStart={(event) => InizioTrascinamento(event, 'union')} 
             draggable
           >
-            <div className="punto-colore" style={{ '--colore-nodo': '#BC8F8F' }}></div>
+            <div className="punto-colore"></div>
             <span style={{marginLeft: '15px'}}><b>Nodo "Union"</b></span>
           </div>
 
           {/* Blocco Sink (output) */}
           <div
             className="blocco-sidebar" 
-            style={{ borderLeftColor: '#8B4513', '--colore-hover': '#8B4513' }}
             onDragStart={(event) => InizioTrascinamento(event, 'sink')} 
             draggable
           >
-            <div className="punto-colore" style={{ '--colore-nodo': '#8B4513' }}></div>
+            <div className="punto-colore"></div>
             <span style={{marginLeft: '15px'}}><b>Nodo "Sink"</b></span>
           </div>
 

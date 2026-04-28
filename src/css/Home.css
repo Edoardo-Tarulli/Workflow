@@ -1,14 +1,14 @@
 
-/*Css che descrive lo stile intero della pagina home e come i suoi elementi vengono disposti*/
-.StileHome {
+/* --- STILE DEI CONTENITORI E DESCRIZIONI DELLA PAGINA HOME --- */
+
+.stile-home {
   display: flex;
   width: 100vw;
   flex-direction: column;
   min-height: 100vh;
 }
 
-/*Classe che descrive lo stile del contenitore del titolo*/
-.ContenitoreScritta {
+.contenitore-scritta {
   margin-top: 150px;
   display: flex;
   width: 100vw;
@@ -17,8 +17,7 @@
   cursor: context-menu;
 }
 
-/* Stili per la scritta */
-.ScrittaWorkflow {
+.scritta-workflow {
   font-size: 6em; 
   font-family:'Courier New', Courier, monospace;
   color: black; 
@@ -26,33 +25,12 @@
   text-shadow: 2px 2px 4px rgba(0.5, 0, 0, 0.5);
 }
 
-/*Stile dei paragrafi che descrivono il sito*/
-.StileDescrizione {
+.stile-descrizione {
   font-family:'Courier New', Courier, monospace;
   margin-left: 150px;
 }
 
-
-/*Serve per fare in modo che gli ingranaggi ruotino, riproducendo in continuazione la rotazione*/
-@keyframes spin {
-  from {
-    transform: rotate(0deg); /*Fa partire la rotazione da 0 gradi*/
-  }
-  to {
-    transform: rotate(360deg); /*Fa finire la rotazione a 360 gradi, compiendo un giro completo*/
-  }
-}
-
-/* Applica l'animazione all'icona */
-.StileIngranaggio {
-  font-size: 4em; 
-  color:#00CED1;
-  animation: spin 3s linear infinite; 
-}
-
-
-/*Stile dei singoli elementi che compongono i vari elementi di ogni div delle sezioni descrizioni*/
-.StileDescrizioneSito {
+.stile-descrizione-sito {
   align-items: center;
   display: flex;
   flex-direction: row;
@@ -64,16 +42,37 @@
   cursor: context-menu;
 }
 
-/*Css che gestisce lo stile della prima immagine*/
-.stile-immagine {
+/* ----------------------------------------------------- */
+
+/* STILE ICONE E LORO ANIMAZIONI */
+
+.stile-ingranaggio {
+  font-size: 4em; 
+  color:#00CED1;
+  animation: spin 3s linear infinite; 
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg); 
+  }
+  to {
+    transform: rotate(360deg); 
+  }
+}
+
+/* ------------------------------------------------------- */
+
+/* STILE DELLE IMMAGINI */
+
+.stile-immagine-workflow {
   width: 300px;
   border: 1px solid;
   border-radius: 50%;
   margin-left: 50px;
 }
 
-/*Css che descrive lo stile della seconda immagine*/
-.imgPersonalizzazione {
+.stile-immagine-personalizzazione {
   margin-left: 500px;
   border: 1px solid;
   border-radius: 50%;
@@ -81,8 +80,20 @@
   height: 300px;
 }
 
-/*Stile del bottone "inizia ora" che porta alla schermata del workflow*/
-.buttonStart {
+.stile-immagine-salva {
+  height: 300px;
+  width: 350px;
+  color: black;
+  margin-left: 80px;
+  border: 1px solid;
+  border-radius: 50%;
+}
+
+/* ------------------------------------------------ */
+
+/* STILE BOTTONE */
+
+.bottone-start {
   width: 300px;
   height: 60px;
   border: 2px solid;
@@ -91,14 +102,17 @@
   font-size: 2em;
 }
 
-/*Quando si passa con il mouse sopra al bottone*/
-.buttonStart:hover {
+.bottone-start:hover {
   cursor: pointer;
   background-color:#AFEEEE;
 }
 
+/* ----------------------------------------------- */
+
+/* STILE ANIMAZIONI E FRECCE */
+
 /* --- 1. ANIMAZIONE IMMEDIATA (TITOLO) --- */
-.ApparizioneImmediata {
+.apparizione-immediata {
     animation: fadeInScale 1.2s ease-out forwards;
 }
 
@@ -116,7 +130,6 @@
     will-change: opacity, transform;
 }
 
-/*Quando l'elemento diventa visibile scorrendo, viene applicata opacità e trasla dando l'effetto che compaia*/
 .rivela-elemento.visibile {
     opacity: 1;
     transform: translateY(0);
@@ -124,12 +137,14 @@
 
 /* --- 3. EFFETTO RITARDO PER LE FRECCE --- */
 /* Quando il contenitore diventa visibile, la freccia aspetta 0.4s */
-.rivela-elemento.visibile .StileFrecciaAnimata {
+.rivela-elemento.visibile .stile-freccia-animata {
     animation: frecciaFade 0.8s ease-out 0.4s forwards;
-    opacity: 0; /* Parte invisibile */
+    opacity: 0;
 }
 
 @keyframes frecciaFade {
-    0% { opacity: 0; transform: translateX(-20px); } /* Piccola spinta laterale */
+    0% { opacity: 0; transform: translateX(-20px); } 
     100% { opacity: 1; transform: translateX(0); }
 }
+
+/* ---------------------------------------------- */

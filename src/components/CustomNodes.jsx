@@ -1,96 +1,85 @@
 
-/*Andiamo ad inserire gli input necessari per il funzionamento, in particolare
+/*
+Andiamo ad inserire gli input necessari per il funzionamento, in particolare
 importiamo Handle e Position che ci serviranno per impostare la posizione delle maniglie
 relative ad ogni singolo blocco che comparirà poi nel workflow e naturalmente
-il foglio di stile css
+il corrispettivo foglio di stile css.
 */
 
 import { Handle, Position } from '@xyflow/react';
 import '../css/CustomNodes.css'
 
 
-// Questo è il nodo source, da cui si parte e che ha solo output quindi verso i blocchi successivi
+// Questo è il nodo source, da cui si parte e che ha solo output, quindi la sua uscita andrà verso blocchi successivi.
 export const Source = ({data}) => (
-  <div tabIndex={0} className='stileNodo' style={{color: '#FF0000', '--colore-bordo-sinistra': '15px solid #FF0000', '--colore-selezione': '#FF0000'}}>
+  <div tabIndex={0} className='stile-nodo'>
     <div style={{fontSize: '15px', fontWeight: 'bold'}}>{data.label}</div>
-    <Handle position={Position.Right} style={{ background: '#FF0000'}}/>
+    <Handle position={Position.Right}/>
   </div>
 );
 
-/*
-Da qui fino all'ultimo blocco eslcuso, cioè sink, sono definiti tutti blocchi che hanno
-due maniglie, una di input e una di output, e un colore univoco che li contraddistingue
-*/
+
+// Da qui fino all'ultimo blocco escluso, cioè sink, sono definiti tutti blocchi che hanno due maniglie, una di input e una di output.
+
 
 export const Filter = ({data}) => (
-  <div tabIndex={0} className='stileNodo' style={{color: '#FFD700', '--colore-bordo-sinistra': '15px solid #FFA500', '--colore-selezione': '#FFA500'}}>
-    <Handle type="target" position={Position.Left} style={{background: '#FFA500'}}/>
-    <div style={{ fontSize: '15px', fontWeight: 'bold'}}>{data.label}</div>
-    <Handle type="source" position={Position.Right} style={{background: '#FFA500'}}/>
+  <div tabIndex={0} className='stile-nodo'>
+    <Handle type="target" position={Position.Left}/>
+    <div className='descrizione-nodo'>{data.label}</div>
+    <Handle type="source" position={Position.Right}/>
   </div>
 );
 
 export const Map = ({data}) => (
-  <div tabIndex={0} className='stileNodo' style={{color: '#BDB76B', '--colore-bordo-sinistra': '15px solid', '--colore-selezione': '#BDB76B'}}>
-    <Handle type="target" position={Position.Left} style={{background: '#BDB76B'}}/>
-    <div style={{ fontSize: '15px', fontWeight: 'bold'}}>{data.label}</div>
-    <Handle type="source" position={Position.Right} style={{background: '#BDB76B'}}/>
+  <div tabIndex={0} className='stile-nodo'>
+    <Handle type="target" position={Position.Left}/>
+    <div className='descrizione-nodo'>{data.label}</div>
+    <Handle type="source" position={Position.Right}/>
   </div>
 );
 
 export const KeyBy = ({data}) => (
-  <div tabIndex={0} className='stileNodo' style={{color: '#3CB371', '--colore-bordo-sinistra': '15px solid #3CB371', '--colore-selezione': '#3CB371'}}>
-    <Handle type="target" position={Position.Left} style={{background: '#3CB371'}}/>
-    <div style={{ fontSize: '15px', fontWeight: 'bold'}}>{data.label}</div>
-    <Handle type="source" position={Position.Right} style={{background: '#3CB371'}}/>
+  <div tabIndex={0} className='stile-nodo'>
+    <Handle type="target" position={Position.Left}/>
+    <div className='descrizione-nodo'>{data.label}</div>
+    <Handle type="source" position={Position.Right}/>
   </div>
 );
 
 export const Window = ({data}) => (
-  <div tabIndex={0} className='stileNodo' style={{color: '#0000FF', '--colore-bordo-sinistra': '15px solid #0000FF', '--colore-selezione': '#0000FF'}}>
-    <Handle type="target" position={Position.Left} style={{background: '#0000FF'}}/>
-    <div style={{ fontSize: '15px', fontWeight: 'bold'}}>{data.label}</div>
-    <Handle type="source" position={Position.Right} style={{background: '#0000FF'}}/>
+  <div tabIndex={0} className='stile-nodo'>
+    <Handle type="target" position={Position.Left}/>
+    <div className='descrizione-nodo'>{data.label}</div>
+    <Handle type="source" position={Position.Right}/>
   </div>
 );
-
 
 export const Aggregate = ({data}) => (
-  <div tabIndex={0} className='stileNodo' style={{color: '#800080', '--colore-bordo-sinistra': '15px solid #800080', '--colore-selezione': '#800080'}}>
-    <Handle type="target" position={Position.Left} style={{background: '#800080'}}/>
-    <div style={{ fontSize: '15px', fontWeight: 'bold'}}>{data.label}</div>
-    <Handle type="source" position={Position.Right} style={{background: '#800080'}}/>
+  <div tabIndex={0} className='stile-nodo'>
+    <Handle type="target" position={Position.Left}/>
+    <div className='descrizione-nodo'>{data.label}</div>
+    <Handle type="source" position={Position.Right}/>
   </div>
 );
 
-// Questo è il nodo Sink, cioè quello di arrivo, che appunto ha una maniglia solo in ingresso. 
-export const Sink = ({data}) => (
-  <div tabIndex={0} className='stileNodo' style={{color: '#8B4513', '--colore-bordo-sinistra': '15px solid #8B4513', '--colore-selezione': '#8B4513'}}>
-    <div style={{ fontSize: '15px', fontWeight: 'bold'}}>{data.label}</div>
-    <Handle type="target" position={Position.Left} style={{background: '#8B4513'}}></Handle>
-  </div>
-);
 
-// In CustomNodes.js
 export const Union = ({ data }) => (
-  <div tabIndex={0} className='stileNodo' style={{color: '#BC8F8F', '--colore-bordo-sinistra': '15px solid #BC8F8F', '--colore-selezione': '#BC8F8F'}}>
-    {/* Handle di sinistra che accetta connessioni multiple */}
-    <Handle 
-      type="target" 
-      position={Position.Left} 
-      style={{ background: '#BC8F8F', width: '10px', height: '10px' }} 
-    />
-    <div style={{ fontSize: '15px', fontWeight: 'bold' }}>{data.label || 'UNION'}</div>
-    {/* Handle di destra per l'uscita dello stream unito */}
-    <Handle 
-      type="source" 
-      position={Position.Right} 
-      style={{ background: '#BC8F8F' }} 
-    />
+  <div tabIndex={0} className='stile-nodo'>
+    <Handle type="target" position={Position.Left}/>
+    <div className='descrizione-nodo'>{data.label || 'UNION'}</div>
+    <Handle type="source" position={Position.Right}/>
   </div>
 );
 
-// Andiamo ad esportare la funzione TipoNodi, che ci permette di settare il tipo personalizzato di nodo
+// Questo è il nodo Sink, cioè quello di arrivo, che ha una maniglia solo in ingresso. 
+export const Sink = ({data}) => (
+  <div tabIndex={0} className='stile-nodo'>
+    <div className='descrizione-nodo'>{data.label}</div>
+    <Handle type="target" position={Position.Left}></Handle>
+  </div>
+);
+
+// Andiamo ad esportare la funzione TipoNodi, che ci permette di settare il tipo personalizzato di nodo.
 export const TipoNodi = {
   source: Source,
   filter: Filter,
