@@ -6,7 +6,7 @@ import { FaCircle } from "react-icons/fa6";
 import Navbar from './components/Navbar';
 import { SCHEMA_PROPRIETA } from './data/schemaProprieta';
 import { useWorkflowActions } from './hooks/useWorkflowActions';
-import { getCampiFinali, calcolaNuovoId} from './utils/workflowHelpers';
+import { getCampiFinali, calcolaNuovoId, connessioneValida, calcolaErroriValidazione, gestisciEsportazione, gestisciImportazione} from './utils/workflowHelpers';
 import { useWorkflow } from './WorkflowContext';
 import { TipoNodi } from './components/CustomNodes';
 import '@xyflow/react/dist/style.css';
@@ -34,288 +34,42 @@ function WorkflowEditor() {
   const { screenToFlowPosition } = useReactFlow();
   const nodoSelezionato = blocchi.find((blocco) => blocco.selected === true);
 
-  const {
-    AggiornaBlocchi,
-    AggiornaCollegamenti,
-    Associa,
-    aggiornaDatoNodo, 
-    gestisciArrayStringhe, 
-    gestisciDizionarioAggregazioni 
-  } = useWorkflowActions(SettaBlocchi, SettaCollegamenti, nodoSelezionato?.id);
+  // Passiamo i parametri necessari all'hook delle azioni
+  const actions = useWorkflowActions(
+    SettaBlocchi, 
+    SettaCollegamenti, 
+    nodoSelezionato?.id, 
+    blocchi, 
+    screenToFlowPosition
+  );
+
+  const { 
+  aggiornaDatoNodo, 
+  gestisciArrayStringhe, 
+  gestisciDizionarioAggregazioni,
+  InizioTrascinamento,
+  SopraWorkflow,
+  AlRilascio
+  } = actions;
 
   const campiFinali = getCampiFinali(nodoSelezionato, SCHEMA_PROPRIETA);
 
-  const InizioTrascinamento = (event, tipoNodo) => {
-      event.dataTransfer.setData('application/reactflow', tipoNodo);
-      event.dataTransfer.effectAllowed = 'move';
-    };
+  // Memorizziamo gli errori chiamando l'helper
+  const erroriValidazione = useMemo(() => 
+    calcolaErroriValidazione(blocchi, collegamenti), 
+  [blocchi, collegamenti]);
 
-  // Questa è la funzione che permette il rilascio del nodo sopra il workflow una volta preso dalla liberia blocchi
-  const SopraWorkflow = useCallback((event) => {
-    event.preventDefault();
-    event.dataTransfer.dropEffect = 'move';
-  }, []);
+  // Gestione validazione connessione
+  const onConnectValid = useCallback((conn) => 
+    connessioneValida(conn, blocchi, collegamenti, SettaMessaggioErrore),
+  [blocchi, collegamenti]);
 
-  // Azione al rilascio: andiamo a mappare la posizione del nodo sul workflow e nella label comparirà l'id sequenziale in base al tipo di nodo
-  // inoltre creiamo l'oggetto nodo con le sue proprietà che poi riprendiamo per l'esportazione della bozza o del JSON.
-  const AlRilascio = useCallback(
-    (event) => {
-      event.preventDefault();
-      const tipo = event.dataTransfer.getData('application/reactflow'); // Recuperiamo il tipo di nodo passato durante il drag
-      if (!tipo) return;
-
-      // Calcoliamo la posizione corretta nel workflow trasformando la posizione del nodo in pixel sulla barra di destra in posizione workflow
-      const posizione = screenToFlowPosition({
-        x: event.clientX,
-        y: event.clientY,
-      });
-
-      const nuovoId = calcolaNuovoId(tipo, blocchi);
-
-      // Creiamo il nuovo oggetto nodo, contraddistinto da id, tipo, posizione e data
-      const nuovoNodo = {
-        id: nuovoId, 
-        type: tipo,
-        position: posizione,
-        data: { label: nuovoId.toUpperCase() },
-      };
-
-      SettaBlocchi((nds) => nds.concat(nuovoNodo));
-    },
-    [screenToFlowPosition, blocchi, SettaBlocchi]
-  );
-
-
-/*
-Questa è la funzione che ci permette di gestire i collegamenti "validi", vale a dire che due nodi diversi possono essere mandati 
-allo stesso nodo solo se quest'ultimo è un union, altrimenti per due nodi abbiamo bisogno ad esempio di due aggregate, due filter etc.
-Inoltre utilizziamo quello che viene chiamato react-hot-toast per una visualizzazione a schermo di un messaggio errore in caso
-l'utente provi a collegare un nodo ad un nodo successivo, al quale è già collegato un altro nodo (a meno che non sia union!)
-*/
-
-const connessioneValida = useCallback((connection) => {
-    const targetNode = blocchi.find((n) => n.id === connection.target);
-    
-    if (targetNode && targetNode.type !== 'union') {
-      const collegamentiInIngresso = collegamenti.filter(
-        (edge) => edge.target === connection.target
-      );
-      
-      if (collegamentiInIngresso.length >= 1) {
-        // TRIGGER MESSAGGIO
-        SettaMessaggioErrore("Solo il nodo Union può ricevere più stream in ingresso!");
-        
-        // Autoreset del messaggio dopo 3 secondi
-        setTimeout(() => SettaMessaggioErrore(null), 3000);
-        
-        return false; 
-      }
-    }
-    return true;
-  }, [blocchi, collegamenti]);
-
-
-/*
-La funzione che segue ci permette di andare a verificare se il nodo selezionato è union e in caso
-troviamo i nodi che sono connessi ad esso. Cosìcche i nodi che sono connessi all'union li andiamo ad inserire nelle 
-sue proprietà.
-*/
-
-const nodiSorgenteConnessi = (nodoSelezionato?.type === 'union') 
+  // Nodi sorgente per UNION
+  const nodiSorgenteConnessi = (nodoSelezionato?.type === 'union') 
   ? collegamenti
       .filter((edge) => edge.target === nodoSelezionato.id)
       .map((edge) => edge.source) // Prendiamo l'ID del nodo di origine
   : [];
-
-
-const erroriValidazione = useMemo(() => {
-  const lista = [];
-
-  // 1. Regola: Almeno un Source
-  if (!blocchi.some(n => n.type === 'source')) {
-    lista.push({ tipo: 'globale', msg: "Manca un nodo Source" });
-  }
-
-  // 2. Regola: Almeno un Sink
-  if (!blocchi.some(n => n.type === 'sink')) {
-    lista.push({ tipo: 'globale', msg: "Manca un nodo Sink" });
-  }
-
-  // 3. Regola: Union con almeno 2 ingressi
-  blocchi.filter(n => n.type === 'union').forEach(u => {
-    const numIn = collegamenti.filter(e => e.target === u.id).length;
-    if (numIn < 2) {
-      lista.push({ tipo: 'nodo', id: u.id, msg: `Il nodo ${u.id} richiede almeno 2 ingressi` });
-    }
-  });
-
-  // 4. Regola: Nodi non isolati, cioè significa che ogni nodo deve essere collegato ad un altro. 
-  blocchi.forEach(nodo => {
-    const haCollegamentiInEntrata = collegamenti.some(e => e.target === nodo.id);
-    const haCollegamentiInUscita = collegamenti.some(e => e.source === nodo.id);
-
-    // Un nodo è isolato se non ha né entrate né uscite
-    if (!haCollegamentiInEntrata && !haCollegamentiInUscita) {
-      lista.push({ 
-        tipo: 'nodo', 
-        id: nodo.id, 
-        msg: `Il nodo ${nodo.id} è isolato e deve essere collegato` 
-      });
-    } 
-    // 5. Regola: Ovviamente il nodo Source e Sink devono avere rispettivamente un collegamento in uscita e uno in ingresso, dato che
-    // rappresentano i nodi di inizio e fine. 
-    else {
-      if (nodo.type === 'source' && !haCollegamentiInUscita) {
-        lista.push({ tipo: 'nodo', id: nodo.id, msg: `Il nodo Source (${nodo.id}) non ha collegamenti in uscita` });
-      }
-      if (nodo.type === 'sink' && !haCollegamentiInEntrata) {
-        lista.push({ tipo: 'nodo', id: nodo.id, msg: `Il nodo Sink (${nodo.id}) non ha collegamenti in ingresso` });
-      }
-      if (nodo.type !== 'source' && nodo.type !== 'sink' && (!haCollegamentiInEntrata || !haCollegamentiInUscita)) {
-        // Se è un nodo intermedio ma gli manca un pezzo della catena
-        const manca = !haCollegamentiInEntrata ? "ingresso" : "uscita";
-        lista.push({ tipo: 'nodo', id: nodo.id, msg: `Il nodo ${nodo.id} è incompleto: manca un collegamento in ${manca}` });
-      }
-    }
-  });
-
-  return lista;
-}, [blocchi, collegamenti]);
-
-
-/*
-Questa è la funzione che ci consente di andare a trasformare i dati grafici di React Flow, 
-quindi nodi e collegamenti, in formato JSON. Viene gestito il fatto che se il workflow non è corretto, viene data la possibilità di esportare
-solo la bozza, la quale può contenere anche errori e nel JSON di essa ci saranno anche le posizioni in modo tale che la possiamo importare
-nuovamente per continuare a lavorarci. Se invece il workflow non presenta errori allora lo possiamo esportare e rappresenta il workflow
-corretto che poi verrà usato su flink quindi contiene solo dati puliti, senza posizioni o altro. 
-*/
-
-const gestisciEsportazione = useCallback((isDraft = false) => {
-  if (!isDraft && erroriValidazione.length > 0) {
-    SettaMessaggioErrore("Impossibile esportare: risolvi prima tutti i problemi nel workflow.");
-    setTimeout(() => SettaMessaggioErrore(null), 4000);
-    return;
-  }
-
-  try {
-    const steps = blocchi.map((nodo) => {
-      const collegamentiInUscita = collegamenti
-        .filter((edge) => edge.source === nodo.id)
-        .map((edge) => edge.target);
-
-      const { label, ...datiPuliti } = nodo.data || {};
-
-      // Se non è una bozza, creiamo un oggetto senza la proprietà 'position'
-      let stepDati = {
-        id: nodo.id,
-        type: nodo.type,
-        ...datiPuliti,
-      };
-
-      if (isDraft) {
-        stepDati.position = nodo.position; // Includiamo la posizione solo nella bozza
-      }
-
-      if (nodo.type !== 'sink') {
-        stepDati.next = collegamentiInUscita;
-      } else if (!stepDati.sinkType) {
-        stepDati.sinkType = "print"; 
-      }
-
-      return stepDati;
-    });
-
-    // Serve per generare la data di esportazione solo nel momento in cui il workflow è una bozza 
-    const workflowFinale = isDraft 
-      ? { steps, status: 'draft', dataEsportazione: new Date().toISOString() } 
-      : { steps };
-
-    const dataStr = JSON.stringify(workflowFinale, null, 2);
-    const blob = new Blob([dataStr], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    
-    const link = document.createElement('a');
-    link.href = url;
-    const prefix = isDraft ? 'BOZZA_workflow' : 'workflow_flink';
-    link.download = `${prefix}_${new Date().toISOString().slice(0,10)}.json`;
-    
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-
-    // Messaggio informativo post-esportazione
-    if (!isDraft) {
-      alert("Esportazione per Flink completata.\n\nNOTA: Questo file è ottimizzato per la produzione e NON contiene le posizioni dei nodi. Per modifiche grafiche future, usa sempre il file 'BOZZA'.");
-    }
-  } catch (error) {
-    console.error("Errore durante l'esportazione:", error);
-  }
-}, [blocchi, collegamenti, erroriValidazione]);
-
-
-/*
-Funzione per la gestione dell'importazione di un JSON da file. Naturalmente nella ricerca del file ci vengono mostrati solo
-i file che hanno estensione JSON. Nel caso in cui l'utente dovesse importare un workflow già completo e corretto, in esso non ci sonno
-le posizioni quindi implementiamo una piccola griglia così da dare comunque una posizione ai nodi, da verificare se funziona correttamente
-o sufficientemente bene 
-*/
-
-const gestisciImportazione = useCallback((event) => {
-  const file = event.target.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    try {
-      const json = JSON.parse(e.target.result);
-      if (!json.steps) throw new Error("Formato non valido");
-
-      const nuoviNodi = json.steps.map((step, indice) => {
-        // Algoritmo di emergenza: Griglia 3xN se manca la posizione
-        const xDefault = (indice % 3) * 300; 
-        const yDefault = Math.floor(indice / 3) * 200;
-
-        return {
-          id: step.id,
-          type: step.type,
-          position: step.position || { x: xDefault, y: yDefault },
-          data: { 
-            label: step.id.toUpperCase(),
-            ...Object.keys(step)
-              .filter(key => !['id', 'type', 'position', 'next'].includes(key))
-              .reduce((obj, key) => ({ ...obj, [key]: step[key] }), {})
-          },
-        };
-      });
-
-      const nuoviEdges = [];
-      json.steps.forEach((step) => {
-        if (step.next && Array.isArray(step.next)) {
-          step.next.forEach((targetId) => {
-            nuoviEdges.push({
-              id: `e-${step.id}-${targetId}`,
-              source: step.id,
-              target: targetId,
-              animated: false, // Così le linee rimangono continue altrimenti, quando reimportiamo, diventano tratteggiate
-              style: { strokeWidth: 2 } 
-            });
-          });
-        }
-      });
-
-      SettaBlocchi(nuoviNodi);
-      SettaCollegamenti(nuoviEdges);
-      event.target.value = ''; // Reset input
-    } catch (err) {
-      SettaMessaggioErrore("Errore nell'importazione del file JSON.");
-      setTimeout(() => SettaMessaggioErrore(null), 3000);
-    }
-  };
-  reader.readAsText(file);
-}, [SettaBlocchi, SettaCollegamenti]);
-
 
 /*
 Inizio del return che ci restituisce la nostra pagina workflow
@@ -336,16 +90,17 @@ con tutte le sue caratteristiche.
         <ReactFlow
           nodes = {blocchi}
           edges = {collegamenti}
-          onNodesChange = {AggiornaBlocchi}
-          onEdgesChange = {AggiornaCollegamenti}
-          onConnect = {Associa}
-          onDrop={AlRilascio}
-          onDragOver={SopraWorkflow}
+          onNodesChange = {actions.AggiornaBlocchi}
+          onEdgesChange = {actions.AggiornaCollegamenti}
+          onConnect = {actions.Associa}
+          onDragStart = {actions.InizioTrascinamento}
+          onDrop={actions.AlRilascio}
+          onDragOver={actions.SopraWorkflow}
           nodeTypes={TipoNodi}
           fitView
           colorMode={ModalitaDark ? 'dark' : 'light'}
           proOptions={{ hideAttribution: true }} // serve per nascondere il link al sito React Flow in basso a destra che compare di default
-          isValidConnection={connessioneValida}
+          isValidConnection={onConnectValid}
           >
           <Background variant="dots" gap={12} size={1} /> {/*Impostiamo lo sfondo con puntini e distanza tra di loro*/}
           
@@ -394,13 +149,13 @@ con tutte le sue caratteristiche.
               type='file'
               id='file-import'
               accept='.json'
-              onChange={gestisciImportazione}
+              onChange={(event) => gestisciImportazione(event, SettaBlocchi, SettaCollegamenti, SettaMessaggioErrore)}
               style={{display: 'none'}}
             />  
             {/* Pulsante SALVA BOZZA (Sempre attivo), per salvare la bozza anche con errori */}
             <button 
               className="btn-workflow bozza" 
-              onClick={() => gestisciEsportazione(true)}
+              onClick={() => gestisciEsportazione(true, blocchi, collegamenti, erroriValidazione, SettaMessaggioErrore)}
               title="Salva bozza (anche con errori)">
               💾 Salva Bozza
             </button>
@@ -408,7 +163,7 @@ con tutte le sue caratteristiche.
             {/* Pulsante Esporta, che è disabilitato fino a che non vengono risolti tutti gli errori */}
             <button 
               className={`btn-workflow esporta ${erroriValidazione.length > 0 ? 'disabilitato' : ''}`}
-              onClick={() => gestisciEsportazione(false)}
+              onClick={() => gestisciEsportazione(false, blocchi, collegamenti, erroriValidazione, SettaMessaggioErrore)}
               title={erroriValidazione.length > 0 ? "Risolvi gli errori per esportare" : "Esporta workflow finale"}>
               🚀 Esporta JSON
             </button>
@@ -460,7 +215,7 @@ con tutte le sue caratteristiche.
               type="file"
               id="file-import"
               accept=".json"
-              onChange={gestisciImportazione}
+              onChange={(e) => gestisciImportazione(e, SettaBlocchi, SettaCollegamenti)}
               style={{ display: 'none' }}
             />
             <button 

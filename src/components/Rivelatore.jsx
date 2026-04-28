@@ -1,6 +1,8 @@
 
 /*
 Import dell'hook useInView, nativo di react, che serve per "osservare" lo stato del componente e gestirlo di conseguenza.
+Questo componente rivelatore serve per andare a mostrare i componenti della pagina home man mano che si scorre verso il basso, 
+in maniera fluida e animata
 */
 
 
