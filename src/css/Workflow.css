@@ -59,6 +59,10 @@ body {
 .blocco-sidebar:hover {
   transform: translateY(-2px);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-top: 1px solid #AFEEEE;
+  border-right: 1px solid #AFEEEE;
+  border-bottom: 1px solid #AFEEEE;
+  
 }
 
 /* -------------------------------------------- */
@@ -138,7 +142,7 @@ la sua left, diventa 0, così da renderla visibile. Inoltre, ne cambiamo il colo
 .dark-mode .icona-toggle, .dark-mode .icona-gestione { background-color: white; }
 
 /*Stile della pallina che permette il passaggio alla modalità dark*/
-.IconaCambiaSfondo {
+.icona-cambia-tema {
   cursor: pointer;
   font-size: 2.0rem;
   color: orange;
@@ -149,13 +153,6 @@ la sua left, diventa 0, così da renderla visibile. Inoltre, ne cambiamo il colo
 @keyframes ruotaColori {
   from { filter: hue-rotate(0deg); }
   to   { filter: hue-rotate(360deg); }
-}
-
-.IconaSalvaEsporta {
-  border-radius: 50%;
-  border: 1px solid;
-  cursor: pointer;
-  font-size: 3.0rem;
 }
 
 /* ---------------------------------------------- */
@@ -463,28 +460,24 @@ la sua left, diventa 0, così da renderla visibile. Inoltre, ne cambiamo il colo
   font-family: inherit;
 }
 
-/* Bottone Bozza (Azzurro/Blu) */
 .btn-workflow.bozza {
+  background-color: #AFEEEE;
+  font-family: 'Courier New', Courier, monospace;
   color: black;
+  border: 1px solid black;
 }
 
 .btn-workflow.bozza:hover {
   transform: translateY(-2px);
 }
 
-.dark-mode .btn-workflow.bozza {
-}
-
-.dark-mode .btn-workflow.bozza:hover {
-}
-
-/* Bottone Esporta (Verde) */
 .btn-workflow.esporta {
-  color: white;
+  border: 1px solid black;
+  color: black;
 }
 
 .btn-workflow.esporta:hover:not(.disabilitato) {
-  background-color: #219150;
+  background-color: #AFEEEE;
   transform: translateY(-2px);
 }
 

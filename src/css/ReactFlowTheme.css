@@ -11,8 +11,11 @@ IL BLOCCO ZOOM-IN ZOOM-OUT, GLI EDGES, NODES ETC.
 .sposta-contenitore-warning.aperta { transform: translateX(-310px); }
 
 /* Personalizzazione Controlli */
-.StileDivWorkflow .react-flow__controls {
-  border: 2px solid;
+.stile-div-workflow .react-flow__controls {
+  border-top: 1px solid black;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+  border-bottom: 1px solid black;
   border-radius: 8px;
   overflow: hidden;
 }
@@ -22,14 +25,14 @@ React flow controls, button, minimap e tutto quello legato a react-flow sono sti
 in automatica di default da relax e qui li andiamo ad adattare al nostro editor.
 */
 
-.StileDivWorkflow .react-flow__controls-button {
+.stile-div-workflow .react-flow__controls-button {
   background-color: #AFEEEE;
   border-bottom: 1px solid black;
 }
 
 /* Personalizzazione MiniMap */
-.StileDivWorkflow .react-flow__minimap {
-  border: 2px solid black;
+.stile-div-workflow .react-flow__minimap {
+  border: 1px solid black;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
@@ -48,7 +51,8 @@ in automatica di default da relax e qui li andiamo ad adattare al nostro editor.
 }
 
 /* Specifichiamo le caratteristiche di tutti gli elementi precedenti quando si passa alla dark mode. */
-.dark-mode .react-flow__minimap { border: 2px solid white; }
+.dark-mode .react-flow__minimap { border: 1px solid white; }
 .dark-mode .react-flow__controls-button { color: black; }
 .dark-mode .react-flow__edge-path { stroke: white; }
 .dark-mode .react-flow__node { background: transparent !important; border: none; box-shadow: none !important; }
+.dark-mode .react-flow__controls { border: 1px solid white; }

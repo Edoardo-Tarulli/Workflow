@@ -100,6 +100,7 @@ con tutte le sue caratteristiche.
           colorMode={ModalitaDark ? 'dark' : 'light'}
           proOptions={{ hideAttribution: true }} // serve per nascondere il link al sito React Flow in basso a destra che compare di default
           isValidConnection={onConnectValid}
+          connectionRadius={30}
           >
           <Background variant="dots" gap={12} size={1} /> {/*Impostiamo lo sfondo con puntini e distanza tra di loro*/}
           
@@ -127,7 +128,7 @@ con tutte le sue caratteristiche.
           {/*Pannello dei colori per il cambio tema*/}
           <Panel position='top-center'>
             <FaCircle
-            className='IconaCambiaSfondo' 
+            className='icona-cambia-tema' 
             title='Cambia Tema'
             onClick={() => SettaModalitaDark(!ModalitaDark)}>
             </FaCircle>
