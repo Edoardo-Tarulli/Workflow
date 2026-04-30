@@ -1,19 +1,74 @@
 
 /* --- CSS RELATIVO AL NODO PRESENTE NELLA SCHERMATA, QUELLO EFFETTIVO --- */
 
-.stile-nodo {
-  border: 2px solid black;
+/* --- NODO SOURCE --- */
+
+.stile-nodo-source-sink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #555;
   padding: 10px;
-  border-radius: 20px;
+  border-radius: 80px;
   width: 150px;
   background: white;
-  text-align: center;
 }
 
-.descrizione-nodo {
-  font-size: 15px;
-  font-weight: bold;
+.descrizione-nodo-source-sink {
+  width: 120px;
+  text-align: center;
   font-family: 'Courier New', Courier, monospace;
+  font-size: 15px;
+  color: black;
+}
+
+/* --------------------- */
+
+/* --- NODI INTERMEDI --- */
+
+
+.stile-nodo-intermedio {
+  border: 2px solid #555;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 160px;
+  height: 70px;
+  border-radius: 50%;
+  background-color: #AFEEEE;
+}
+
+.descrizione-nodo-intermedio {
+  width: 140px;
+  text-align: center;
+  justify-content: center;
+  align-content: center;
+  font-size: 15px;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+/* --------------------------------- */
+
+/* --- NODO UNION --- */
+
+.stile-nodo-union {
+  border: 2px solid #555;
+  background-color: #AFEEEE;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* -------------------------------- */
+
+/* --- HANDLE PERSONALIZZATA PIù GRANDE CHE UTILIZZANO TUTTI I NODI TRANNE L'UNION --- */
+
+.handle-personalizzata {
+  width: 12px !important;
+  height: 12px !important;
 }
 
 /* -------------------------------------------------------------- */

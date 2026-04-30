@@ -7,14 +7,15 @@ il corrispettivo foglio di stile css.
 */
 
 import { Handle, Position } from '@xyflow/react';
+import React from 'react';
 import '../css/CustomNodes.css'
 
 
 // Questo è il nodo source, da cui si parte e che ha solo output, quindi la sua uscita andrà verso blocchi successivi.
 export const Source = ({data}) => (
-  <div tabIndex={0} className='stile-nodo'>
-    <div style={{fontSize: '15px', fontWeight: 'bold'}}>{data.label}</div>
-    <Handle position={Position.Right}/>
+  <div tabIndex={0} className='stile-nodo-source-sink'>
+    <div className='descrizione-nodo-source-sink'>{data.label}</div>
+    <Handle className='handle-personalizzata' position={Position.Right}/>
   </div>
 );
 
@@ -23,59 +24,58 @@ export const Source = ({data}) => (
 
 
 export const Filter = ({data}) => (
-  <div tabIndex={0} className='stile-nodo'>
-    <Handle type="target" position={Position.Left}/>
-    <div className='descrizione-nodo'>{data.label}</div>
-    <Handle type="source" position={Position.Right}/>
+  <div tabIndex={0} className='stile-nodo-intermedio'>
+    <Handle className='handle-personalizzata' type="target" position={Position.Left}/>
+    <div className='descrizione-nodo-intermedio'>{data.label}</div>
+    <Handle className='handle-personalizzata' type="source" position={Position.Right}/>
   </div>
 );
 
 export const Map = ({data}) => (
-  <div tabIndex={0} className='stile-nodo'>
-    <Handle type="target" position={Position.Left}/>
-    <div className='descrizione-nodo'>{data.label}</div>
-    <Handle type="source" position={Position.Right}/>
+  <div tabIndex={0} className='stile-nodo-intermedio'>
+    <Handle className='handle-personalizzata' type="target" position={Position.Left}/>
+    <div className='descrizione-nodo-intermedio'>{data.label}</div>
+    <Handle className='handle-personalizzata' type="source" position={Position.Right}/>
   </div>
 );
 
 export const KeyBy = ({data}) => (
-  <div tabIndex={0} className='stile-nodo'>
-    <Handle type="target" position={Position.Left}/>
-    <div className='descrizione-nodo'>{data.label}</div>
-    <Handle type="source" position={Position.Right}/>
+  <div tabIndex={0} className='stile-nodo-intermedio'>
+    <Handle className='handle-personalizzata' type="target" position={Position.Left}/>
+    <div className='descrizione-nodo-intermedio'>{data.label}</div>
+    <Handle className='handle-personalizzata' type="source" position={Position.Right}/>
   </div>
 );
 
 export const Window = ({data}) => (
-  <div tabIndex={0} className='stile-nodo'>
-    <Handle type="target" position={Position.Left}/>
-    <div className='descrizione-nodo'>{data.label}</div>
-    <Handle type="source" position={Position.Right}/>
+  <div tabIndex={0} className='stile-nodo-intermedio'>
+    <Handle className='handle-personalizzata' type="target" position={Position.Left}/>
+    <div className='descrizione-nodo-intermedio'>{data.label}</div>
+    <Handle className='handle-personalizzata' type="source" position={Position.Right}/>
   </div>
 );
 
 export const Aggregate = ({data}) => (
-  <div tabIndex={0} className='stile-nodo'>
-    <Handle type="target" position={Position.Left}/>
-    <div className='descrizione-nodo'>{data.label}</div>
-    <Handle type="source" position={Position.Right}/>
+  <div tabIndex={0} className='stile-nodo-intermedio'>
+    <Handle className='handle-personalizzata' type="target" position={Position.Left}/>
+    <div className='descrizione-nodo-intermedio'>{data.label}</div>
+    <Handle className='handle-personalizzata' type="source" position={Position.Right}/>
   </div>
 );
 
-
 export const Union = ({ data }) => (
-  <div tabIndex={0} className='stile-nodo'>
-    <Handle type="target" position={Position.Left}/>
-    <div className='descrizione-nodo'>{data.label || 'UNION'}</div>
-    <Handle type="source" position={Position.Right}/>
+  <div tabIndex={0} className='stile-nodo-union'>
+    <Handle style={{width: '30px', height: '30px'}} type="target" position={Position.Left}/>
+    <div className='descrizione-nodo-intermedio'>{data.label || 'UNION'}</div>
+    <Handle className='handle-personalizzata' type="source" position={Position.Right}/>
   </div>
 );
 
 // Questo è il nodo Sink, cioè quello di arrivo, che ha una maniglia solo in ingresso. 
 export const Sink = ({data}) => (
-  <div tabIndex={0} className='stile-nodo'>
-    <div className='descrizione-nodo'>{data.label}</div>
-    <Handle type="target" position={Position.Left}></Handle>
+  <div tabIndex={0} className='stile-nodo-source-sink'>
+    <div className='descrizione-nodo-source-sink'>{data.label}</div>
+    <Handle className='handle-personalizzata' type="target" position={Position.Left}></Handle>
   </div>
 );
 
